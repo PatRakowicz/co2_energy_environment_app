@@ -1,4 +1,4 @@
-package com.example.scenebuilderdemo;
+package com.example.MainApp;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -7,7 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class ReportController {
+public class ViewDataController {
     private Stage stage;
     private Scene scene;
     private Parent root;

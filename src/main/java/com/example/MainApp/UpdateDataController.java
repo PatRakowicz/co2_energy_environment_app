@@ -1,6 +1,5 @@
-package com.example.scenebuilderdemo;
+package com.example.MainApp;
 
-import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

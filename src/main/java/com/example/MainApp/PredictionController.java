@@ -1,4 +1,4 @@
-package com.example.scenebuilderdemo;
+package com.example.MainApp;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
