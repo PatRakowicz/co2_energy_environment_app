@@ -1,16 +1,30 @@
 package com.example.MainApp;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Modality;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class HomeController {
     private Stage stage;
     private Scene scene;
     private Parent root;
+    private Parent DBRoot;
+    private Stage DBStage;
+    private Scene DBScene;
+    @FXML
+    private Button DBButton;
+    @FXML
+    private Rectangle indicator;
 
 
     public void switchToAddData(ActionEvent event){
@@ -110,6 +124,38 @@ public class HomeController {
             stage.setScene(scene);
             stage.show();
         } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public Boolean checkDatabaseConnection(){
+        // add the code here to check if the database is connected or not
+
+
+        return true;
+    }
+
+    public void openDBWindow (ActionEvent event){
+        try {
+            DBButton.setDisable(true);
+            DBRoot = FXMLLoader.load(getClass().getResource("DBWindow.fxml"));
+            DBStage = new Stage();
+            DBStage.initModality(Modality.APPLICATION_MODAL);
+            DBScene = new Scene(DBRoot);
+            DBStage.setScene(DBScene);
+            DBStage.setResizable(false);
+            DBStage.initStyle(StageStyle.UTILITY);
+            DBStage.setOnHidden( windowEvent -> {
+                DBButton.setDisable(false);
+                if(checkDatabaseConnection()){
+                    indicator.setFill(Color.GREEN);
+                }
+                else{
+                    indicator.setFill(Color.RED);
+                }});
+
+            DBStage.show();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
