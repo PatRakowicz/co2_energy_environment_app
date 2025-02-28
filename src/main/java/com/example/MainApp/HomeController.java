@@ -129,30 +129,32 @@ public class HomeController {
     }
 
     public Boolean checkDatabaseConnection(){
-        // add the code here to check if the database is connected or not
-
-
-        return true;
+        DBController dbcontroller = new DBController();
+        return dbcontroller.isConnectionSuccessful();
     }
 
-    public void openDBWindow (ActionEvent event){
+    public void openDBWindow(ActionEvent event) {
         try {
             DBButton.setDisable(true);
-            DBRoot = FXMLLoader.load(getClass().getResource("DBWindow.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("DBWindow.fxml"));
+            DBRoot = loader.load();
+            DBController dbController = loader.getController();
+
             DBStage = new Stage();
-            DBStage.initModality(Modality.APPLICATION_MODAL);
             DBScene = new Scene(DBRoot);
+            DBStage.initModality(Modality.APPLICATION_MODAL);
             DBStage.setScene(DBScene);
             DBStage.setResizable(false);
             DBStage.initStyle(StageStyle.UTILITY);
-            DBStage.setOnHidden( windowEvent -> {
+
+            DBStage.setOnHidden(windowEvent -> {
                 DBButton.setDisable(false);
-                if(checkDatabaseConnection()){
+                if (dbController.isConnectionSuccessful()) {
                     indicator.setFill(Color.GREEN);
-                }
-                else{
+                } else {
                     indicator.setFill(Color.RED);
-                }});
+                }
+            });
 
             DBStage.show();
         } catch (Exception e) {
