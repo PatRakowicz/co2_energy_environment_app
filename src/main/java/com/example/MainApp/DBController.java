@@ -64,5 +64,7 @@ public class DBController {
         }
     }
 
-
+    public boolean isConnectionSuccessful() {
+        return connectionSuccessful;
+    }
 }
