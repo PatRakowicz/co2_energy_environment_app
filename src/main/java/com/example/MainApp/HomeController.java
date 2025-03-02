@@ -128,9 +128,9 @@ public class HomeController {
         }
     }
 
-    public Boolean checkDatabaseConnection(){
-        DBController dbcontroller = new DBController();
-        return dbcontroller.isConnectionSuccessful();
+    public Boolean checkDatabaseConnection() {
+        DBController dbController = new DBController();
+        return dbController.isConnectionSuccessful();
     }
 
     public void openDBWindow(ActionEvent event) {
