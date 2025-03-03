@@ -19,6 +19,8 @@ public class ViewDataController {
             scene = new Scene(root);
             stage.setTitle("home");
             stage.setScene(scene);
+            stage.setMinHeight(600);
+            stage.setMinWidth(400);
             stage.show();
         } catch (Exception e){
             e.printStackTrace();
