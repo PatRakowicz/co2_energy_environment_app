@@ -28,11 +28,37 @@ public class ApplicationController{
 
     public ApplicationController(){}
 
+    public ApplicationController(Stage newStage){
+        try {
+            root = FXMLLoader.load(getClass().getResource("home-view.fxml"));
+            scene = new Scene(root);
+            newStage.setTitle("home");
+            newStage.setScene(scene);
+            newStage.show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        //this makes sure the database connection is verified when the application is launched
+        Button button = (Button) scene.lookup("#DBButton");
+        if(checkDatabaseConnection()){
+            connected = true;
+            button.setStyle("-fx-background-color: LimeGreen");
+        }
+        else{
+            connected = false;
+            button.setStyle("-fx-background-color: #f74545");
+        }
+
+
+        //get building info and save to buildings ArrayList
+    }
+
     public Boolean checkDatabaseConnection(){
         // add the code here to check if the database is connected or not
 
 
-        return false;
+        return true;
     }
 
     @FXML

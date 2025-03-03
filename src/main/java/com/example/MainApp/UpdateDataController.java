@@ -48,6 +48,8 @@ public class UpdateDataController extends ApplicationController{
     private Button updateButton;
     @FXML
     private Button deleteButton;
+    @FXML
+    private Label question;
 
     float eUsage;
     float eCost;
@@ -170,29 +172,7 @@ public class UpdateDataController extends ApplicationController{
 
 
     public void delete(){
-        try {
-            updateButton.setDisable(true);
-            deleteButton.setDisable(true);
-            //building = value of building choice
-            date = datePicker.getValue();
-
-
-            DBRoot = FXMLLoader.load(getClass().getResource("delete-clarification.fxml"));
-            DBStage = new Stage();
-            DBStage.initModality(Modality.APPLICATION_MODAL);
-            DBScene = new Scene(DBRoot);
-            DBStage.setScene(DBScene);
-            DBStage.setResizable(false);
-            DBStage.initStyle(StageStyle.UNDECORATED);
-            DBStage.show();
-            Label question = (Label) DBScene.lookup("#question");
-            question.setText("Are you sure you want to delete the entry of " + "BUILDING"
-                                + " at " + date.toString() + "?");
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        //delete data
     }
 
 
@@ -221,5 +201,4 @@ public class UpdateDataController extends ApplicationController{
             deleteButton.setDisable(true);
         }
     }
-
 }

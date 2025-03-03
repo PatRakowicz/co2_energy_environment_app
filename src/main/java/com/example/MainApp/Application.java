@@ -7,7 +7,7 @@ public class Application extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws IOException {
         try {
-            HomeController controller = new HomeController(stage);
+            ApplicationController controller = new ApplicationController(stage);
         } catch (Exception e){
             e.printStackTrace();
         }
