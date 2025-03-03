@@ -130,7 +130,7 @@ public class AddDataController extends ApplicationController{
         }
 
         if(datePicker.getValue() == null){
-            dateError.setText("ERROR: date can't be nothing");
+            dateError.setText("ERROR: invalid date");
             valid = false;
         }
         else{
