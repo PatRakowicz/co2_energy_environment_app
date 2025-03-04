@@ -128,10 +128,6 @@ public class HomeController {
         }
     }
 
-    public Boolean checkDatabaseConnection() {
-        DBController dbController = new DBController();
-        return dbController.isConnectionSuccessful();
-    }
 
     public void openDBWindow(ActionEvent event) {
         try {
