@@ -1,4 +1,4 @@
-package com.example.MainApp;
+package com.example.app;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -7,11 +7,11 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class Application extends javafx.application.Application {
+public class emissionsApp extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws IOException {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("home-view.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/fxml/home-view.fxml"));
             Scene home = new Scene(root);
             stage.setTitle("home");
             stage.setScene(home);
