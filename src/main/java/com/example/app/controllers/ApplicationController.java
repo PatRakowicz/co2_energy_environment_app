@@ -24,7 +24,7 @@ public class ApplicationController{
 
     public ApplicationController(Stage newStage){
         try {
-            root = FXMLLoader.load(getClass().getResource("home-view.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/fxml/home-view.fxml"));
             scene = new Scene(root);
             newStage.setTitle("home");
             newStage.setScene(scene);
@@ -58,7 +58,7 @@ public class ApplicationController{
     @FXML
     public void switchToAddData(ActionEvent event){
         try {
-            root = FXMLLoader.load(getClass().getResource("add-data-view.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/fxml/add-data-view.fxml"));
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setTitle("add data");
@@ -75,7 +75,7 @@ public class ApplicationController{
     @FXML
     public void switchToPrediction(ActionEvent event){
         try {
-            root = FXMLLoader.load(getClass().getResource("prediction-view.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/fxml/prediction-view.fxml"));
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setTitle("prediction");
@@ -92,7 +92,7 @@ public class ApplicationController{
     @FXML
     public void switchToReport(ActionEvent event){
         try {
-            root = FXMLLoader.load(getClass().getResource("report-view.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/fxml/report-view.fxml"));
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setTitle("reports");
@@ -109,7 +109,7 @@ public class ApplicationController{
     @FXML
     public void switchToScenarios(ActionEvent event){
         try {
-            root = FXMLLoader.load(getClass().getResource("scenarios-view.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/fxml/scenarios-view.fxml"));
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setTitle("scenarios");
@@ -126,7 +126,7 @@ public class ApplicationController{
     @FXML
     public void switchToUpdateData(ActionEvent event){
         try {
-            root = FXMLLoader.load(getClass().getResource("update-data-view.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/fxml/update-data-view.fxml"));
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setTitle("update data");
@@ -143,7 +143,7 @@ public class ApplicationController{
     @FXML
     public void switchToViewData(ActionEvent event){
         try {
-            root = FXMLLoader.load(getClass().getResource("view-data-view.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/fxml/view-data-view.fxml"));
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setTitle("view data");
@@ -160,7 +160,7 @@ public class ApplicationController{
     @FXML
     public void switchToHome(ActionEvent event){
         try {
-            root = FXMLLoader.load(getClass().getResource("home-view.fxml"));
+            root = FXMLLoader.load(getClass().getResource("/fxml/home-view.fxml"));
             stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setTitle("home");

@@ -45,14 +45,8 @@ public class HomeController extends ApplicationController{
 
             DBStage.setOnHidden(windowEvent -> {
                 DBButton.setDisable(false);
-                if(checkDatabaseConnection()){
-                    connected = true;
-                    DBButton.setStyle("-fx-background-color: LimeGreen");
-                }
-                else{
-                    connected = false;
-                    DBButton.setStyle("-fx-background-color: #f74545");
-                }});
+                checkDBConnection();
+            });
 
             DBStage.show();
         } catch (Exception e) {

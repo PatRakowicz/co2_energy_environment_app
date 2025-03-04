@@ -1,5 +1,6 @@
 package com.example.app;
 
+import com.example.app.controllers.ApplicationController;
 import javafx.stage.Stage;
 import java.io.IOException;
 
