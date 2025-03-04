@@ -7,10 +7,8 @@ import java.sql.SQLException;
 // Interface to call
 // Will have Basic CRUD operations, but will provide with override for custom classes
 public interface DBQueries {
-    Connection getConnection();
-
-    default boolean insert(String table, String columns, String values) {
-        Connection connection = getConnection();
+    default boolean insert(String table, String columns, String values, DBController dbController) {
+        Connection connection = dbController.getConnection();
         if (connection == null) {
             System.out.println("No active database connection.");
             return false;
@@ -25,6 +23,11 @@ public interface DBQueries {
             return false;
         }
     }
+    /* Example Use of insert
+        DBController dbController = new DBController();
+        DBQueries dbQueries = new DBQueries() {}; // Anonymous implementation
+        boolean success = dbQueries.insert("users", "name, email", "'John Doe', 'john@example.com'", dbController);
+    * */
 
     // Need to add Read / Update / Delete
 }
