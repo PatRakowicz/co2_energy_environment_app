@@ -26,6 +26,12 @@ public class HomeController {
     @FXML
     private Rectangle indicator;
 
+    private DBController dbController;
+
+    public void initialize() {
+        dbController = new DBController();
+        checkDBConnection();
+    }
 
     public void switchToAddData(ActionEvent event){
         try {
@@ -128,13 +134,20 @@ public class HomeController {
         }
     }
 
+    private void checkDBConnection() {
+        if (dbController.isConnectionSuccessful()) {
+            indicator.setFill(Color.GREEN);
+        } else {
+            indicator.setFill(Color.RED);
+        }
+    }
 
     public void openDBWindow(ActionEvent event) {
         try {
             DBButton.setDisable(true);
             FXMLLoader loader = new FXMLLoader(getClass().getResource("DBWindow.fxml"));
             DBRoot = loader.load();
-            DBController dbController = loader.getController();
+            dbController = loader.getController();
 
             DBStage = new Stage();
             DBScene = new Scene(DBRoot);
@@ -145,11 +158,7 @@ public class HomeController {
 
             DBStage.setOnHidden(windowEvent -> {
                 DBButton.setDisable(false);
-                if (dbController.isConnectionSuccessful()) {
-                    indicator.setFill(Color.GREEN);
-                } else {
-                    indicator.setFill(Color.RED);
-                }
+                checkDBConnection();
             });
 
             DBStage.show();

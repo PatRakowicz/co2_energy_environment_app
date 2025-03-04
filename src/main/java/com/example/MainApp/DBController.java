@@ -29,8 +29,11 @@ public class DBController {
     private boolean connectionSuccessful = false;
     private static final String ENV_FILE = "db_config.env";
 
-    public DBController() {
-        loadDBConfig();
+    @FXML
+    public void initialize() {
+        if (loadDBConfig()) {
+            attemptAutoConnect();
+        }
     }
 
     public void handleSubmit(ActionEvent event) {
@@ -54,7 +57,6 @@ public class DBController {
             showAlert("Error", "Database connection failed.");
         }
 
-        // Close window
         Stage stage = (Stage) ipField.getScene().getWindow();
         stage.close();
     }
@@ -88,18 +90,31 @@ public class DBController {
         }
     }
 
-    private void loadDBConfig() {
+    private boolean loadDBConfig() {
         File file = new File(ENV_FILE);
-        if (!file.exists()) return;
+        if (!file.exists()) return false;
 
         Properties prop = new Properties();
         try (FileReader fr = new FileReader(file)) {
             prop.load(fr);
-            ipField.setText(prop.getProperty("ip", ""));
-            userField.setText(prop.getProperty("user", ""));
-            passwordField.setText(prop.getProperty("password", ""));
+
+            String ip = prop.getProperty("ip", "");
+            String user = prop.getProperty("user", "");
+            String password = prop.getProperty("password", "");
+
+            if (!ip.isEmpty() && !user.isEmpty() && !password.isEmpty()) {
+                conn = connectToDatabase(ip, user, password);
+            }
+            return connectionSuccessful;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
+        }
+    }
+
+    private void attemptAutoConnect() {
+        if (conn != null) {
+            connectionSuccessful = true;
         }
     }
 
