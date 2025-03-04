@@ -16,27 +16,24 @@ public class DBController {
     @FXML
     private TextField ipField;
     @FXML
+    private TextField userField;
+    @FXML
     private PasswordField passwordField;
-
 
     private boolean connectionSuccessful = false;
 
     public void handleSubmit(ActionEvent event) {
-        // this is where the logic of submitting the information goes
         String ip = ipField.getText().trim();
+        String user = userField.getText().trim();
         String password = passwordField.getText().trim();
 
-        if (ip.isEmpty() || password.isEmpty()) {
-            showAlert("Error", "IP and Password can not be empty.");
+        if (ip.isEmpty() || user.isEmpty() || password.isEmpty()) {
+            showAlert("Error", "IP, Username, and/or Password cannot be empty.");
             return;
         }
 
-        if (!ip.matches("\\b(?:\\d{1,3}\\.){3}\\d{1,3}\\b")) {
-            showAlert("Error", "Invalid IP format. Use standard IPv4 (e.g., 127.0.0.1).");
-            return;
-        }
 
-        connectionSuccessful = testDataBaseConnection(ip, password);
+        connectionSuccessful = testDatabaseConnection(ip, user, password);
 
         if (connectionSuccessful) {
             showAlert("Success", "Database connection successful.");
@@ -57,9 +54,8 @@ public class DBController {
         alert.showAndWait();
     }
 
-    private boolean testDataBaseConnection(String ip, String password) {
-        String url = "jdbc:mysql://" + ip + ":3306/WCU_Emissions"; // Update with correct database
-        String user = "root"; // Replace with correct DB User
+    private boolean testDatabaseConnection(String ip, String user, String password) {
+        String url = "jdbc:mysql://" + ip + ":3306/WCU_Emissions";
 
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
             return connection != null;
@@ -71,12 +67,9 @@ public class DBController {
 
     private void handleSQLException(SQLException e) {
         String errorMessage = switch (e.getSQLState()) {
-            case "28000" -> // Invalid authorization specification
-                    "Invalid username or password.";
-            case "08S01" -> // Communication link failure
-                    "Cannot connect to database. Check IP and ensure MySQL is running.";
-            case "42000" -> // Syntax error or access rule violation
-                    "Access denied. Ensure your MySQL user has correct permissions.";
+            case "28000" -> "Invalid user or password.";
+            case "08S01" -> "Cannot connect to database. Check IP and ensure MySQL is running.";
+            case "42000" -> "Access denied. Ensure your MySQL user has correct permissions.";
             default -> "Database connection failed: " + e.getMessage();
         };
         showAlert("Error", errorMessage);
