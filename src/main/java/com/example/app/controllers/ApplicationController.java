@@ -1,5 +1,6 @@
 package com.example.app.controllers;
 
+import com.example.app.controllers.database.DBController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,59 +8,92 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
 import java.util.ArrayList;
 
-public class ApplicationController{
+public class ApplicationController {
     protected Stage stage;
     protected Scene scene;
     protected Parent root;
-    protected Parent DBRoot;
-    protected Stage DBStage;
-    protected Scene DBScene;
-    protected boolean connected;
     protected ArrayList<String> buildings;
 
-    public ApplicationController(){}
+    @FXML
+    private Button DBButton;
+    private DBController dbController;
+    private Stage DBStage;
 
-    public ApplicationController(Stage newStage){
+    public ApplicationController() {
+        dbController = new DBController();
+    }
+
+    public ApplicationController(Stage newStage) {
         try {
             root = FXMLLoader.load(getClass().getResource("/fxml/home-view.fxml"));
             scene = new Scene(root);
             newStage.setTitle("home");
             newStage.setScene(scene);
             newStage.show();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-
-        //this makes sure the database connection is verified when the application is launched
-        Button button = (Button) scene.lookup("#DBButton");
-        if(checkDatabaseConnection()){
-            connected = true;
-            button.setStyle("-fx-background-color: LimeGreen");
-        }
-        else{
-            connected = false;
-            button.setStyle("-fx-background-color: #f74545");
         }
 
 
         //get building info and save to buildings ArrayList
     }
 
-    public Boolean checkDatabaseConnection(){
-        // add the code here to check if the database is connected or not
+    @FXML
+    public void initialize() {
+        updateDBButtonStatus();
+    }
 
+    private void updateDBButtonStatus() {
+        if (dbController.isConnectionSuccessful()) {
+            if (DBButton != null) {
+                DBButton.setStyle("-fx-background-color: LimeGreen");
+            }
+        } else {
+            if (DBButton != null) {
+                DBButton.setStyle("-fx-background-color: #f74545");
+            }
+        }
+    }
 
-        return true;
+    public void openDBWindow() {
+        try {
+            if (DBStage != null && DBStage.isShowing()) {
+                return;
+            }
+
+            DBButton.setDisable(true);
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DBWindow.fxml"));
+            Parent DBRoot = loader.load();
+            Scene DBScene = new Scene(DBRoot);
+            DBStage = new Stage();
+            DBStage.initModality(Modality.APPLICATION_MODAL);
+            DBStage.setScene(DBScene);
+            DBStage.setResizable(false);
+            DBStage.initStyle(StageStyle.UTILITY);
+
+            DBStage.setOnHidden(windowEvent -> {
+                DBButton.setDisable(false);
+                updateDBButtonStatus();
+            });
+
+            DBStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
-    public void switchToAddData(ActionEvent event){
+    public void switchToAddData(ActionEvent event) {
         try {
             root = FXMLLoader.load(getClass().getResource("/fxml/add-data-view.fxml"));
-            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setTitle("add data");
 
@@ -67,16 +101,16 @@ public class ApplicationController{
 
             stage.setScene(scene);
             stage.show();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    public void switchToPrediction(ActionEvent event){
+    public void switchToPrediction(ActionEvent event) {
         try {
             root = FXMLLoader.load(getClass().getResource("/fxml/prediction-view.fxml"));
-            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setTitle("prediction");
 
@@ -84,16 +118,16 @@ public class ApplicationController{
 
             stage.setScene(scene);
             stage.show();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    public void switchToReport(ActionEvent event){
+    public void switchToReport(ActionEvent event) {
         try {
             root = FXMLLoader.load(getClass().getResource("/fxml/report-view.fxml"));
-            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setTitle("reports");
 
@@ -101,16 +135,16 @@ public class ApplicationController{
 
             stage.setScene(scene);
             stage.show();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    public void switchToScenarios(ActionEvent event){
+    public void switchToScenarios(ActionEvent event) {
         try {
             root = FXMLLoader.load(getClass().getResource("/fxml/scenarios-view.fxml"));
-            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setTitle("scenarios");
 
@@ -118,16 +152,16 @@ public class ApplicationController{
 
             stage.setScene(scene);
             stage.show();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    public void switchToUpdateData(ActionEvent event){
+    public void switchToUpdateData(ActionEvent event) {
         try {
             root = FXMLLoader.load(getClass().getResource("/fxml/update-data-view.fxml"));
-            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setTitle("update data");
 
@@ -135,16 +169,16 @@ public class ApplicationController{
 
             stage.setScene(scene);
             stage.show();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    public void switchToViewData(ActionEvent event){
+    public void switchToViewData(ActionEvent event) {
         try {
             root = FXMLLoader.load(getClass().getResource("/fxml/view-data-view.fxml"));
-            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setTitle("view data");
 
@@ -152,32 +186,27 @@ public class ApplicationController{
 
             stage.setScene(scene);
             stage.show();
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    public void switchToHome(ActionEvent event){
+    public void switchToHome(ActionEvent event) {
         try {
             root = FXMLLoader.load(getClass().getResource("/fxml/home-view.fxml"));
-            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             scene = new Scene(root);
             stage.setTitle("home");
             stage.setScene(scene);
-            Button button = (Button) scene.lookup("#DBButton");
-            if(connected){
-                button.setStyle("-fx-background-color: LimeGreen");
-            }else{
-                button.setStyle("-fx-background-color: #f74545");
-            }
             stage.setMinHeight(600);
             stage.setMinWidth(400);
             stage.show();
-        } catch (Exception e){
+
+            updateDBButtonStatus();
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
 }
