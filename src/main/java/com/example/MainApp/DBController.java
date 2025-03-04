@@ -8,9 +8,14 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 public class DBController {
     @FXML
@@ -22,6 +27,11 @@ public class DBController {
 
     private Connection conn;
     private boolean connectionSuccessful = false;
+    private static final String ENV_FILE = "db_config.env";
+
+    public DBController() {
+        loadDBConfig();
+    }
 
     public void handleSubmit(ActionEvent event) {
         String ip = ipField.getText().trim();
@@ -37,6 +47,7 @@ public class DBController {
 
         if (conn != null) {
             connectionSuccessful = true;
+            saveDBConfig(ip, user, password);
             showAlert("Success", "Database connection successful.");
         } else {
             connectionSuccessful = false;
@@ -64,6 +75,31 @@ public class DBController {
         } catch (SQLException e) {
             handleSQLException(e);
             return null;
+        }
+    }
+
+    private void saveDBConfig(String ip, String user, String password) {
+        try (FileWriter fw = new FileWriter(ENV_FILE)) {
+            fw.write("ip=" + ip + "\n");
+            fw.write("user=" + user + "\n");
+            fw.write("password=" + password + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadDBConfig() {
+        File file = new File(ENV_FILE);
+        if (!file.exists()) return;
+
+        Properties prop = new Properties();
+        try (FileReader fr = new FileReader(file)) {
+            prop.load(fr);
+            ipField.setText(prop.getProperty("ip", ""));
+            userField.setText(prop.getProperty("user", ""));
+            passwordField.setText(prop.getProperty("password", ""));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
