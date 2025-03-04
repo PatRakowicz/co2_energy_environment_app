@@ -1,30 +1,18 @@
 package com.example.app.controllers;
 
 import com.example.app.controllers.database.DBController;
-import javafx.event.ActionEvent;
+
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class HomeController {
-    private Stage stage;
-    private Scene scene;
-    private Parent root;
-    private Parent DBRoot;
-    private Stage DBStage;
-    private Scene DBScene;
+public class HomeController extends ApplicationController{
     @FXML
     private Button DBButton;
-    @FXML
-    private Rectangle indicator;
 
     private DBController dbController;
 
@@ -33,120 +21,10 @@ public class HomeController {
         checkDBConnection();
     }
 
-    public void switchToAddData(ActionEvent event){
-        try {
-            root = FXMLLoader.load(getClass().getResource("/fxml/add-data-view.fxml"));
-            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setTitle("add data");
-
-            // Get current buildings and send them to AddDataController
-
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-
-    public void switchToPrediction(ActionEvent event){
-        try {
-            root = FXMLLoader.load(getClass().getResource("/fxml/prediction-view.fxml"));
-            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setTitle("prediction");
-
-            // Get current buildings and send them to AddDataController
-
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-
-    public void switchToReport(ActionEvent event){
-        try {
-            root = FXMLLoader.load(getClass().getResource("/fxml/report-view.fxml"));
-            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setTitle("reports");
-
-            // Get current buildings and send them to AddDataController
-
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-
-    public void switchToScenarios(ActionEvent event){
-        try {
-            root = FXMLLoader.load(getClass().getResource("/fxml/scenarios-view.fxml"));
-            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setTitle("scenarios");
-
-            // Get current buildings and send them to AddDataController
-
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-
-    public void switchToUpdateData(ActionEvent event){
-        try {
-            root = FXMLLoader.load(getClass().getResource("/fxml/update-data-view.fxml"));
-            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setTitle("update data");
-
-            // Get current buildings and send them to AddDataController
-
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-
-    public void switchToViewData(ActionEvent event){
-        try {
-            root = FXMLLoader.load(getClass().getResource("/fxml/view-data-view.fxml"));
-            stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setTitle("view data");
-
-            // Get current buildings and send them to AddDataController
-
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    private void checkDBConnection() {
-        if (dbController.isConnectionSuccessful()) {
-            indicator.setFill(Color.GREEN);
-        } else {
-            indicator.setFill(Color.RED);
-        }
-    }
-
-    public void openDBWindow(ActionEvent event) {
+    public void openDBWindow (){
         try {
             DBButton.setDisable(true);
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DBWindow.fxml"));
-            DBRoot = loader.load();
+            DBRoot = FXMLLoader.load(getClass().getResource("/fxml/DBWindow.fxml"));
             dbController = loader.getController();
             DBStage = new Stage();
             DBScene = new Scene(DBRoot);
@@ -157,8 +35,14 @@ public class HomeController {
 
             DBStage.setOnHidden(windowEvent -> {
                 DBButton.setDisable(false);
-                checkDBConnection();
-            });
+                if(checkDatabaseConnection()){
+                    connected = true;
+                    DBButton.setStyle("-fx-background-color: LimeGreen");
+                }
+                else{
+                    connected = false;
+                    DBButton.setStyle("-fx-background-color: #f74545");
+                }});
 
             DBStage.show();
         } catch (Exception e) {
