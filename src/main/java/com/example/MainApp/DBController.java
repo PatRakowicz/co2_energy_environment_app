@@ -29,8 +29,7 @@ public class DBController {
     private boolean connectionSuccessful = false;
     private static final String ENV_FILE = "db_config.env";
 
-    @FXML
-    public void initialize() {
+    public DBController() {
         if (loadDBConfig()) {
             attemptAutoConnect();
         }
@@ -73,7 +72,9 @@ public class DBController {
         String url = "jdbc:mysql://" + ip + ":3306/WCU_Emissions";
 
         try {
-            return DriverManager.getConnection(url, user, password);
+            conn = DriverManager.getConnection(url, user, password);
+            connectionSuccessful = (conn != null);
+            return conn;
         } catch (SQLException e) {
             handleSQLException(e);
             return null;
@@ -92,7 +93,9 @@ public class DBController {
 
     private boolean loadDBConfig() {
         File file = new File(ENV_FILE);
-        if (!file.exists()) return false;
+        if (!file.exists()) {
+            return false;
+        }
 
         Properties prop = new Properties();
         try (FileReader fr = new FileReader(file)) {
