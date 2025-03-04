@@ -20,6 +20,7 @@ public class DBController {
     @FXML
     private PasswordField passwordField;
 
+    private Connection conn;
     private boolean connectionSuccessful = false;
 
     public void handleSubmit(ActionEvent event) {
@@ -32,18 +33,38 @@ public class DBController {
             return;
         }
 
+        conn = connectToDatabase(ip, user, password);
 
-        connectionSuccessful = testDatabaseConnection(ip, user, password);
-
-        if (connectionSuccessful) {
+        if (conn != null) {
+            connectionSuccessful = true;
             showAlert("Success", "Database connection successful.");
         } else {
+            connectionSuccessful = false;
             showAlert("Error", "Database connection failed.");
         }
 
         // Close window
         Stage stage = (Stage) ipField.getScene().getWindow();
         stage.close();
+    }
+
+    public Connection getConnection() {
+        return conn;
+    }
+
+    public boolean isConnectionSuccessful() {
+        return connectionSuccessful;
+    }
+
+    private Connection connectToDatabase(String ip, String user, String password) {
+        String url = "jdbc:mysql://" + ip + ":3306/WCU_Emissions";
+
+        try {
+            return DriverManager.getConnection(url, user, password);
+        } catch (SQLException e) {
+            handleSQLException(e);
+            return null;
+        }
     }
 
     private void showAlert(String title, String message) {
@@ -54,17 +75,6 @@ public class DBController {
         alert.showAndWait();
     }
 
-    private boolean testDatabaseConnection(String ip, String user, String password) {
-        String url = "jdbc:mysql://" + ip + ":3306/WCU_Emissions";
-
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
-            return connection != null;
-        } catch (SQLException e) {
-            handleSQLException(e);
-            return false;
-        }
-    }
-
     private void handleSQLException(SQLException e) {
         String errorMessage = switch (e.getSQLState()) {
             case "28000" -> "Invalid user or password.";
@@ -73,9 +83,5 @@ public class DBController {
             default -> "Database connection failed: " + e.getMessage();
         };
         showAlert("Error", errorMessage);
-    }
-
-    public boolean isConnectionSuccessful() {
-        return connectionSuccessful;
     }
 }
