@@ -14,13 +14,13 @@
       <DatePicker fx:id="datePicker" layoutX="353.0" layoutY="60.0" onInputMethodTextChanged="#onChange" />
       <Label layoutX="40.0" layoutY="43.0" text="Building" />
       <Label layoutX="356.0" layoutY="44.0" text="Date" />
-      <TextField fx:id="electricityUsage" disable="true" layoutX="37.0" layoutY="125.0" />
-      <TextField fx:id="electricityCost" disable="true" layoutX="363.0" layoutY="126.0" />
-      <TextField fx:id="waterUsage" disable="true" layoutX="36.0" layoutY="210.0" />
-      <TextField fx:id="sewageCost" disable="true" layoutX="37.0" layoutY="301.0" prefHeight="11.0" prefWidth="149.0" />
-      <TextField fx:id="miscCost" disable="true" layoutX="369.0" layoutY="303.0" />
-      <TextField fx:id="waterCost" disable="true" layoutX="366.0" layoutY="210.0" />
-      <Button fx:id="updateButton" disable="true" layoutX="205.0" layoutY="361.0" mnemonicParsing="false" onAction="#update" text="Update" />
+      <TextField fx:id="electricityUsage" layoutX="37.0" layoutY="125.0" />
+      <TextField fx:id="electricityCost" layoutX="363.0" layoutY="126.0" />
+      <TextField fx:id="waterUsage" layoutX="36.0" layoutY="210.0" />
+      <TextField fx:id="sewageCost" layoutX="37.0" layoutY="301.0" prefHeight="11.0" prefWidth="149.0" />
+      <TextField fx:id="miscCost" layoutX="369.0" layoutY="303.0" />
+      <TextField fx:id="waterCost" layoutX="366.0" layoutY="210.0" />
+      <Button fx:id="updateButton" layoutX="205.0" layoutY="361.0" mnemonicParsing="false" onAction="#update" text="Update" />
       <Label layoutX="37.0" layoutY="108.0" text="Electricity Usage" />
       <Label layoutX="37.0" layoutY="193.0" text="Water Usage" />
       <Label layoutX="38.0" layoutY="283.0" text="Sewage Cost" />

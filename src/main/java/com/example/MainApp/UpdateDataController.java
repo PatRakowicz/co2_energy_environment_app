@@ -1,13 +1,7 @@
 package com.example.MainApp;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-
 import java.time.LocalDate;
 
 
@@ -44,12 +38,6 @@ public class UpdateDataController extends ApplicationController{
     private DatePicker datePicker;
     @FXML
     private ChoiceBox buildingChoice;
-    @FXML
-    private Button updateButton;
-    @FXML
-    private Button deleteButton;
-    @FXML
-    private Label question;
 
     float eUsage;
     float eCost;
@@ -176,6 +164,9 @@ public class UpdateDataController extends ApplicationController{
     }
 
 
+    /* trying to disable the buttons and textfields until a building and date are chosen,
+        but haven't quite figured it out yet
+
     public void onChange(){
         if(datePicker.getValue() != null){ // && buildings.getValue() != null
 
@@ -201,4 +192,5 @@ public class UpdateDataController extends ApplicationController{
             deleteButton.setDisable(true);
         }
     }
+    */
 }
