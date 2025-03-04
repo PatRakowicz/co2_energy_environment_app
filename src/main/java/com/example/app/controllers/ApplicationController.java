@@ -1,4 +1,4 @@
-package com.example.MainApp;
+package com.example.app.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,13 +7,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.paint.Color;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class ApplicationController{
@@ -177,6 +171,8 @@ public class ApplicationController{
             }else{
                 button.setStyle("-fx-background-color: #f74545");
             }
+            stage.setMinHeight(600);
+            stage.setMinWidth(400);
             stage.show();
         } catch (Exception e){
             e.printStackTrace();

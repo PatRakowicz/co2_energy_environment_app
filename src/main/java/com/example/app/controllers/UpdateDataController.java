@@ -1,7 +1,10 @@
-package com.example.MainApp;
+package com.example.app.controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import java.time.LocalDate;
 
 
