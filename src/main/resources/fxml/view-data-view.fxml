@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app.controllers.ViewDataController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app.controllers.ViewDataController">
    <top>
       <HBox prefHeight="30.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -31,14 +31,14 @@
       </HBox>
    </top>
    <left>
-      <VBox id="leftPanel" prefHeight="370.0" prefWidth="168.0" style="-fx-border-color: #000000;" BorderPane.alignment="CENTER">
+      <VBox prefHeight="370.0" prefWidth="168.0" style="-fx-border-color: #000000;" BorderPane.alignment="CENTER">
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Building">
                <VBox.margin>
                   <Insets bottom="2.0" left="5.0" top="10.0" />
                </VBox.margin>
             </Text>
-            <ComboBox maxWidth="1.7976931348623157E308" prefWidth="150.0">
+            <ComboBox fx:id="buildingComboBox" maxWidth="1.7976931348623157E308" prefWidth="150.0">
                <VBox.margin>
                   <Insets bottom="10.0" left="5.0" right="5.0" />
                </VBox.margin>
@@ -48,12 +48,12 @@
                   <Insets bottom="2.0" left="5.0" top="10.0" />
                </VBox.margin>
             </Text>
-            <DatePicker prefHeight="25.0" prefWidth="104.0" promptText="Start Date">
+            <DatePicker fx:id="startDatePicker" prefHeight="25.0" prefWidth="104.0" promptText="Start Date">
                <VBox.margin>
                   <Insets bottom="2.0" left="5.0" />
                </VBox.margin>
             </DatePicker>
-            <DatePicker prefHeight="25.0" prefWidth="104.0" promptText="End Date">
+            <DatePicker fx:id="endDatePicker" prefHeight="25.0" prefWidth="104.0" promptText="End Date">
                <VBox.margin>
                   <Insets bottom="5.0" left="5.0" top="2.0" />
                </VBox.margin>
@@ -63,7 +63,7 @@
                   <Insets bottom="2.0" left="5.0" top="10.0" />
                </VBox.margin>
             </Text>
-            <CheckBox mnemonicParsing="false" text="Electricity Usage">
+            <CheckBox fx:id="electricityUsageCheck" mnemonicParsing="false" text="Electricity Usage">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
@@ -71,27 +71,27 @@
                   <Insets left="5.0" />
                </padding>
             </CheckBox>
-            <CheckBox mnemonicParsing="false" text="Water Usage">
+            <CheckBox fx:id="waterUsageCheck" mnemonicParsing="false" text="Water Usage">
                <padding>
                   <Insets left="5.0" />
                </padding>
             </CheckBox>
-            <CheckBox mnemonicParsing="false" text="Electricty Cost">
+            <CheckBox fx:id="electricityCostCheck" mnemonicParsing="false" text="Electricty Cost">
                <padding>
                   <Insets left="5.0" />
                </padding>
             </CheckBox>
-            <CheckBox mnemonicParsing="false" text="Water Cost">
+            <CheckBox fx:id="waterCostCheck" mnemonicParsing="false" text="Water Cost">
                <padding>
                   <Insets left="5.0" />
                </padding>
             </CheckBox>
-            <CheckBox mnemonicParsing="false" text="Sewage Cost">
+            <CheckBox fx:id="sewageCostCheck" mnemonicParsing="false" text="Sewage Cost">
                <padding>
                   <Insets left="5.0" />
                </padding>
             </CheckBox>
-            <CheckBox mnemonicParsing="false" text="Misc Cost">
+            <CheckBox fx:id="miscCostCheck" mnemonicParsing="false" text="Misc Cost">
                <padding>
                   <Insets left="5.0" />
                </padding>
@@ -102,7 +102,7 @@
    <center>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <LineChart id="graphingPanel" prefHeight="206.0" prefWidth="432.0" style="-fx-border-color: #000000;" VBox.vgrow="ALWAYS">
+            <LineChart prefHeight="206.0" prefWidth="432.0" style="-fx-border-color: #000000;" VBox.vgrow="ALWAYS">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -110,7 +110,7 @@
                 <NumberAxis side="LEFT" />
               </yAxis>
             </LineChart>
-            <TableView id="tablePanel" maxHeight="200.0" prefHeight="43.0" prefWidth="432.0" style="-fx-border-color: #000000;" VBox.vgrow="ALWAYS">
+            <TableView maxHeight="200.0" prefHeight="43.0" prefWidth="432.0" style="-fx-border-color: #000000;" VBox.vgrow="ALWAYS">
               <columns>
                 <TableColumn prefWidth="75.0" text="Info1" />
                 <TableColumn prefWidth="75.0" text="Info2" />

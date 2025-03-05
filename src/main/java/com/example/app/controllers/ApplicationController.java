@@ -1,6 +1,8 @@
 package com.example.app.controllers;
 
-import com.example.app.controllers.database.DBController;
+import com.example.app.dao.BuildingRecords;
+import com.example.app.model.Building;
+import com.example.app.utils.ViewManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,17 +14,20 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.sql.Connection;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ApplicationController {
     protected Stage stage;
     protected Scene scene;
     protected Parent root;
-    protected ArrayList<String> buildings;
+
+    protected ArrayList<Building> buildings;
 
     @FXML
     private Button DBButton;
-    private DBController dbController;
+    protected DBController dbController;
     private Stage DBStage;
 
     public ApplicationController() {
@@ -41,14 +46,15 @@ public class ApplicationController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-        //get building info and save to buildings ArrayList
     }
 
     @FXML
     public void initialize() {
         updateDBButtonStatus();
+    }
+
+    public void setDbController(DBController dbController) {
+        this.dbController = dbController;
     }
 
     private void updateDBButtonStatus() {
@@ -188,21 +194,8 @@ public class ApplicationController {
 
     @FXML
     public void switchToViewData(ActionEvent event) {
-        try {
-            root = FXMLLoader.load(getClass().getResource("/fxml/view-data-view.fxml"));
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setTitle("view data");
-
-            // Get current buildings and send them to AddDataController
-
-            stage.setScene(scene);
-            stage.setMinHeight(400);
-            stage.setMinWidth(600);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        ViewManager.setScene(stage, "/fxml/view-data-view.fxml", dbController, "Dashboard");
     }
 
     @FXML

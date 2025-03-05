@@ -1,7 +1,10 @@
-package com.example.app.controllers.database;
+package com.example.app.dao;
+
+import com.example.app.controllers.DBController;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 // Interface to call
@@ -30,4 +33,25 @@ public interface DBQueries {
     * */
 
     // Need to add Read / Update / Delete
+    default ResultSet read(String table, String columns, String condition, DBController dbController) throws SQLException {
+        Connection connection = dbController.getConnection();
+        if (connection == null) {
+
+            System.out.println("No active database connection.");
+            return null;
+        }
+
+        String query = String.format("SELECT %s FROM %s", columns, table);
+        if (!condition.isEmpty()) {
+            condition = String.format(" WHERE %s", condition);
+            query += condition;
+        }
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            return statement.executeQuery();
+        } catch (SQLException e) {
+            System.out.printf("Caught SQL Error: %s", e);
+            return null;
+        }
+
+}
 }
