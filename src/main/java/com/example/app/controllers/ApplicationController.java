@@ -35,6 +35,8 @@ public class ApplicationController {
             scene = new Scene(root);
             newStage.setTitle("home");
             newStage.setScene(scene);
+            newStage.setMinHeight(400);
+            newStage.setMinWidth(600);
             newStage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -100,6 +102,8 @@ public class ApplicationController {
             // Get current buildings and send them to AddDataController
 
             stage.setScene(scene);
+            stage.setMinHeight(400);
+            stage.setMinWidth(600);
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -117,6 +121,8 @@ public class ApplicationController {
             // Get current buildings and send them to AddDataController
 
             stage.setScene(scene);
+            stage.setMinHeight(400);
+            stage.setMinWidth(600);
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,6 +140,8 @@ public class ApplicationController {
             // Get current buildings and send them to AddDataController
 
             stage.setScene(scene);
+            stage.setMinHeight(400);
+            stage.setMinWidth(600);
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -151,6 +159,8 @@ public class ApplicationController {
             // Get current buildings and send them to AddDataController
 
             stage.setScene(scene);
+            stage.setMinHeight(400);
+            stage.setMinWidth(600);
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -168,6 +178,8 @@ public class ApplicationController {
             // Get current buildings and send them to AddDataController
 
             stage.setScene(scene);
+            stage.setMinHeight(400);
+            stage.setMinWidth(600);
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -185,6 +197,8 @@ public class ApplicationController {
             // Get current buildings and send them to AddDataController
 
             stage.setScene(scene);
+            stage.setMinHeight(400);
+            stage.setMinWidth(600);
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -199,8 +213,8 @@ public class ApplicationController {
             scene = new Scene(root);
             stage.setTitle("home");
             stage.setScene(scene);
-            stage.setMinHeight(600);
-            stage.setMinWidth(400);
+            stage.setMinHeight(400);
+            stage.setMinWidth(600);
             stage.show();
 
             updateDBButtonStatus();
