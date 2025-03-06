@@ -1,14 +1,23 @@
 package com.example.app.controllers;
 
+import com.example.app.dao.BuildingRecords;
+import com.example.app.dao.UtilityRecords;
+import com.example.app.model.Building;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.util.StringConverter;
+
 import java.time.LocalDate;
 
 
 public class UpdateDataController extends ApplicationController{
+    private BuildingRecords buildingRecords;
+    private UtilityRecords utilityRecords;
     @FXML
     private Label electricityUsageError;
     @FXML
@@ -166,7 +175,38 @@ public class UpdateDataController extends ApplicationController{
         //delete data
     }
 
+    @Override
+    public void initialize() {
+        super.initialize();
 
+        if (dbController == null) {
+            System.out.println("No active database connection.");
+            return;
+        }
+
+        buildingRecords = new BuildingRecords(super.dbController);
+        buildings = buildingRecords.getBuildings();
+
+        ObservableList<Building> oBuildings = FXCollections.observableArrayList(buildings);
+        buildingChoice.setItems(oBuildings);
+
+        buildingChoice.setConverter(new StringConverter<Building>() {
+            @Override
+            public String toString(Building building) {
+                if (building == null) {
+                    return "";
+                }
+                return building.getName();
+            }
+
+            @Override
+            public Building fromString(String s) {
+                return null;
+            }
+        });
+
+        utilityRecords = new UtilityRecords(super.dbController);
+    }
     /* trying to disable the buttons and textfields until a building and date are chosen,
         but haven't quite figured it out yet
 

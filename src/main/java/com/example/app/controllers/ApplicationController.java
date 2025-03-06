@@ -99,97 +99,32 @@ public class ApplicationController {
 
     @FXML
     public void switchToAddData(ActionEvent event) {
-        try {
-            root = FXMLLoader.load(getClass().getResource("/fxml/add-data-view.fxml"));
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setTitle("add data");
-
-            // Get current buildings and send them to AddDataController
-
-            stage.setScene(scene);
-            stage.setMinHeight(400);
-            stage.setMinWidth(600);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        ViewManager.setScene(stage, "/fxml/add-data-view.fxml", dbController, "Dashboard");
     }
 
     @FXML
     public void switchToPrediction(ActionEvent event) {
-        try {
-            root = FXMLLoader.load(getClass().getResource("/fxml/prediction-view.fxml"));
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setTitle("prediction");
-
-            // Get current buildings and send them to AddDataController
-
-            stage.setScene(scene);
-            stage.setMinHeight(400);
-            stage.setMinWidth(600);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        ViewManager.setScene(stage, "/fxml/prediction-view.fxml", dbController, "Dashboard");
     }
 
     @FXML
     public void switchToReport(ActionEvent event) {
-        try {
-            root = FXMLLoader.load(getClass().getResource("/fxml/report-view.fxml"));
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setTitle("reports");
-
-            // Get current buildings and send them to AddDataController
-
-            stage.setScene(scene);
-            stage.setMinHeight(400);
-            stage.setMinWidth(600);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        ViewManager.setScene(stage, "/fxml/report-view.fxml", dbController, "Dashboard");
     }
 
     @FXML
     public void switchToScenarios(ActionEvent event) {
-        try {
-            root = FXMLLoader.load(getClass().getResource("/fxml/scenarios-view.fxml"));
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setTitle("scenarios");
-
-            // Get current buildings and send them to AddDataController
-
-            stage.setScene(scene);
-            stage.setMinHeight(400);
-            stage.setMinWidth(600);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        ViewManager.setScene(stage, "/fxml/scenarios-view.fxml", dbController, "Dashboard");
     }
 
     @FXML
     public void switchToUpdateData(ActionEvent event) {
-        try {
-            root = FXMLLoader.load(getClass().getResource("/fxml/update-data-view.fxml"));
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setTitle("update data");
-
-            // Get current buildings and send them to AddDataController
-
-            stage.setScene(scene);
-            stage.setMinHeight(400);
-            stage.setMinWidth(600);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        ViewManager.setScene(stage, "/fxml/update-data-view.fxml", dbController, "Dashboard");
     }
 
     @FXML
@@ -200,20 +135,8 @@ public class ApplicationController {
 
     @FXML
     public void switchToHome(ActionEvent event) {
-        try {
-            root = FXMLLoader.load(getClass().getResource("/fxml/home-view.fxml"));
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            scene = new Scene(root);
-            stage.setTitle("home");
-            stage.setScene(scene);
-            stage.setMinHeight(400);
-            stage.setMinWidth(600);
-            stage.show();
-
-            updateDBButtonStatus();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        ViewManager.setScene(stage, "/fxml/home-view.fxml", dbController, "Dashboard");
     }
 
 }

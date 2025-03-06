@@ -11,7 +11,7 @@
    <children>
       <ChoiceBox fx:id="buildingChoice" layoutX="38.0" layoutY="59.0" prefWidth="150.0" />
       <Button layoutX="3.0" layoutY="3.0" mnemonicParsing="false" onAction="#switchToHome" prefHeight="25.0" prefWidth="44.0" text="Back" />
-      <DatePicker fx:id="datePicker" layoutX="353.0" layoutY="60.0" onInputMethodTextChanged="#onChange" />
+      <DatePicker fx:id="datePicker" layoutX="353.0" layoutY="60.0"/>
       <Label layoutX="40.0" layoutY="43.0" text="Building" />
       <Label layoutX="356.0" layoutY="44.0" text="Date" />
       <TextField fx:id="electricityUsage" layoutX="37.0" layoutY="125.0" />
