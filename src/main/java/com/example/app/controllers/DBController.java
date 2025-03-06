@@ -1,4 +1,4 @@
-package com.example.app.controllers.database;
+package com.example.app.controllers;
 
 
 import javafx.event.ActionEvent;
