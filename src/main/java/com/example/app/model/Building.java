@@ -1,7 +1,6 @@
 package com.example.app.model;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class Building {
@@ -15,7 +14,9 @@ public class Building {
     private Date endShared;
 
     // Getters
-
+    public int getBuildingID() {
+        return buildingID;
+    }
 
     public String getName() {
         return name;

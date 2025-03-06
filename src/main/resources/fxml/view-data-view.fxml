@@ -15,7 +15,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app.controllers.ViewDataController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app.controllers.ViewDataController">
    <top>
       <HBox prefHeight="30.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
@@ -26,6 +26,14 @@
                <padding>
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                </padding>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#refreshView" text="Refresh" textAlignment="CENTER" HBox.hgrow="ALWAYS">
+               <padding>
+                  <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
+               </padding>
+               <HBox.margin>
+                  <Insets left="5.0" right="5.0" top="5.0" />
+               </HBox.margin>
             </Button>
          </children>
       </HBox>
@@ -102,7 +110,7 @@
    <center>
       <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <LineChart prefHeight="206.0" prefWidth="432.0" style="-fx-border-color: #000000;" VBox.vgrow="ALWAYS">
+            <LineChart fx:id="lineChart" prefHeight="206.0" prefWidth="432.0" style="-fx-border-color: #000000;" VBox.vgrow="ALWAYS">
               <xAxis>
                 <CategoryAxis side="BOTTOM" />
               </xAxis>
@@ -110,7 +118,7 @@
                 <NumberAxis side="LEFT" />
               </yAxis>
             </LineChart>
-            <TableView maxHeight="200.0" prefHeight="43.0" prefWidth="432.0" style="-fx-border-color: #000000;" VBox.vgrow="ALWAYS">
+            <TableView fx:id="tableView" maxHeight="200.0" prefHeight="43.0" prefWidth="432.0" style="-fx-border-color: #000000;" VBox.vgrow="ALWAYS">
               <columns>
                 <TableColumn prefWidth="75.0" text="Info1" />
                 <TableColumn prefWidth="75.0" text="Info2" />
