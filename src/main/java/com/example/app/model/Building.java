@@ -22,6 +22,10 @@ public class Building {
         return name;
     }
 
+    public Date getStartShared(){return startShared;}
+
+    public Date getEndShared(){return endShared;}
+
     // Setters
     public void setBuildingID(int buildingID) {
         this.buildingID = buildingID;

@@ -1,20 +1,20 @@
 package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
-import com.example.app.dao.UtilityRecords;
 import com.example.app.model.Building;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.util.StringConverter;
 
+import java.time.ZoneId;
 import java.time.LocalDate;
+import java.util.Date;
+import java.util.Objects;
 
 public class AddDataController extends ApplicationController{
     private BuildingRecords buildingRecords;
-    private UtilityRecords utilityRecords;
     @FXML
     private Label electricityUsageError;
     @FXML
@@ -46,7 +46,7 @@ public class AddDataController extends ApplicationController{
     @FXML
     private DatePicker datePicker;
     @FXML
-    private ChoiceBox buildingChoice;
+    private ComboBox<Building> buildingComboBox;
 
     float eUsage;
     float eCost;
@@ -55,7 +55,7 @@ public class AddDataController extends ApplicationController{
     float sCost;
     float mCost;
     LocalDate date;
-    String building;
+    Object building;
 
 
     public void clearErrors(){
@@ -145,12 +145,12 @@ public class AddDataController extends ApplicationController{
             date = datePicker.getValue();
         }
 
-        if(buildingChoice.getValue() == null){
+        if(buildingComboBox.getValue() == null){
             buildingError.setText("ERROR: building can't be nothing");
             valid = false;
         }
         else{
-            //get value from buildingChoice and store it in building
+            building = buildingComboBox.getValue();
         }
 
 
@@ -180,9 +180,9 @@ public class AddDataController extends ApplicationController{
         buildings = buildingRecords.getBuildings();
 
         ObservableList<Building> oBuildings = FXCollections.observableArrayList(buildings);
-        buildingChoice.setItems(oBuildings);
+        buildingComboBox.setItems(oBuildings);
 
-        buildingChoice.setConverter(new StringConverter<Building>() {
+        buildingComboBox.setConverter(new StringConverter<Building>() {
             @Override
             public String toString(Building building) {
                 if (building == null) {
@@ -196,7 +196,51 @@ public class AddDataController extends ApplicationController{
                 return null;
             }
         });
+    }
 
-        utilityRecords = new UtilityRecords(super.dbController);
+    public void onChange(){
+        if(buildingComboBox.getValue() != null && datePicker.getValue() != null) {
+            String name = buildingComboBox.getValue().getName();
+            Date checkDate = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+            System.out.println("name = " + name);
+            System.out.println("date = " + date);
+
+            for (int i = 0; i < buildings.size(); i++) {
+                String checkName = buildings.get(i).getName();
+
+
+                if (Objects.equals(checkName, name)) {
+
+                    System.out.println("checkName = " + checkName);
+
+                    Date checkDateStart = buildings.get(i).getStartShared();
+                    Date checkDateEnd = buildings.get(i).getEndShared();
+
+
+                    System.out.println("checkDateStart = " + checkDateStart);
+                    System.out.println("checkDateEnd = " + checkDateEnd);
+                    if(checkDateStart != null) {
+                        if (checkDateStart.before(checkDate)) {
+                            if (checkDateEnd == null) {
+                                electricityCost.setDisable(true);
+                                electricityUsage.setDisable(true);
+                            } else if (checkDateEnd.after(checkDate)) {
+                                electricityCost.setDisable(true);
+                                electricityUsage.setDisable(true);
+                            } else {
+                                electricityUsage.setDisable(false);
+                                electricityCost.setDisable(false);
+                            }
+
+                        } else {
+                            electricityUsage.setDisable(false);
+                            electricityCost.setDisable(false);
+                        }
+                    }
+                    break;
+                }
+            }
+        }
     }
 }

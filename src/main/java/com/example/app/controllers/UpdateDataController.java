@@ -6,10 +6,7 @@ import com.example.app.model.Building;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.util.StringConverter;
 
 import java.time.LocalDate;
@@ -17,7 +14,6 @@ import java.time.LocalDate;
 
 public class UpdateDataController extends ApplicationController{
     private BuildingRecords buildingRecords;
-    private UtilityRecords utilityRecords;
     @FXML
     private Label electricityUsageError;
     @FXML
@@ -50,6 +46,10 @@ public class UpdateDataController extends ApplicationController{
     private DatePicker datePicker;
     @FXML
     private ChoiceBox buildingChoice;
+    @FXML
+    private Button updateButton;
+    @FXML
+    private Button deleteButton;
 
     float eUsage;
     float eCost;
@@ -58,7 +58,7 @@ public class UpdateDataController extends ApplicationController{
     float sCost;
     float mCost;
     LocalDate date;
-    String building;
+    Object building;
 
 
     public void clearErrors(){
@@ -205,13 +205,10 @@ public class UpdateDataController extends ApplicationController{
             }
         });
 
-        utilityRecords = new UtilityRecords(super.dbController);
     }
-    /* trying to disable the buttons and textfields until a building and date are chosen,
-        but haven't quite figured it out yet
 
     public void onChange(){
-        if(datePicker.getValue() != null){ // && buildings.getValue() != null
+        if(datePicker.getValue() != null && buildingChoice.getValue() != null){
 
             //get info from database and populate values
 
@@ -235,5 +232,4 @@ public class UpdateDataController extends ApplicationController{
             deleteButton.setDisable(true);
         }
     }
-    */
 }
