@@ -1,11 +1,14 @@
 package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
+import com.example.app.dao.DBQueries;
 import com.example.app.model.Building;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.util.StringConverter;
 
 import java.time.ZoneId;
@@ -14,6 +17,7 @@ import java.util.Date;
 import java.util.Objects;
 
 public class AddDataController extends ApplicationController{
+    ObservableList<Building> oBuildings;
     private BuildingRecords buildingRecords;
     @FXML
     private Label electricityUsageError;
@@ -47,6 +51,7 @@ public class AddDataController extends ApplicationController{
     private DatePicker datePicker;
     @FXML
     private ComboBox<Building> buildingComboBox;
+    private TextField editor;
 
     float eUsage;
     float eCost;
@@ -55,7 +60,9 @@ public class AddDataController extends ApplicationController{
     float sCost;
     float mCost;
     LocalDate date;
-    Object building;
+    Building building;
+    Building lastNotNull;
+
 
 
     public void clearErrors(){
@@ -146,7 +153,12 @@ public class AddDataController extends ApplicationController{
         }
 
         if(buildingComboBox.getValue() == null){
-            buildingError.setText("ERROR: building can't be nothing");
+            if(editor.getText() != null){
+                buildingError.setText("ERROR: input is not a known building");
+            }
+            else {
+                buildingError.setText("ERROR: building can't be nothing");
+            }
             valid = false;
         }
         else{
@@ -160,11 +172,26 @@ public class AddDataController extends ApplicationController{
     public void add(){
         clearErrors();
         if(validity()){
-            //add data to database
+            String buildingId = Integer.toString(buildingComboBox.getValue().getBuildingID());
+            String info = buildingId + ", " + sCost + ", " + mCost + ", " + eCost + ", " + wCost + ", " + eUsage + ", "
+                    + wUsage + ", " + date;
+            String columns = "buildingID, sw_cost, misc_cost, e_cost, w_cost, e_usage, w_usage, date";
 
-            clearInputs();
+
+            System.out.println(buildingId);
+            System.out.println(info);
+            System.out.println(columns);
+            if(!buildingRecords.insert("utility", columns, info, dbController)){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setHeaderText(null);
+                alert.setTitle("Error");
+                alert.setContentText("Something went wrong while trying to connect to the database");
+                alert.showAndWait();
+            }
+            else {
+                clearInputs();
+            }
         }
-
     }
 
     @Override
@@ -179,7 +206,7 @@ public class AddDataController extends ApplicationController{
         buildingRecords = new BuildingRecords(super.dbController);
         buildings = buildingRecords.getBuildings();
 
-        ObservableList<Building> oBuildings = FXCollections.observableArrayList(buildings);
+        oBuildings = FXCollections.observableArrayList(buildings);
         buildingComboBox.setItems(oBuildings);
 
         buildingComboBox.setConverter(new StringConverter<Building>() {
@@ -196,38 +223,42 @@ public class AddDataController extends ApplicationController{
                 return null;
             }
         });
+
+        editor = buildingComboBox.getEditor();
+
+        editor.textProperty().addListener((observable, oldValue, newValue) -> {
+            Platform.runLater(() -> filter());
+        });
+
+        editor.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            Platform.runLater(() -> lostFocus(isNowFocused));
+        });
     }
 
     public void onChange(){
+        if(buildingComboBox.getValue() != null){
+            lastNotNull = buildingComboBox.getValue();
+        }
         if(buildingComboBox.getValue() != null && datePicker.getValue() != null) {
             String name = buildingComboBox.getValue().getName();
             Date checkDate = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-
-            System.out.println("name = " + name);
-            System.out.println("date = " + date);
-
             for (int i = 0; i < buildings.size(); i++) {
                 String checkName = buildings.get(i).getName();
-
-
                 if (Objects.equals(checkName, name)) {
-
-                    System.out.println("checkName = " + checkName);
-
                     Date checkDateStart = buildings.get(i).getStartShared();
                     Date checkDateEnd = buildings.get(i).getEndShared();
-
-
-                    System.out.println("checkDateStart = " + checkDateStart);
-                    System.out.println("checkDateEnd = " + checkDateEnd);
                     if(checkDateStart != null) {
                         if (checkDateStart.before(checkDate)) {
                             if (checkDateEnd == null) {
                                 electricityCost.setDisable(true);
                                 electricityUsage.setDisable(true);
+                                electricityCost.setText("");
+                                electricityUsage.setText("");
                             } else if (checkDateEnd.after(checkDate)) {
                                 electricityCost.setDisable(true);
                                 electricityUsage.setDisable(true);
+                                electricityCost.setText("");
+                                electricityUsage.setText("");
                             } else {
                                 electricityUsage.setDisable(false);
                                 electricityCost.setDisable(false);
@@ -238,9 +269,48 @@ public class AddDataController extends ApplicationController{
                             electricityCost.setDisable(false);
                         }
                     }
+                    else{
+                        electricityUsage.setDisable(false);
+                        electricityCost.setDisable(false);
+                    }
                     break;
                 }
             }
+        }
+    }
+
+    public void filter() {
+        int caretPosition = editor.getCaretPosition();
+        String input = editor.getText();
+        ObservableList<Building> filteredList = FXCollections.observableArrayList();
+
+        boolean buildingSelected = false;
+        for (Building b : oBuildings) {
+            if (b.getName().equals(input)) {
+                buildingSelected = true;
+            }
+        }
+
+        if (!buildingSelected) {
+            buildingComboBox.show();
+            if (input.isEmpty()) {
+                buildingComboBox.setItems(oBuildings);
+            } else {
+                for (Building item : oBuildings) {
+                    if (item.getName().toLowerCase().contains(input.toLowerCase())) {
+                        filteredList.add(item);
+                    }
+                }
+                buildingComboBox.setItems(filteredList);
+            }
+        }
+        editor.positionCaret(caretPosition);
+    }
+
+    public void lostFocus(Boolean isNowFocused){
+        if(buildingComboBox.getValue() == null && lastNotNull != null && !isNowFocused){
+            buildingComboBox.setValue(lastNotNull);
+            buildingComboBox.hide();
         }
     }
 }
