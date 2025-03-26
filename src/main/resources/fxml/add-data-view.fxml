@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<?import javafx.scene.control.ComboBox?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app.controllers.AddDataController">
    <children>
-      <ComboBox fx:id="buildingComboBox" layoutX="38.0" layoutY="59.0" prefWidth="150.0" onAction="#onChange"/>
+      <ComboBox fx:id="buildingComboBox" editable="true" layoutX="38.0" layoutY="59.0" onAction="#onChange" prefWidth="150.0"/>
       <Button layoutX="3.0" layoutY="3.0" mnemonicParsing="false" onAction="#switchToHome" prefHeight="25.0" prefWidth="44.0" text="Back" />
-      <DatePicker fx:id="datePicker" layoutX="353.0" layoutY="60.0" onAction="#onChange"/>
+      <DatePicker fx:id="datePicker" layoutX="353.0" layoutY="60.0" onAction="#onChange" />
       <Label layoutX="40.0" layoutY="43.0" text="Building" />
       <Label layoutX="356.0" layoutY="44.0" text="Date" />
       <TextField fx:id="electricityUsage" layoutX="37.0" layoutY="125.0" />

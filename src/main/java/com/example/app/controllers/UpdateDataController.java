@@ -1,12 +1,14 @@
 package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
-import com.example.app.dao.UtilityRecords;
 import com.example.app.model.Building;
+import com.example.app.model.FilteredBuildingBox;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.InputMethodEvent;
 import javafx.util.StringConverter;
 
 import java.time.LocalDate;
@@ -45,11 +47,12 @@ public class UpdateDataController extends ApplicationController{
     @FXML
     private DatePicker datePicker;
     @FXML
-    private ChoiceBox buildingChoice;
+    private ComboBox<Building> buildingComboBox;
     @FXML
     private Button updateButton;
     @FXML
     private Button deleteButton;
+    private FilteredBuildingBox buildingBox;
 
     float eUsage;
     float eCost;
@@ -58,7 +61,6 @@ public class UpdateDataController extends ApplicationController{
     float sCost;
     float mCost;
     LocalDate date;
-    Object building;
 
 
     public void clearErrors(){
@@ -148,7 +150,7 @@ public class UpdateDataController extends ApplicationController{
             date = datePicker.getValue();
         }
 
-        if(buildingChoice.getValue() == null){
+        if(buildingComboBox.getValue() == null){
             buildingError.setText("ERROR: building can't be nothing");
             valid = false;
         }
@@ -186,29 +188,14 @@ public class UpdateDataController extends ApplicationController{
 
         buildingRecords = new BuildingRecords(super.dbController);
         buildings = buildingRecords.getBuildings();
-
-        ObservableList<Building> oBuildings = FXCollections.observableArrayList(buildings);
-        buildingChoice.setItems(oBuildings);
-
-        buildingChoice.setConverter(new StringConverter<Building>() {
-            @Override
-            public String toString(Building building) {
-                if (building == null) {
-                    return "";
-                }
-                return building.getName();
-            }
-
-            @Override
-            public Building fromString(String s) {
-                return null;
-            }
-        });
-
+        buildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
     }
 
     public void onChange(){
-        if(datePicker.getValue() != null && buildingChoice.getValue() != null){
+        if(buildingComboBox.getValue() != null){
+            buildingBox.lastNotNull = buildingComboBox.getValue();
+        }
+        if(datePicker.getValue() != null && buildingComboBox.getValue() != null){
 
             //get info from database and populate values
 
