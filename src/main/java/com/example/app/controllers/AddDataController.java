@@ -165,6 +165,12 @@ public class AddDataController extends ApplicationController{
 
     public void add(){
         clearErrors();
+        if(validity()){
+            //add data to database
+
+            clearInputs();
+        }
+
     }
 
     @Override
