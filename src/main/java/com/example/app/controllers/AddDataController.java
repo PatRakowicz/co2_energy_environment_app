@@ -3,6 +3,7 @@ package com.example.app.controllers;
 import com.example.app.dao.BuildingRecords;
 import com.example.app.dao.DBQueries;
 import com.example.app.model.Building;
+import com.example.app.model.FilteredBuildingBox;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,7 +18,6 @@ import java.util.Date;
 import java.util.Objects;
 
 public class AddDataController extends ApplicationController{
-    ObservableList<Building> oBuildings;
     private BuildingRecords buildingRecords;
     @FXML
     private Label electricityUsageError;
@@ -51,7 +51,7 @@ public class AddDataController extends ApplicationController{
     private DatePicker datePicker;
     @FXML
     private ComboBox<Building> buildingComboBox;
-    private TextField editor;
+    private FilteredBuildingBox buildingBox;
 
     float eUsage;
     float eCost;
@@ -61,7 +61,6 @@ public class AddDataController extends ApplicationController{
     float mCost;
     LocalDate date;
     Building building;
-    Building lastNotNull;
 
 
 
@@ -153,12 +152,7 @@ public class AddDataController extends ApplicationController{
         }
 
         if(buildingComboBox.getValue() == null){
-            if(editor.getText() != null){
-                buildingError.setText("ERROR: input is not a known building");
-            }
-            else {
-                buildingError.setText("ERROR: building can't be nothing");
-            }
+            buildingError.setText("ERROR: building must be selected");
             valid = false;
         }
         else{
@@ -171,27 +165,6 @@ public class AddDataController extends ApplicationController{
 
     public void add(){
         clearErrors();
-        if(validity()){
-            String buildingId = Integer.toString(buildingComboBox.getValue().getBuildingID());
-            String info = buildingId + ", " + sCost + ", " + mCost + ", " + eCost + ", " + wCost + ", " + eUsage + ", "
-                    + wUsage + ", " + date;
-            String columns = "buildingID, sw_cost, misc_cost, e_cost, w_cost, e_usage, w_usage, date";
-
-
-            System.out.println(buildingId);
-            System.out.println(info);
-            System.out.println(columns);
-            if(!buildingRecords.insert("utility", columns, info, dbController)){
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setHeaderText(null);
-                alert.setTitle("Error");
-                alert.setContentText("Something went wrong while trying to connect to the database");
-                alert.showAndWait();
-            }
-            else {
-                clearInputs();
-            }
-        }
     }
 
     @Override
@@ -205,39 +178,12 @@ public class AddDataController extends ApplicationController{
 
         buildingRecords = new BuildingRecords(super.dbController);
         buildings = buildingRecords.getBuildings();
-
-        oBuildings = FXCollections.observableArrayList(buildings);
-        buildingComboBox.setItems(oBuildings);
-
-        buildingComboBox.setConverter(new StringConverter<Building>() {
-            @Override
-            public String toString(Building building) {
-                if (building == null) {
-                    return "";
-                }
-                return building.getName();
-            }
-
-            @Override
-            public Building fromString(String s) {
-                return null;
-            }
-        });
-
-        editor = buildingComboBox.getEditor();
-
-        editor.textProperty().addListener((observable, oldValue, newValue) -> {
-            Platform.runLater(() -> filter());
-        });
-
-        editor.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-            Platform.runLater(() -> lostFocus(isNowFocused));
-        });
+        buildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
     }
 
     public void onChange(){
         if(buildingComboBox.getValue() != null){
-            lastNotNull = buildingComboBox.getValue();
+            buildingBox.lastNotNull = buildingComboBox.getValue();
         }
         if(buildingComboBox.getValue() != null && datePicker.getValue() != null) {
             String name = buildingComboBox.getValue().getName();
@@ -276,41 +222,6 @@ public class AddDataController extends ApplicationController{
                     break;
                 }
             }
-        }
-    }
-
-    public void filter() {
-        int caretPosition = editor.getCaretPosition();
-        String input = editor.getText();
-        ObservableList<Building> filteredList = FXCollections.observableArrayList();
-
-        boolean buildingSelected = false;
-        for (Building b : oBuildings) {
-            if (b.getName().equals(input)) {
-                buildingSelected = true;
-            }
-        }
-
-        if (!buildingSelected) {
-            buildingComboBox.show();
-            if (input.isEmpty()) {
-                buildingComboBox.setItems(oBuildings);
-            } else {
-                for (Building item : oBuildings) {
-                    if (item.getName().toLowerCase().contains(input.toLowerCase())) {
-                        filteredList.add(item);
-                    }
-                }
-                buildingComboBox.setItems(filteredList);
-            }
-        }
-        editor.positionCaret(caretPosition);
-    }
-
-    public void lostFocus(Boolean isNowFocused){
-        if(buildingComboBox.getValue() == null && lastNotNull != null && !isNowFocused){
-            buildingComboBox.setValue(lastNotNull);
-            buildingComboBox.hide();
         }
     }
 }

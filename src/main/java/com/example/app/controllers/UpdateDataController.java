@@ -2,6 +2,7 @@ package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
 import com.example.app.model.Building;
+import com.example.app.model.FilteredBuildingBox;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,7 +15,6 @@ import java.time.LocalDate;
 
 
 public class UpdateDataController extends ApplicationController{
-    ObservableList<Building> oBuildings;
     private BuildingRecords buildingRecords;
     @FXML
     private Label electricityUsageError;
@@ -52,7 +52,7 @@ public class UpdateDataController extends ApplicationController{
     private Button updateButton;
     @FXML
     private Button deleteButton;
-    private TextField editor;
+    private FilteredBuildingBox buildingBox;
 
     float eUsage;
     float eCost;
@@ -61,8 +61,6 @@ public class UpdateDataController extends ApplicationController{
     float sCost;
     float mCost;
     LocalDate date;
-    Object building;
-    Building lastNotNull;
 
 
     public void clearErrors(){
@@ -190,39 +188,12 @@ public class UpdateDataController extends ApplicationController{
 
         buildingRecords = new BuildingRecords(super.dbController);
         buildings = buildingRecords.getBuildings();
-
-        oBuildings = FXCollections.observableArrayList(buildings);
-        buildingComboBox.setItems(oBuildings);
-
-        buildingComboBox.setConverter(new StringConverter<Building>() {
-            @Override
-            public String toString(Building building) {
-                if (building == null) {
-                    return "";
-                }
-                return building.getName();
-            }
-
-            @Override
-            public Building fromString(String s) {
-                return null;
-            }
-        });
-
-        editor = buildingComboBox.getEditor();
-
-        editor.textProperty().addListener((observable, oldValue, newValue) -> {
-            Platform.runLater(() -> filter());
-        });
-
-        editor.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-            Platform.runLater(() -> lostFocus(isNowFocused));
-        });
+        buildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
     }
 
     public void onChange(){
         if(buildingComboBox.getValue() != null){
-            lastNotNull = buildingComboBox.getValue();
+            buildingBox.lastNotNull = buildingComboBox.getValue();
         }
         if(datePicker.getValue() != null && buildingComboBox.getValue() != null){
 
@@ -246,41 +217,6 @@ public class UpdateDataController extends ApplicationController{
             miscCost.setDisable(true);
             updateButton.setDisable(true);
             deleteButton.setDisable(true);
-        }
-    }
-
-    public void filter() {
-        int caretPosition = editor.getCaretPosition();
-        String input = editor.getText();
-        ObservableList<Building> filteredList = FXCollections.observableArrayList();
-
-        boolean buildingSelected = false;
-        for (Building b : oBuildings) {
-            if (b.getName().equals(input)) {
-                buildingSelected = true;
-            }
-        }
-
-        if (!buildingSelected) {
-            buildingComboBox.show();
-            if (input.isEmpty()) {
-                buildingComboBox.setItems(oBuildings);
-            } else {
-                for (Building item : oBuildings) {
-                    if (item.getName().toLowerCase().contains(input.toLowerCase())) {
-                        filteredList.add(item);
-                    }
-                }
-                buildingComboBox.setItems(filteredList);
-            }
-        }
-        editor.positionCaret(caretPosition);
-    }
-
-    public void lostFocus(Boolean isNowFocused){
-        if(buildingComboBox.getValue() == null && lastNotNull != null && !isNowFocused){
-            buildingComboBox.setValue(lastNotNull);
-            buildingComboBox.hide();
         }
     }
 }
