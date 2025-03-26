@@ -28,10 +28,17 @@ public class DBController {
     private Connection conn;
     private boolean connectionSuccessful = false;
     private static final String ENV_FILE = "db_config.env";
+    private static boolean autoConnectAttempted = false;
+    private static boolean hasShownAutoConnErr = false;
 
     public DBController() {
-        if (loadDBConfig()) {
-            attemptAutoConnect();
+        if (!autoConnectAttempted) {
+            autoConnectAttempted = true;
+            if (loadDBConfig()) attemptAutoConnect();
+            if (!connectionSuccessful &&!hasShownAutoConnErr) {
+                hasShownAutoConnErr = true;
+                showAlert("Database Connection Failed", "Auto-connect failed. Please click the DataBase button to connect manually.");
+            }
         }
     }
 
@@ -116,8 +123,16 @@ public class DBController {
     }
 
     private void attemptAutoConnect() {
-        if (conn != null) {
-            connectionSuccessful = true;
+        try {
+            if (conn != null && !conn.isClosed() && conn.isValid(2)) {
+                connectionSuccessful = true;
+            } else {
+                connectionSuccessful = false;
+                conn = null;
+            }
+        } catch (SQLException e) {
+            connectionSuccessful = false;
+            conn = null;
         }
     }
 
