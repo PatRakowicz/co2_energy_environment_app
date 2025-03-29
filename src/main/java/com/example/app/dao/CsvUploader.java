@@ -25,6 +25,7 @@ public class CsvUploader implements DBQueries{
 
     private int fetchBuildingID(String name, Connection conn) throws Exception {
 
+    return 1;
     }
 
     private void insertUtilityRecord(Connection conn, Utility utility) throws Exception {
