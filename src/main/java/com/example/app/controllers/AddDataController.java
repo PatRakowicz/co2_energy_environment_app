@@ -1,18 +1,12 @@
 package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
-import com.example.app.dao.CsvUploader;
-import com.example.app.dao.DBQueries;
+import com.example.app.dao.CsvLogic;
 import com.example.app.model.Building;
 import com.example.app.model.FilteredBuildingBox;
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
 import javafx.stage.FileChooser;
-import javafx.util.StringConverter;
 
 import java.io.File;
 import java.time.ZoneId;
@@ -243,7 +237,7 @@ public class AddDataController extends ApplicationController {
         File file = fileChooser.showOpenDialog(null);
 
         if (file != null) {
-            CsvUploader uploader = new CsvUploader(dbController);
+            CsvLogic uploader = new CsvLogic(dbController);
             uploader.uploadUtilityCSV(file);
             System.out.println("CSV Upload Complete.");
         }
