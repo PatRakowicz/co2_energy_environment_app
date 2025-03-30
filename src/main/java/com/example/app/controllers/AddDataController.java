@@ -230,7 +230,8 @@ public class AddDataController extends ApplicationController {
         }
     }
 
-    @FXML public void handleUploadCsv() {
+    @FXML
+    public void handleUploadCsv() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select CSV File.");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV File", "*.csv"));
@@ -238,8 +239,23 @@ public class AddDataController extends ApplicationController {
 
         if (file != null) {
             CsvLogic uploader = new CsvLogic(dbController);
-            uploader.uploadUtilityCSV(file);
+            uploader.importUtilityCSV(file);
             System.out.println("CSV Upload Complete.");
+        }
+    }
+
+    @FXML
+    public void handleDownloadCsvTemplate() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save CSV Template");
+        fileChooser.setInitialFileName("utility_template.csv");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV File", "*.csv"));
+        File file = fileChooser.showSaveDialog(null);
+
+        if (file != null) {
+            CsvLogic exporter = new CsvLogic(dbController);
+            exporter.exportCsvTemplate(file);
+            System.out.println("CSV Template Exported.");
         }
     }
 }

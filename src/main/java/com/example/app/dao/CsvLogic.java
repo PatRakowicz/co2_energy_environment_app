@@ -2,6 +2,8 @@ package com.example.app.dao;
 
 import com.example.app.controllers.DBController;
 
+import java.io.File;
+
 public class CsvLogic implements DBQueries{
     private final DBController dbController;
 
@@ -15,4 +17,9 @@ public class CsvLogic implements DBQueries{
     }
 
 
+    public void importUtilityCSV(File file) {
+    }
+
+    public void exportCsvTemplate(File file) {
+    }
 }
