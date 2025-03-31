@@ -17,7 +17,7 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
-public class AddDataController extends ApplicationController{
+public class AddDataController extends ApplicationController {
     private BuildingRecords buildingRecords;
     @FXML
     private Label electricityUsageError;
