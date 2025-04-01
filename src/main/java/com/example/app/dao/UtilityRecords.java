@@ -17,6 +17,23 @@ public class UtilityRecords implements DBQueries {
         this.dbController = dbController;
     }
 
+    public boolean insertUtilities(Utility utility) {
+        String table = "utility";
+        String columns = "buildingID, date, e_usage, e_cost, w_usage, w_cost, sw_cost, misc_cost";
+        String values = String.format(
+                "%d, '%s', %.2f, %.2f, %.2f, %.2f, %.2f, %.2f",
+                utility.getBuildingID(),
+                new Date(utility.getDate().getTime()),
+                utility.getElectricityUsage(),
+                utility.getElectricityCost(),
+                utility.getWaterUsage(),
+                utility.getWaterCost(),
+                utility.getSewageCost(),
+                utility.getMiscCost()
+        );
+        return insert(table, columns, values, dbController);
+    }
+
     public ArrayList<Utility> getUtilities(int buildingID, LocalDate start, LocalDate end) {
         Connection connection = dbController.getConnection();
         if (connection == null) {
