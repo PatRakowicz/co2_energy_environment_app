@@ -1,17 +1,14 @@
 package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
-import com.example.app.dao.DBQueries;
+import com.example.app.dao.CsvLogic;
 import com.example.app.model.Building;
 import com.example.app.model.FilteredBuildingBox;
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
-import javafx.util.StringConverter;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.time.ZoneId;
 import java.time.LocalDate;
 import java.util.Date;
@@ -52,6 +49,8 @@ public class AddDataController extends ApplicationController {
     @FXML
     private ComboBox<Building> buildingComboBox;
     private FilteredBuildingBox buildingBox;
+
+    @FXML Button uploadCsvButton;
 
     float eUsage;
     float eCost;
@@ -228,6 +227,35 @@ public class AddDataController extends ApplicationController {
                     break;
                 }
             }
+        }
+    }
+
+    @FXML
+    public void handleUploadCsv() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select CSV File.");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV File", "*.csv"));
+        File file = fileChooser.showOpenDialog(null);
+
+        if (file != null) {
+            CsvLogic uploader = new CsvLogic(dbController);
+            uploader.importUtilityCSV(file);
+            System.out.println("CSV Upload Complete.");
+        }
+    }
+
+    @FXML
+    public void handleDownloadCsvTemplate() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save CSV Template");
+        fileChooser.setInitialFileName("utility_template.csv");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV File", "*.csv"));
+        File file = fileChooser.showSaveDialog(null);
+
+        if (file != null) {
+            CsvLogic exporter = new CsvLogic(dbController);
+            exporter.exportCsvTemplate(file);
+            System.out.println("CSV Template Exported.");
         }
     }
 }
