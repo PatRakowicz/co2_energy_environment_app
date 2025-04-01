@@ -67,7 +67,7 @@ public class ViewDataController extends ApplicationController{
         boolean showSewageCost = sewageCostCheck.isSelected();
         boolean showMiscCost = miscCostCheck.isSelected();
 
-        ArrayList<Utility> utilities = utilityRecords.getUtilities(building.getBuildingID(), startDate, endDate);
+        ArrayList<Utility> utilities = utilityRecords.getUtilities(building.getBuildingID(), startDate, endDate, dbConn);
 
         populateChart(utilities, showElectricityUsage, showWaterUsage, showElectricityCost,
                         showWaterCost, showSewageCost, showMiscCost);

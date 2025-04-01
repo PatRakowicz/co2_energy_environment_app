@@ -1,8 +1,10 @@
 package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
+import com.example.app.dao.UtilityRecords;
 import com.example.app.model.Building;
 import com.example.app.model.FilteredBuildingBox;
+import com.example.app.model.Utility;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
@@ -160,9 +162,26 @@ public class AddDataController extends ApplicationController {
     public void add(){
         clearErrors();
         if(validity()){
-            //add data to database
+            Utility utility = new Utility();
+            utility.setBuildingID(building.getBuildingID());
+            utility.setDate(java.sql.Date.valueOf(date));
+            utility.setElectricityUsage(eUsage);
+            utility.setElectricityCost(eCost);
+            utility.setWaterUsage(wUsage);
+            utility.setWaterCost(wCost);
+            utility.setSewageCost(sCost);
+            utility.setMiscCost(mCost);
 
-            clearInputs();
+            UtilityRecords utilityRecords = new UtilityRecords(dbConn);
+            boolean success = utilityRecords.insertUtility(utility);
+
+            if (success) {
+                // Log inserted data here
+                System.out.println("Data inserted.");
+                clearInputs();
+            } else {
+                System.out.println("Failed to insert data.");
+            }
         }
 
     }

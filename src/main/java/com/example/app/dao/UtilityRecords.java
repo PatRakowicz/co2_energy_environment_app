@@ -15,7 +15,7 @@ public class UtilityRecords implements DBQueries {
         this.dbConn = dbConn;
     }
 
-    public boolean insertUtilities(Utility utility) {
+    public boolean insertUtility(Utility utility) {
         String table = "utility";
         String columns = "buildingID, date, e_usage, e_cost, w_usage, w_cost, sw_cost, misc_cost";
         String values = String.format(
@@ -32,17 +32,11 @@ public class UtilityRecords implements DBQueries {
         return insert(table, columns, values, dbConn);
     }
 
-    public ArrayList<Utility> getUtilities(int buildingID, LocalDate start, LocalDate end) {
-        Connection connection = dbConn.getConnection();
-        if (connection == null) {
-            System.out.println("No active database connection.");
-            return utilities; // would return empty
-        }
-
+    public ArrayList<Utility> getUtilities(int buildingID, LocalDate start, LocalDate end, DBConn dbConn) {
         String query = "SELECT * FROM utility "
                      + "WHERE buildingID = ? "
                      + "AND date >= ? AND date <= ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (PreparedStatement statement = this.dbConn.getConnection().prepareStatement(query)) {
             statement.setInt(1, buildingID);
             statement.setDate(2, Date.valueOf(start));
             statement.setDate(3, Date.valueOf(end));
