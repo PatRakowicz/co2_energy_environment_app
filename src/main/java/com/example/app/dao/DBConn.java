@@ -1,4 +1,4 @@
-package com.example.app.controllers;
+package com.example.app.dao;
 
 
 import javafx.event.ActionEvent;
@@ -17,7 +17,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
-public class DBController {
+public class DBConn {
     @FXML
     private TextField ipField;
     @FXML
@@ -31,7 +31,7 @@ public class DBController {
     private static boolean autoConnectAttempted = false;
     private static boolean hasShownAutoConnErr = false;
 
-    public DBController() {
+    public DBConn() {
         if (!autoConnectAttempted) {
             autoConnectAttempted = true;
             if (loadDBConfig()) attemptAutoConnect();

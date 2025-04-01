@@ -1,6 +1,5 @@
 package com.example.app.dao;
 
-import com.example.app.controllers.DBController;
 import com.example.app.model.Building;
 import com.example.app.model.Utility;
 
@@ -8,21 +7,21 @@ import java.io.*;
 import java.sql.*;
 
 public class CsvLogic implements DBQueries {
-    private final DBController dbController;
+    private DBConn dbConn;
 
     private final String[] HEADERS = {
             "Building Name", "Water Usage", "Water Cost", "Electricity Usage", "Electricity Cost",
             "Sewage Cost", "Misc Cost"
     };
 
-    public CsvLogic(DBController dbController) {
-        this.dbController = dbController;
+    public CsvLogic(DBConn dbConn) {
+        this.dbConn = dbConn;
     }
 
 
     public void importUtilityCSV(File file) {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            Connection conn = dbController.getConnection();
+            Connection conn = dbConn.getConnection();
             if (conn == null) {
                 System.out.println("No active DB connection");
                 return;
@@ -81,7 +80,7 @@ public class CsvLogic implements DBQueries {
 
     public void exportCsvTemplate(File file) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            Connection conn = dbController.getConnection();
+            Connection conn = dbConn.getConnection();
             if (conn == null) {
                 System.out.println("No active DB connection");
                 return;

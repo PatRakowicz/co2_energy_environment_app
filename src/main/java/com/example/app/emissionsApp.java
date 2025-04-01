@@ -1,7 +1,7 @@
 package com.example.app;
 
 import com.example.app.controllers.ApplicationController;
-import com.example.app.controllers.DBController;
+import com.example.app.dao.DBConn;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,12 +12,12 @@ public class emissionsApp extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws IOException {
         try {
-            DBController dbController = new DBController();     // shared controller
+            DBConn dbConn = new DBConn();     // shared controller
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/home-view.fxml"));
 
             ApplicationController applicationController = new ApplicationController();
-            applicationController.setDbController(dbController);
+            applicationController.setDbController(dbConn);
             fxmlLoader.setController(applicationController);
 
             Parent root = fxmlLoader.load();

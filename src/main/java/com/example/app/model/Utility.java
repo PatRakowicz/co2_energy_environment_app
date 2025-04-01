@@ -45,6 +45,10 @@ public class Utility {
         return waterUsage;
     }
 
+    public Object getBuildingID() {
+        return buildingID;
+    }
+
     // Setters
     public void setUtilityID(int utilityID) {
         this.utilityID = utilityID;

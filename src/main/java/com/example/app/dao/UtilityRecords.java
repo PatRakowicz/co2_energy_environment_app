@@ -1,7 +1,5 @@
 package com.example.app.dao;
 
-import com.example.app.controllers.DBController;
-import com.example.app.model.Building;
 import com.example.app.model.Utility;
 
 import java.sql.*;
@@ -9,25 +7,36 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class UtilityRecords implements DBQueries {
-    private DBController dbController;
+    private DBConn dbConn;
     private ArrayList<Utility> utilities = new ArrayList<>();
     private ResultSet resultSet;
 
-    public UtilityRecords(DBController dbController) {
-        this.dbController = dbController;
+    public UtilityRecords(DBConn dbConn) {
+        this.dbConn = dbConn;
     }
 
-    public ArrayList<Utility> getUtilities(int buildingID, LocalDate start, LocalDate end) {
-        Connection connection = dbController.getConnection();
-        if (connection == null) {
-            System.out.println("No active database connection.");
-            return utilities; // would return empty
-        }
+    public boolean insertUtility(Utility utility) {
+        String table = "utility";
+        String columns = "buildingID, date, e_usage, e_cost, w_usage, w_cost, sw_cost, misc_cost";
+        String values = String.format(
+                "%d, '%s', %.2f, %.2f, %.2f, %.2f, %.2f, %.2f",
+                utility.getBuildingID(),
+                new Date(utility.getDate().getTime()),
+                utility.getElectricityUsage(),
+                utility.getElectricityCost(),
+                utility.getWaterUsage(),
+                utility.getWaterCost(),
+                utility.getSewageCost(),
+                utility.getMiscCost()
+        );
+        return insert(table, columns, values, dbConn);
+    }
 
+    public ArrayList<Utility> getUtilities(int buildingID, LocalDate start, LocalDate end, DBConn dbConn) {
         String query = "SELECT * FROM utility "
                      + "WHERE buildingID = ? "
                      + "AND date >= ? AND date <= ?";
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (PreparedStatement statement = this.dbConn.getConnection().prepareStatement(query)) {
             statement.setInt(1, buildingID);
             statement.setDate(2, Date.valueOf(start));
             statement.setDate(3, Date.valueOf(end));

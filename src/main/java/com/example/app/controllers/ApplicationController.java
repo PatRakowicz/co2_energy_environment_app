@@ -1,6 +1,6 @@
 package com.example.app.controllers;
 
-import com.example.app.dao.BuildingRecords;
+import com.example.app.dao.DBConn;
 import com.example.app.model.Building;
 import com.example.app.utils.ViewManager;
 import javafx.event.ActionEvent;
@@ -14,9 +14,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-import java.sql.Connection;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ApplicationController {
     protected Stage stage;
@@ -27,7 +25,7 @@ public class ApplicationController {
 
     @FXML
     private Button DBButton;
-    protected DBController dbController;
+    protected DBConn dbConn;
     private Stage DBStage;
 
     public ApplicationController() {
@@ -55,12 +53,12 @@ public class ApplicationController {
         updateDBButtonStatus();
     }
 
-    public void setDbController(DBController dbController) {
-        this.dbController = dbController;
+    public void setDbController(DBConn dbConn) {
+        this.dbConn = dbConn;
     }
 
     private void updateDBButtonStatus() {
-        if (dbController.isConnectionSuccessful()) {
+        if (dbConn.isConnectionSuccessful()) {
             if (DBButton != null) {
                 DBButton.setStyle("-fx-background-color: LimeGreen");
             }
@@ -102,43 +100,43 @@ public class ApplicationController {
     @FXML
     public void switchToAddData(ActionEvent event) {
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        ViewManager.setScene(stage, "/fxml/add-data-view.fxml", dbController, "Dashboard");
+        ViewManager.setScene(stage, "/fxml/add-data-view.fxml", dbConn, "Dashboard");
     }
 
     @FXML
     public void switchToPrediction(ActionEvent event) {
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        ViewManager.setScene(stage, "/fxml/prediction-view.fxml", dbController, "Dashboard");
+        ViewManager.setScene(stage, "/fxml/prediction-view.fxml", dbConn, "Dashboard");
     }
 
     @FXML
     public void switchToReport(ActionEvent event) {
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        ViewManager.setScene(stage, "/fxml/report-view.fxml", dbController, "Dashboard");
+        ViewManager.setScene(stage, "/fxml/report-view.fxml", dbConn, "Dashboard");
     }
 
     @FXML
     public void switchToScenarios(ActionEvent event) {
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        ViewManager.setScene(stage, "/fxml/scenarios-view.fxml", dbController, "Dashboard");
+        ViewManager.setScene(stage, "/fxml/scenarios-view.fxml", dbConn, "Dashboard");
     }
 
     @FXML
     public void switchToUpdateData(ActionEvent event) {
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        ViewManager.setScene(stage, "/fxml/update-data-view.fxml", dbController, "Dashboard");
+        ViewManager.setScene(stage, "/fxml/update-data-view.fxml", dbConn, "Dashboard");
     }
 
     @FXML
     public void switchToViewData(ActionEvent event) {
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        ViewManager.setScene(stage, "/fxml/view-data-view.fxml", dbController, "Dashboard");
+        ViewManager.setScene(stage, "/fxml/view-data-view.fxml", dbConn, "Dashboard");
     }
 
     @FXML
     public void switchToHome(ActionEvent event) {
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        ViewManager.setScene(stage, "/fxml/home-view.fxml", dbController, "Dashboard");
+        ViewManager.setScene(stage, "/fxml/home-view.fxml", dbConn, "Dashboard");
     }
 
 }

@@ -1,9 +1,11 @@
 package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
+import com.example.app.dao.UtilityRecords;
 import com.example.app.dao.CsvLogic;
 import com.example.app.model.Building;
 import com.example.app.model.FilteredBuildingBox;
+import com.example.app.model.Utility;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
@@ -165,9 +167,26 @@ public class AddDataController extends ApplicationController {
     public void add(){
         clearErrors();
         if(validity()){
-            //add data to database
+            Utility utility = new Utility();
+            utility.setBuildingID(building.getBuildingID());
+            utility.setDate(java.sql.Date.valueOf(date));
+            utility.setElectricityUsage(eUsage);
+            utility.setElectricityCost(eCost);
+            utility.setWaterUsage(wUsage);
+            utility.setWaterCost(wCost);
+            utility.setSewageCost(sCost);
+            utility.setMiscCost(mCost);
 
-            clearInputs();
+            UtilityRecords utilityRecords = new UtilityRecords(dbConn);
+            boolean success = utilityRecords.insertUtility(utility);
+
+            if (success) {
+                // Log inserted data here
+                System.out.println("Data inserted.");
+                clearInputs();
+            } else {
+                System.out.println("Failed to insert data.");
+            }
         }
 
     }
@@ -176,12 +195,12 @@ public class AddDataController extends ApplicationController {
     public void initialize() {
         super.initialize();
 
-        if (dbController == null) {
+        if (dbConn == null) {
             System.out.println("No active database connection.");
             return;
         }
 
-        buildingRecords = new BuildingRecords(super.dbController);
+        buildingRecords = new BuildingRecords(super.dbConn);
         buildings = buildingRecords.getBuildings();
         buildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
     }
@@ -237,8 +256,8 @@ public class AddDataController extends ApplicationController {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV File", "*.csv"));
         File file = fileChooser.showOpenDialog(null);
 
-        if (file != null) {
-            CsvLogic uploader = new CsvLogic(dbController);
+        if (file != null && dbConn != null) {
+            CsvLogic uploader = new CsvLogic(dbConn);
             uploader.importUtilityCSV(file);
             System.out.println("CSV Upload Complete.");
         }
@@ -252,8 +271,8 @@ public class AddDataController extends ApplicationController {
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV File", "*.csv"));
         File file = fileChooser.showSaveDialog(null);
 
-        if (file != null) {
-            CsvLogic exporter = new CsvLogic(dbController);
+        if (file != null && dbConn != null) {
+            CsvLogic exporter = new CsvLogic(dbConn);
             exporter.exportCsvTemplate(file);
             System.out.println("CSV Template Exported.");
         }
