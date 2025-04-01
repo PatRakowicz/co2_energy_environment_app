@@ -1,6 +1,5 @@
 package com.example.app.dao;
 
-import com.example.app.controllers.DBController;
 import com.example.app.model.Building;
 
 import java.sql.Connection;
@@ -10,16 +9,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class BuildingRecords implements DBQueries {
-    private DBController dbController;
+    private DBConn dbConn;
     private ArrayList<Building> buildings = new ArrayList<>();
     private ResultSet resultSet;
 
-    public BuildingRecords(DBController dbController) {
-        this.dbController = dbController;
+    public BuildingRecords(DBConn dbConn) {
+        this.dbConn = dbConn;
     }
 
     public ArrayList<Building> getBuildings() {
-        Connection connection = dbController.getConnection();
+        Connection connection = dbConn.getConnection();
         if (connection == null) {
             System.out.println("No active database connection.");
             return buildings; // would return empty

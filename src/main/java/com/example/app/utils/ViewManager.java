@@ -1,18 +1,16 @@
 package com.example.app.utils;
 
 import com.example.app.controllers.*;
-import javafx.event.ActionEvent;
+import com.example.app.dao.DBConn;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Objects;
 
 public class ViewManager {
-    public static void setScene(Stage stage, String fxml, DBController dbController, String title) {
+    public static void setScene(Stage stage, String fxml, DBConn dbConn, String title) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(ViewManager.class.getResource(fxml));
 
@@ -25,7 +23,7 @@ public class ViewManager {
                 default -> new ApplicationController();
             }
 
-            controller.setDbController(dbController);
+            controller.setDbController(dbConn);
             fxmlLoader.setController(controller);
 
             Parent root = fxmlLoader.load();

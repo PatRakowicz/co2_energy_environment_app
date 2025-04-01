@@ -192,12 +192,12 @@ public class ViewDataController extends ApplicationController{
     public void initialize() {
         super.initialize();
 
-        if (dbController == null) {
+        if (dbConn == null) {
             System.out.println("No active database connection.");
             return;
         }
 
-        buildingRecords = new BuildingRecords(super.dbController);
+        buildingRecords = new BuildingRecords(super.dbConn);
         buildings = buildingRecords.getBuildings();
 
         ObservableList<Building> oBuildings = FXCollections.observableArrayList(buildings);
@@ -218,6 +218,6 @@ public class ViewDataController extends ApplicationController{
             }
         });
 
-        utilityRecords = new UtilityRecords(super.dbController);
+        utilityRecords = new UtilityRecords(super.dbConn);
     }
 }

@@ -1,16 +1,10 @@
 package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
-import com.example.app.dao.DBQueries;
 import com.example.app.model.Building;
 import com.example.app.model.FilteredBuildingBox;
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
-import javafx.util.StringConverter;
 
 import java.time.ZoneId;
 import java.time.LocalDate;
@@ -177,12 +171,12 @@ public class AddDataController extends ApplicationController {
     public void initialize() {
         super.initialize();
 
-        if (dbController == null) {
+        if (dbConn == null) {
             System.out.println("No active database connection.");
             return;
         }
 
-        buildingRecords = new BuildingRecords(super.dbController);
+        buildingRecords = new BuildingRecords(super.dbConn);
         buildings = buildingRecords.getBuildings();
         buildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
     }

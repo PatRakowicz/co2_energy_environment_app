@@ -1,7 +1,5 @@
 package com.example.app.dao;
 
-import com.example.app.controllers.DBController;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,8 +8,8 @@ import java.sql.SQLException;
 // Interface to call
 // Will have Basic CRUD operations, but will provide with override for custom classes
 public interface DBQueries {
-    default boolean insert(String table, String columns, String values, DBController dbController) {
-        Connection connection = dbController.getConnection();
+    default boolean insert(String table, String columns, String values, DBConn dbConn) {
+        Connection connection = dbConn.getConnection();
         if (connection == null) {
             System.out.println("No active database connection.");
             return false;
@@ -33,8 +31,8 @@ public interface DBQueries {
     * */
 
     // Need to add Read / Update / Delete
-    default ResultSet read(String table, String columns, String condition, DBController dbController) throws SQLException {
-        Connection connection = dbController.getConnection();
+    default ResultSet read(String table, String columns, String condition, DBConn dbConn) throws SQLException {
+        Connection connection = dbConn.getConnection();
         if (connection == null) {
 
             System.out.println("No active database connection.");
@@ -54,8 +52,8 @@ public interface DBQueries {
         }
     }
 
-    default boolean update(String table, String setClause, String condition, DBController dbController) {
-        Connection connection = dbController.getConnection();
+    default boolean update(String table, String setClause, String condition, DBConn dbConn) {
+        Connection connection = dbConn.getConnection();
         if (connection == null) {
             System.out.println("No active db Connection.");
             return false;
@@ -92,8 +90,8 @@ public interface DBQueries {
      *  else { System.out.println("No user was updated."); }
      * */
 
-    default boolean delete(String table, String setClause, String condition, DBController dbController) {
-        Connection connection = dbController.getConnection();
+    default boolean delete(String table, String setClause, String condition, DBConn dbConn) {
+        Connection connection = dbConn.getConnection();
         if (connection == null) {
             System.out.println("No active db Connection.");
             return false;
