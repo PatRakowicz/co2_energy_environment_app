@@ -1,7 +1,6 @@
 package com.example.app.utils;
 
-import com.example.app.controllers.ApplicationController;
-import com.example.app.controllers.DBController;
+import com.example.app.controllers.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -15,11 +14,21 @@ import java.util.Objects;
 public class ViewManager {
     public static void setScene(Stage stage, String fxml, DBController dbController, String title) {
         try {
-            FXMLLoader fmxlLoader = new FXMLLoader(ViewManager.class.getResource(fxml));
-            Parent root = fmxlLoader.load();
+            FXMLLoader fxmlLoader = new FXMLLoader(ViewManager.class.getResource(fxml));
 
-            ApplicationController controller = fmxlLoader.getController();
+            ApplicationController controller = null;
+            switch (fxml) {
+                case "/fxml/home-view.fxml" -> controller = new ApplicationController();
+                case "/fxml/add-data-view.fxml" -> controller = new AddDataController();
+                case "/fxml/update-data-view.fxml" -> controller = new UpdateDataController();
+                case "/fxml/view-data-view.fxml" -> controller = new ViewDataController();
+                default -> new ApplicationController();
+            }
+
             controller.setDbController(dbController);
+            fxmlLoader.setController(controller);
+
+            Parent root = fxmlLoader.load();
 
             Scene scene = new Scene(root);
             stage.setScene(scene);

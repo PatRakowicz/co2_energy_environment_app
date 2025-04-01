@@ -4,38 +4,100 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app.controllers.ApplicationController">
+<AnchorPane
+        xmlns:fx="http://javafx.com/fxml"
+        maxHeight="-Infinity"
+        maxWidth="-Infinity"
+        minHeight="-Infinity"
+        minWidth="-Infinity"
+        prefHeight="400.0"
+        prefWidth="600.0"
+        xmlns="http://javafx.com/javafx/17">
    <children>
-      <Button layoutX="135.0" layoutY="166.0" mnemonicParsing="false" onAction="#switchToUpdateData" prefHeight="70.0" prefWidth="155.0" text="Update Data">
+      <Button
+              layoutX="135.0"
+              layoutY="166.0"
+              mnemonicParsing="false"
+              onAction="#switchToUpdateData"
+              prefHeight="70.0"
+              prefWidth="155.0"
+              text="Update Data">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button layoutX="135.0" layoutY="76.0" mnemonicParsing="false" onAction="#switchToAddData" prefHeight="70.0" prefWidth="155.0" text="Add Data">
+
+      <Button
+              layoutX="135.0"
+              layoutY="76.0"
+              mnemonicParsing="false"
+              onAction="#switchToAddData"
+              prefHeight="70.0"
+              prefWidth="155.0"
+              text="Add Data">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button layoutX="135.0" layoutY="254.0" mnemonicParsing="false" onAction="#switchToViewData" prefHeight="70.0" prefWidth="155.0" text="View Data">
+
+      <Button
+              layoutX="135.0"
+              layoutY="254.0"
+              mnemonicParsing="false"
+              onAction="#switchToViewData"
+              prefHeight="70.0"
+              prefWidth="155.0"
+              text="View Data">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button layoutX="310.0" layoutY="166.0" mnemonicParsing="false" onAction="#switchToPrediction" prefHeight="70.0" prefWidth="155.0" text="Predict Data">
+
+      <Button
+              layoutX="310.0"
+              layoutY="166.0"
+              mnemonicParsing="false"
+              onAction="#switchToPrediction"
+              prefHeight="70.0"
+              prefWidth="155.0"
+              text="Predict Data">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button layoutX="310.0" layoutY="76.0" mnemonicParsing="false" onAction="#switchToScenarios" prefHeight="70.0" prefWidth="155.0" text="Scenarios">
+
+      <Button
+              layoutX="310.0"
+              layoutY="76.0"
+              mnemonicParsing="false"
+              onAction="#switchToScenarios"
+              prefHeight="70.0"
+              prefWidth="155.0"
+              text="Scenarios">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button layoutX="310.0" layoutY="254.0" mnemonicParsing="false" onAction="#switchToReport" prefHeight="70.0" prefWidth="155.0" text="Reporting">
+
+      <Button
+              layoutX="310.0"
+              layoutY="254.0"
+              mnemonicParsing="false"
+              onAction="#switchToReport"
+              prefHeight="70.0"
+              prefWidth="155.0"
+              text="Reporting">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="DBButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#openDBWindow" text="Database" />
+
+      <Button
+              fx:id="DBButton"
+              layoutX="14.0"
+              layoutY="14.0"
+              mnemonicParsing="false"
+              onAction="#openDBWindow"
+              text="Database" />
    </children>
 </AnchorPane>

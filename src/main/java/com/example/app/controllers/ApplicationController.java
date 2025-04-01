@@ -31,22 +31,24 @@ public class ApplicationController {
     private Stage DBStage;
 
     public ApplicationController() {
-        dbController = new DBController();
+//        dbController = new DBController();
+        // We need to not create a new DBController by default
+        // updated the emissionsApp to pass DBController
     }
 
-    public ApplicationController(Stage newStage) {
-        try {
-            root = FXMLLoader.load(getClass().getResource("/fxml/home-view.fxml"));
-            scene = new Scene(root);
-            newStage.setTitle("home");
-            newStage.setScene(scene);
-            newStage.setMinHeight(400);
-            newStage.setMinWidth(600);
-            newStage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    public ApplicationController(Stage newStage) {
+//        try {
+//            root = FXMLLoader.load(getClass().getResource("/fxml/home-view.fxml"));
+//            scene = new Scene(root);
+//            newStage.setTitle("home");
+//            newStage.setScene(scene);
+//            newStage.setMinHeight(400);
+//            newStage.setMinWidth(600);
+//            newStage.show();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     @FXML
     public void initialize() {

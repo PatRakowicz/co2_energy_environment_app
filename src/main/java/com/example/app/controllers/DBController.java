@@ -77,13 +77,17 @@ public class DBController {
 
     private Connection connectToDatabase(String ip, String user, String password) {
         String url = "jdbc:mysql://" + ip + ":3306/wcuemissions";
-
+//        System.out.printf("Attempting to connect to %s with user %s%n", url, user);
         try {
+//            System.out.println("Got here 1");
             conn = DriverManager.getConnection(url, user, password);
+//            System.out.println("Got here 2");
             connectionSuccessful = (conn != null);
+//            System.out.println("Got here 3");
             return conn;
         } catch (SQLException e) {
             handleSQLException(e);
+//            e.printStackTrace();
             return null;
         }
     }
