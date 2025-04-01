@@ -2,12 +2,15 @@ package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
 import com.example.app.dao.UtilityRecords;
+import com.example.app.dao.CsvLogic;
 import com.example.app.model.Building;
 import com.example.app.model.FilteredBuildingBox;
 import com.example.app.model.Utility;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.time.ZoneId;
 import java.time.LocalDate;
 import java.util.Date;
@@ -48,6 +51,8 @@ public class AddDataController extends ApplicationController {
     @FXML
     private ComboBox<Building> buildingComboBox;
     private FilteredBuildingBox buildingBox;
+
+    @FXML Button uploadCsvButton;
 
     float eUsage;
     float eCost;
@@ -241,6 +246,35 @@ public class AddDataController extends ApplicationController {
                     break;
                 }
             }
+        }
+    }
+
+    @FXML
+    public void handleUploadCsv() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select CSV File.");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV File", "*.csv"));
+        File file = fileChooser.showOpenDialog(null);
+
+        if (file != null && dbConn != null) {
+            CsvLogic uploader = new CsvLogic(dbConn);
+            uploader.importUtilityCSV(file);
+            System.out.println("CSV Upload Complete.");
+        }
+    }
+
+    @FXML
+    public void handleDownloadCsvTemplate() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save CSV Template");
+        fileChooser.setInitialFileName("utility_template.csv");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV File", "*.csv"));
+        File file = fileChooser.showSaveDialog(null);
+
+        if (file != null && dbConn != null) {
+            CsvLogic exporter = new CsvLogic(dbConn);
+            exporter.exportCsvTemplate(file);
+            System.out.println("CSV Template Exported.");
         }
     }
 }
