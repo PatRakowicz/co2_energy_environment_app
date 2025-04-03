@@ -5,6 +5,7 @@ import com.example.app.dao.UpdateViewLogic;
 import com.example.app.model.Building;
 import com.example.app.model.FilteredBuildingBox;
 import com.example.app.model.Utility;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -49,6 +50,7 @@ public class UpdateDataController extends ApplicationController {
         buildingRecords = new BuildingRecords(dbConn);
         buildings = buildingRecords.getBuildings();
         buildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
+
         updateViewLogic = new UpdateViewLogic(dbConn);
 
         monthComboBox.getItems().addAll(
@@ -63,12 +65,21 @@ public class UpdateDataController extends ApplicationController {
         }
     }
 
+
+    public void onChange() {
+        Building selected = buildingComboBox.getValue();
+        if (selected != null) {
+            buildingBox.lastNotNull = selected;
+            buildingComboBox.getEditor().setText(selected.getName());
+        }
+    }
+
     public void loadData() {
         Building selectedBuilding = buildingComboBox.getValue();
         Integer selectedYear = yearComboBox.getValue();
         int selectedMonthIndex = monthComboBox.getSelectionModel().getSelectedIndex();
 
-        System.out.print(selectedBuilding.toString());
+        clearInputs();
 
         if (selectedBuilding == null || selectedYear == null || selectedMonthIndex < 0) {
             System.out.println("Please select both a building and a date before loading data.");
