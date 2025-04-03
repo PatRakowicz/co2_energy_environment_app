@@ -20,9 +20,10 @@ public class UpdateDataController extends ApplicationController {
             waterCostError, sewageCostError, miscCostError, dateError, buildingError;
 
     @FXML private TextField electricityUsage, electricityCost, waterUsage, waterCost, sewageCost, miscCost;
-    @FXML private DatePicker datePicker;
     @FXML private ComboBox<Building> buildingComboBox;
     @FXML private Button updateButton, deleteButton;
+    @FXML private ComboBox<String> monthComboBox;
+    @FXML private ComboBox<Integer> yearComboBox;
 
     private float eUsage, eCost, wUsage, wCost, sCost, mCost;
     private LocalDate date;
@@ -40,17 +41,30 @@ public class UpdateDataController extends ApplicationController {
         buildings = buildingRecords.getBuildings();
         buildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
         updateViewLogic = new UpdateViewLogic(dbConn);
+
+        monthComboBox.getItems().addAll(
+                "January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+        );
+
+        int currentYear = LocalDate.now().getYear();
+        int minYear = updateViewLogic.getMinUtilityYear();
+        for (int year = currentYear; year >= minYear; year--) {
+            yearComboBox.getItems().add(year);
+        }
     }
 
     public void onChange() {
         Building selectedBuilding = buildingComboBox.getValue();
-        LocalDate selectedDate = datePicker.getValue();
+        Integer selectedYear = yearComboBox.getValue();
+        int selectedMonthIndex = monthComboBox.getSelectionModel().getSelectedIndex();
 
         if (selectedBuilding != null) {
             buildingBox.lastNotNull = selectedBuilding;
         }
 
-        if (selectedDate != null && selectedBuilding != null) {
+        if (selectedYear != null && selectedMonthIndex >= 0 && selectedBuilding != null) {
+            LocalDate selectedDate = LocalDate.of(selectedYear, selectedMonthIndex + 1, 1);
             Utility utility = updateViewLogic.getUtilityForDate(selectedBuilding.getBuildingID(), selectedDate);
 
             if (utility != null) {
@@ -84,7 +98,7 @@ public class UpdateDataController extends ApplicationController {
             utility.setMiscCost(mCost);
 
             Building building = buildingComboBox.getValue();
-            boolean success = updateViewLogic.insertUtility(building, utility);
+            boolean success = updateViewLogic.updateUtility(building, utility);
 
             if (success) clearInputs();
             else System.out.println("Failed to insert utility record.");
@@ -152,11 +166,13 @@ public class UpdateDataController extends ApplicationController {
             }
         }
 
-        if (datePicker.getValue() == null) {
-            dateError.setText("ERROR: Invalid date");
+        if (yearComboBox.getValue() == null || monthComboBox.getValue() == null) {
+            dateError.setText("ERROR: Month and Year must be selected.");
             valid = false;
         } else {
-            date = datePicker.getValue();
+            int year = yearComboBox.getValue();
+            int month = monthComboBox.getSelectionModel().getSelectedIndex() + 1;
+            date = LocalDate.of(year, month, 1);
         }
 
         if (buildingComboBox.getValue() == null) {
@@ -174,7 +190,8 @@ public class UpdateDataController extends ApplicationController {
         waterCost.setText("");
         sewageCost.setText("");
         miscCost.setText("");
-        datePicker.setValue(null);
+        monthComboBox.getSelectionModel().clearSelection();
+        yearComboBox.getSelectionModel().clearSelection();
     }
 
     private void clearErrors() {

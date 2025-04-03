@@ -63,5 +63,44 @@ public class UpdateViewLogic implements DBQueries {
         return null;
     }
 
-    // Additional custom queries for update view can go here later.
+    public int getMinUtilityYear() {
+        String query = "SELECT MIN(YEAR(date)) AS min_year FROM utility";
+        try (PreparedStatement stmt = dbConn.getConnection().prepareStatement(query);
+             ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                int year = rs.getInt("min_year");
+                return rs.wasNull() ? LocalDate.now().getYear() : year;
+            }
+        } catch (SQLException e) {
+            System.out.println("Error fetching min year from DB:");
+            e.printStackTrace();
+        }
+        return LocalDate.now().getYear();
+    }
+
+    public boolean updateUtility(Building building, Utility utility) {
+        if (building == null || building.getBuildingID() == 0 || utility.getDate() == null) {
+            System.out.println("Invalid input: building and date must be provided.");
+            return false;
+        }
+
+        String query = "UPDATE utility SET e_usage = ?, e_cost = ?, w_usage = ?, w_cost = ?, sw_cost = ?, misc_cost = ? " +
+                "WHERE buildingID = ? AND date = ?";
+        try (PreparedStatement stmt = dbConn.getConnection().prepareStatement(query)) {
+            stmt.setFloat(1, utility.getElectricityUsage());
+            stmt.setFloat(2, utility.getElectricityCost());
+            stmt.setFloat(3, utility.getWaterUsage());
+            stmt.setFloat(4, utility.getWaterCost());
+            stmt.setFloat(5, utility.getSewageCost());
+            stmt.setFloat(6, utility.getMiscCost());
+            stmt.setInt(7, building.getBuildingID());
+            stmt.setDate(8, new java.sql.Date(utility.getDate().getTime()));
+
+            int rows = stmt.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
