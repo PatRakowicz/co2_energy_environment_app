@@ -6,7 +6,10 @@ import com.example.app.model.Building;
 import com.example.app.model.FilteredBuildingBox;
 import com.example.app.model.Utility;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 import java.time.LocalDate;
 
@@ -16,14 +19,20 @@ public class UpdateDataController extends ApplicationController {
     private UpdateViewLogic updateViewLogic;
     private FilteredBuildingBox buildingBox;
 
-    @FXML private Label electricityUsageError, electricityCostError, waterUsageError,
+    @FXML
+    private Label electricityUsageError, electricityCostError, waterUsageError,
             waterCostError, sewageCostError, miscCostError, dateError, buildingError;
 
-    @FXML private TextField electricityUsage, electricityCost, waterUsage, waterCost, sewageCost, miscCost;
-    @FXML private ComboBox<Building> buildingComboBox;
-    @FXML private Button updateButton, deleteButton;
-    @FXML private ComboBox<String> monthComboBox;
-    @FXML private ComboBox<Integer> yearComboBox;
+    @FXML
+    private TextField electricityUsage, electricityCost, waterUsage, waterCost, sewageCost, miscCost;
+    @FXML
+    private ComboBox<Building> buildingComboBox;
+    @FXML
+    private Button updateButton, deleteButton, loadDataButton;
+    @FXML
+    private ComboBox<String> monthComboBox;
+    @FXML
+    private ComboBox<Integer> yearComboBox;
 
     private float eUsage, eCost, wUsage, wCost, sCost, mCost;
     private LocalDate date;
@@ -54,32 +63,32 @@ public class UpdateDataController extends ApplicationController {
         }
     }
 
-    public void onChange() {
+    public void loadData() {
         Building selectedBuilding = buildingComboBox.getValue();
         Integer selectedYear = yearComboBox.getValue();
         int selectedMonthIndex = monthComboBox.getSelectionModel().getSelectedIndex();
 
-        if (selectedBuilding != null) {
-            buildingBox.lastNotNull = selectedBuilding;
+        System.out.print(selectedBuilding.toString());
+
+        if (selectedBuilding == null || selectedYear == null || selectedMonthIndex < 0) {
+            System.out.println("Please select both a building and a date before loading data.");
+            return;
         }
 
-        if (selectedYear != null && selectedMonthIndex >= 0 && selectedBuilding != null) {
-            LocalDate selectedDate = LocalDate.of(selectedYear, selectedMonthIndex + 1, 1);
-            Utility utility = updateViewLogic.getUtilityForDate(selectedBuilding.getBuildingID(), selectedDate);
+        LocalDate selectedDate = LocalDate.of(selectedYear, selectedMonthIndex + 1, 1);
+        Utility utility = updateViewLogic.getUtilityForDate(selectedBuilding.getBuildingID(), selectedDate);
 
-            if (utility != null) {
-                electricityUsage.setText(String.valueOf(utility.getElectricityUsage()));
-                electricityCost.setText(String.valueOf(utility.getElectricityCost()));
-                waterUsage.setText(String.valueOf(utility.getWaterUsage()));
-                waterCost.setText(String.valueOf(utility.getWaterCost()));
-                sewageCost.setText(String.valueOf(utility.getSewageCost()));
-                miscCost.setText(String.valueOf(utility.getMiscCost()));
-            } else {
-                clearInputs();
-            }
-
+        if (utility != null) {
+            electricityUsage.setText(String.valueOf(utility.getElectricityUsage()));
+            electricityCost.setText(String.valueOf(utility.getElectricityCost()));
+            waterUsage.setText(String.valueOf(utility.getWaterUsage()));
+            waterCost.setText(String.valueOf(utility.getWaterCost()));
+            sewageCost.setText(String.valueOf(utility.getSewageCost()));
+            miscCost.setText(String.valueOf(utility.getMiscCost()));
             setInputDisabled(false);
         } else {
+            System.out.println("No data found for this building and date.");
+            clearInputs();
             setInputDisabled(true);
         }
     }
@@ -190,8 +199,6 @@ public class UpdateDataController extends ApplicationController {
         waterCost.setText("");
         sewageCost.setText("");
         miscCost.setText("");
-        monthComboBox.getSelectionModel().clearSelection();
-        yearComboBox.getSelectionModel().clearSelection();
     }
 
     private void clearErrors() {

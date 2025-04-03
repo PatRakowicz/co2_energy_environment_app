@@ -18,11 +18,12 @@
         xmlns="http://javafx.com/javafx/23.0.1"
         xmlns:fx="http://javafx.com/fxml">
    <children>
-      <ComboBox fx:id="buildingComboBox" editable="true" layoutX="38.0" layoutY="59.0" onAction="#onChange" prefWidth="150.0"/>
+      <ComboBox fx:id="buildingComboBox" editable="true" layoutX="38.0" layoutY="59.0" prefWidth="150.0"/>
       <Button layoutX="3.0" layoutY="3.0" mnemonicParsing="false" onAction="#switchToHome" prefHeight="25.0" prefWidth="44.0" text="Back" />
-      <HBox spacing="10" layoutX="155.0" layoutY="3.0">
-         <ComboBox fx:id="monthComboBox" prefWidth="120" promptText="Month" />
-         <ComboBox fx:id="yearComboBox" prefWidth="100" promptText="Year" />
+      <Button layoutX="50.0" layoutY="3.0" fx:id="loadDataButton" text="Load Data" onAction="#loadData" />
+      <HBox spacing="10" layoutX="350.0" layoutY="59.0">
+         <ComboBox fx:id="monthComboBox" prefWidth="120" promptText="Month"/>
+         <ComboBox fx:id="yearComboBox" prefWidth="100" promptText="Year"/>
       </HBox>
       <Label layoutX="40.0" layoutY="43.0" text="Building" />
       <Label layoutX="356.0" layoutY="44.0" text="Date" />
