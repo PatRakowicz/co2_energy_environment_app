@@ -5,8 +5,10 @@ import com.example.app.dao.UtilityRecords;
 import com.example.app.dao.CsvLogic;
 import com.example.app.model.Building;
 import com.example.app.model.FilteredBuildingBox;
+import com.example.app.model.Gas;
 import com.example.app.model.Utility;
 import javafx.fxml.FXML;
+import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 

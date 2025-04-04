@@ -4,6 +4,7 @@ import com.example.app.dao.BuildingRecords;
 import com.example.app.dao.UtilityRecords;
 import com.example.app.model.Building;
 import com.example.app.model.FilteredBuildingBox;
+import com.example.app.model.Gas;
 import com.example.app.model.Utility;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -38,10 +39,15 @@ public class ViewDataController extends ApplicationController{
     @FXML private CheckBox miscCostCheck;
 
     // Center Panel
-    @FXML private LineChart<String, Number> lineChart;
-    @FXML private TableView<Utility> tableView;
-
     // Table View
+    @FXML private SplitPane mainSplitPane;
+    @FXML private LineChart<String, Number> lineChart;
+    @FXML private TabPane tabPane;
+    @FXML private Tab utilityTab;
+    @FXML private Tab gasTab;
+    @FXML private TableView<Utility> utilityTableView;
+    @FXML private TableView<Gas> gasTableView;
+
     @FXML private TableColumn<Utility, String> dateColumn;
     @FXML private TableColumn<Utility, Float> electricityUsageColumn;
     @FXML private TableColumn<Utility, Float> waterUsageColumn;
@@ -86,10 +92,10 @@ public class ViewDataController extends ApplicationController{
     }
 
     private void populateTable(ArrayList<Utility> utilities) {
-        tableView.getItems().clear();
+        utilityTableView.getItems().clear();
 
         ObservableList<Utility> oUtilities = FXCollections.observableArrayList(utilities);
-        tableView.setItems(oUtilities);
+        utilityTableView.setItems(oUtilities);
     }
 
     private void populateChart(ArrayList<Utility> utilities, boolean showElectricityUsage, boolean showWaterUsage, boolean showElectricityCost,
