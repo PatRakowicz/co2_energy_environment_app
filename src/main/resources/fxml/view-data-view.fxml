@@ -54,7 +54,12 @@
                   <Insets bottom="2.0" left="5.0" top="10.0" />
                </VBox.margin>
             </Text>
-            <ComboBox fx:id="buildingComboBox" maxWidth="1.7976931348623157E308" prefWidth="150.0">
+            <ComboBox
+                    fx:id="buildingComboBox"
+                    onAction="#onChange"
+                    editable="true"
+                    maxWidth="1.7976931348623157E308"
+                    prefWidth="150.0">
                <VBox.margin>
                   <Insets bottom="10.0" left="5.0" right="5.0" />
                </VBox.margin>
@@ -128,11 +133,13 @@
             </LineChart>
             <TableView fx:id="tableView" maxHeight="200.0" prefHeight="43.0" prefWidth="432.0" style="-fx-border-color: #000000;" VBox.vgrow="ALWAYS">
               <columns>
-                <TableColumn prefWidth="75.0" text="Info1" />
-                <TableColumn prefWidth="75.0" text="Info2" />
-                  <TableColumn prefWidth="75.0" text="Info3" />
-                  <TableColumn prefWidth="75.0" text="Info4" />
-                  <TableColumn prefWidth="75.0" text="Info5" />
+                 <TableColumn fx:id="dateColumn" text="Date"/>
+                 <TableColumn fx:id="electricityUsageColumn" text="Electricity Usage"/>
+                 <TableColumn fx:id="waterUsageColumn" text="Water Usage"/>
+                 <TableColumn fx:id="electricityCostColumn" text="Electricity Cost"/>
+                 <TableColumn fx:id="waterCostColumn" text="Water Cost"/>
+                 <TableColumn fx:id="sewageCostColumn" text="Sewage Cost"/>
+                 <TableColumn fx:id="miscCostColumn" text="Misc Cost"/>
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
