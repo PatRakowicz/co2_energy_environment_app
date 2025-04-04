@@ -3,17 +3,19 @@ package com.example.app.controllers;
 import com.example.app.dao.BuildingRecords;
 import com.example.app.dao.UtilityRecords;
 import com.example.app.model.Building;
+import com.example.app.model.FilteredBuildingBox;
+import com.example.app.model.Gas;
 import com.example.app.model.Utility;
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.util.StringConverter;
 
 import java.time.LocalDate;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 public class ViewDataController extends ApplicationController{
     private BuildingRecords buildingRecords;
     private UtilityRecords utilityRecords;
+    private FilteredBuildingBox filteredBuildingBox;
 
     private Utility utility = new Utility();
 
@@ -37,8 +40,22 @@ public class ViewDataController extends ApplicationController{
     @FXML private CheckBox miscCostCheck;
 
     // Center Panel
+    // Table View
+    @FXML private SplitPane mainSplitPane;
     @FXML private LineChart<String, Number> lineChart;
-    @FXML private TableView<Utility> tableView;
+    @FXML private TabPane tabPane;
+    @FXML private Tab utilityTab;
+    @FXML private Tab gasTab;
+    @FXML private TableView<Utility> utilityTableView;
+    @FXML private TableView<Gas> gasTableView;
+
+    @FXML private TableColumn<Utility, String> dateColumn;
+    @FXML private TableColumn<Utility, Float> electricityUsageColumn;
+    @FXML private TableColumn<Utility, Float> waterUsageColumn;
+    @FXML private TableColumn<Utility, Float> electricityCostColumn;
+    @FXML private TableColumn<Utility, Float> waterCostColumn;
+    @FXML private TableColumn<Utility, Float> sewageCostColumn;
+    @FXML private TableColumn<Utility, Float> miscCostColumn;
 
     @FXML public void refreshView(ActionEvent event) {
         Building building = buildingComboBox.getValue();
@@ -76,10 +93,10 @@ public class ViewDataController extends ApplicationController{
     }
 
     private void populateTable(ArrayList<Utility> utilities) {
-        tableView.getItems().clear();
+        utilityTableView.getItems().clear();
 
         ObservableList<Utility> oUtilities = FXCollections.observableArrayList(utilities);
-        tableView.setItems(oUtilities);
+        utilityTableView.setItems(oUtilities);
     }
 
     private void populateChart(ArrayList<Utility> utilities, boolean showElectricityUsage, boolean showWaterUsage, boolean showElectricityCost,
@@ -199,25 +216,25 @@ public class ViewDataController extends ApplicationController{
 
         buildingRecords = new BuildingRecords(super.dbConn);
         buildings = buildingRecords.getBuildings();
-
-        ObservableList<Building> oBuildings = FXCollections.observableArrayList(buildings);
-        buildingComboBox.setItems(oBuildings);
-
-        buildingComboBox.setConverter(new StringConverter<Building>() {
-            @Override
-            public String toString(Building building) {
-                if (building == null) {
-                    return "";
-                }
-                return building.getName();
-            }
-
-            @Override
-            public Building fromString(String s) {
-                return null;
-            }
-        });
+        filteredBuildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
 
         utilityRecords = new UtilityRecords(super.dbConn);
+
+        // https://docs.oracle.com/javase/8/javafx/api/javafx/beans/property/SimpleFloatProperty.html#SimpleFloatProperty-java.lang.Object-java.lang.String-
+        // Properties can be bound in ways that will automatically update the UI when something changes
+        dateColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDate().toString()));
+        electricityUsageColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getElectricityUsage()).asObject());
+        waterUsageColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getWaterUsage()).asObject());
+        electricityCostColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getElectricityCost()).asObject());
+        waterCostColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getWaterCost()).asObject());
+        sewageCostColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getSewageCost()).asObject());
+        miscCostColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getMiscCost()).asObject());
     }
+
+    public void onChange() {
+        if (buildingComboBox.getValue() != null) {
+            filteredBuildingBox.lastNotNull = buildingComboBox.getValue();
+        }
+    }
+
 }
