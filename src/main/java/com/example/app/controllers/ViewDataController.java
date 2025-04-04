@@ -12,6 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
@@ -228,7 +229,6 @@ public class ViewDataController extends ApplicationController{
         waterCostColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getWaterCost()).asObject());
         sewageCostColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getSewageCost()).asObject());
         miscCostColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getMiscCost()).asObject());
-
     }
 
     public void onChange() {
