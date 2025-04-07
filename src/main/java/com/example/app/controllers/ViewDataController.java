@@ -231,10 +231,4 @@ public class ViewDataController extends ApplicationController{
         miscCostColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getMiscCost()).asObject());
     }
 
-    public void onChange() {
-        if (buildingComboBox.getValue() != null) {
-            filteredBuildingBox.lastNotNull = buildingComboBox.getValue();
-        }
-    }
-
 }
