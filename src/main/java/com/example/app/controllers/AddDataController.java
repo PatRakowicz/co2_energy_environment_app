@@ -21,47 +21,18 @@ import java.util.Objects;
 public class AddDataController extends ApplicationController {
     private BuildingRecords buildingRecords;
     @FXML
-    private Label electricityUsageError;
+    private Label electricityUsageError, electricityCostError, waterUsageError, waterCostError, sewageCostError,
+            miscCostError, dateError, buildingError;
     @FXML
-    private Label electricityCostError;
-    @FXML
-    private Label waterUsageError;
-    @FXML
-    private Label waterCostError;
-    @FXML
-    private Label sewageCostError;
-    @FXML
-    private Label miscCostError;
-    @FXML
-    private Label dateError;
-    @FXML
-    private Label buildingError;
-    @FXML
-    private TextField electricityUsage;
-    @FXML
-    private TextField electricityCost;
-    @FXML
-    private TextField waterUsage;
-    @FXML
-    private TextField waterCost;
-    @FXML
-    private TextField sewageCost;
-    @FXML
-    private TextField miscCost;
+    private TextField electricityUsage, electricityCost, waterUsage, waterCost, sewageCost, miscCost;
     @FXML
     private DatePicker datePicker;
     @FXML
     private ComboBox<Building> buildingComboBox;
-    private FilteredBuildingBox buildingBox;
 
     @FXML Button uploadCsvButton;
 
-    float eUsage;
-    float eCost;
-    float wUsage;
-    float wCost;
-    float sCost;
-    float mCost;
+    float eUsage, eCost, wUsage, wCost, sCost, mCost;
     LocalDate date;
     Building building;
 
@@ -189,6 +160,9 @@ public class AddDataController extends ApplicationController {
             } else {
                 System.out.println("Failed to insert data.");
             }
+            if(buildingComboBox.getValue().getName().equals("Master Meter")){
+                averageMasterMeter(eCost, eUsage);
+            }
         }
 
     }
@@ -204,48 +178,57 @@ public class AddDataController extends ApplicationController {
 
         buildingRecords = new BuildingRecords(super.dbConn);
         buildings = buildingRecords.getBuildings();
-        buildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
+        FilteredBuildingBox buildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
     }
 
     public void onChange(){
-        if(buildingComboBox.getValue() != null){
-            buildingBox.lastNotNull = buildingComboBox.getValue();
-        }
         if(buildingComboBox.getValue() != null && datePicker.getValue() != null) {
             String name = buildingComboBox.getValue().getName();
             Date checkDate = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-            for (int i = 0; i < buildings.size(); i++) {
-                String checkName = buildings.get(i).getName();
-                if (Objects.equals(checkName, name)) {
-                    Date checkDateStart = buildings.get(i).getStartShared();
-                    Date checkDateEnd = buildings.get(i).getEndShared();
-                    if(checkDateStart != null) {
-                        if (checkDateStart.before(checkDate)) {
-                            if (checkDateEnd == null) {
-                                electricityCost.setDisable(true);
-                                electricityUsage.setDisable(true);
-                                electricityCost.setText("");
-                                electricityUsage.setText("");
-                            } else if (checkDateEnd.after(checkDate)) {
-                                electricityCost.setDisable(true);
-                                electricityUsage.setDisable(true);
-                                electricityCost.setText("");
-                                electricityUsage.setText("");
+            if(name.equals("Master Meter")){
+                electricityUsage.setDisable(false);
+                electricityCost.setDisable(false);
+                miscCost.setDisable(false);
+                waterUsage.setDisable(true);
+                waterUsage.setText(null);
+                waterCost.setDisable(true);
+                waterCost.setText(null);
+                sewageCost.setDisable(true);
+                sewageCost.setText(null);
+            }
+            else {
+                for(int i = 0; i < buildings.size(); i++) {
+                    String checkName = buildings.get(i).getName();
+                    if (Objects.equals(checkName, name)) {
+                        Date checkDateStart = buildings.get(i).getStartShared();
+                        Date checkDateEnd = buildings.get(i).getEndShared();
+                        if (checkDateStart != null) {
+                            if (checkDateStart.before(checkDate)) {
+                                if (checkDateEnd == null) {
+                                    electricityCost.setDisable(true);
+                                    electricityUsage.setDisable(true);
+                                    electricityCost.setText(null);
+                                    electricityUsage.setText(null);
+                                } else if (checkDateEnd.after(checkDate)) {
+                                    electricityCost.setDisable(true);
+                                    electricityUsage.setDisable(true);
+                                    electricityCost.setText(null);
+                                    electricityUsage.setText(null);
+                                } else {
+                                    electricityUsage.setDisable(false);
+                                    electricityCost.setDisable(false);
+                                }
+
                             } else {
                                 electricityUsage.setDisable(false);
                                 electricityCost.setDisable(false);
                             }
-
                         } else {
                             electricityUsage.setDisable(false);
                             electricityCost.setDisable(false);
                         }
+                        break;
                     }
-                    else{
-                        electricityUsage.setDisable(false);
-                        electricityCost.setDisable(false);
-                    }
-                    break;
                 }
             }
         }
@@ -278,5 +261,10 @@ public class AddDataController extends ApplicationController {
             exporter.exportCsvTemplate(file);
             System.out.println("CSV Template Exported.");
         }
+    }
+
+
+    public void averageMasterMeter(float masterCost, float masterUsage){
+
     }
 }

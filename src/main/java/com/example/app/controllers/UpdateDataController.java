@@ -13,6 +13,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.Objects;
 
 
 public class UpdateDataController extends ApplicationController {
@@ -66,20 +69,12 @@ public class UpdateDataController extends ApplicationController {
     }
 
 
-    public void onChange() {
-        Building selected = buildingComboBox.getValue();
-        if (selected != null) {
-            buildingBox.lastNotNull = selected;
-            buildingComboBox.getEditor().setText(selected.getName());
-        }
-    }
-
     public void loadData() {
         Building selectedBuilding = buildingComboBox.getValue();
         Integer selectedYear = yearComboBox.getValue();
         int selectedMonthIndex = monthComboBox.getSelectionModel().getSelectedIndex();
-
         clearInputs();
+
 
         if (selectedBuilding == null || selectedYear == null || selectedMonthIndex < 0) {
             System.out.println("Please select both a building and a date before loading data.");
@@ -224,13 +219,67 @@ public class UpdateDataController extends ApplicationController {
     }
 
     private void setInputDisabled(boolean disabled) {
-        electricityUsage.setDisable(disabled);
-        electricityCost.setDisable(disabled);
-        waterUsage.setDisable(disabled);
-        waterCost.setDisable(disabled);
-        sewageCost.setDisable(disabled);
-        miscCost.setDisable(disabled);
-        updateButton.setDisable(disabled);
-        deleteButton.setDisable(disabled);
+        if(!disabled){
+            if(buildingComboBox.getValue().getName().equals("Master Meter")){
+                electricityUsage.setDisable(false);
+                electricityCost.setDisable(false);
+                miscCost.setDisable(false);
+                waterUsage.setDisable(true);
+                waterUsage.setText(null);
+                waterCost.setDisable(true);
+                waterCost.setText(null);
+                sewageCost.setDisable(true);
+                sewageCost.setText(null);
+            }
+            else{
+                int year = yearComboBox.getValue();
+                int month = monthComboBox.getSelectionModel().getSelectedIndex() + 1;
+                LocalDate getDate = LocalDate.of(year, month, 1);
+                Date checkDate = Date.from(getDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                for(int i = 0; i < buildings.size(); i++) {
+                    String checkName = buildings.get(i).getName();
+                    if (Objects.equals(checkName, buildingComboBox.getValue().getName())) {
+                        Date checkDateStart = buildings.get(i).getStartShared();
+                        Date checkDateEnd = buildings.get(i).getEndShared();
+                        if (checkDateStart != null) {
+                            if (checkDateStart.before(checkDate)) {
+                                if (checkDateEnd == null) {
+                                    electricityCost.setDisable(true);
+                                    electricityUsage.setDisable(true);
+                                    electricityCost.setText(null);
+                                    electricityUsage.setText(null);
+                                } else if (checkDateEnd.after(checkDate)) {
+                                    electricityCost.setDisable(true);
+                                    electricityUsage.setDisable(true);
+                                    electricityCost.setText(null);
+                                    electricityUsage.setText(null);
+                                } else {
+                                    electricityUsage.setDisable(false);
+                                    electricityCost.setDisable(false);
+                                }
+
+                            } else {
+                                electricityUsage.setDisable(false);
+                                electricityCost.setDisable(false);
+                            }
+                        } else {
+                            electricityUsage.setDisable(false);
+                            electricityCost.setDisable(false);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        else {
+            electricityUsage.setDisable(true);
+            electricityCost.setDisable(true);
+            waterUsage.setDisable(true);
+            waterCost.setDisable(true);
+            sewageCost.setDisable(true);
+            miscCost.setDisable(true);
+            updateButton.setDisable(true);
+            deleteButton.setDisable(true);
+        }
     }
 }
