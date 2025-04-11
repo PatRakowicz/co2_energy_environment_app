@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -12,15 +13,20 @@ import javafx.util.StringConverter;
 
 import java.util.ArrayList;
 
-import static javafx.scene.input.KeyCode.BACK_SPACE;
+import static javafx.scene.input.KeyCode.*;
 
 public class FilteredBuildingBox {
-    ObservableList<Building> oBuildings;
-    private TextField editor;
-    public Building lastNotNull;
-    ComboBox<Building> buildingComboBox;
+    private ObservableList<Building> oBuildings; //original list of buildings
+    private ObservableList<Building> filteredList; //filtered list of buildings
+    private TextField editor; //The textfeild inside buildingComboBox
+    private Building lastNotNull; //Keeps track of the last building that was selected
+    private ComboBox<Building> buildingComboBox; //just the comboBox
+
+    //Listeners
     private ChangeListener<Boolean> focusListener;
     private ChangeListener<String> textListener;
+    private ChangeListener<Building> valueChangeListener;
+    private EventHandler<ActionEvent> onEnterListener;
 
 
     public FilteredBuildingBox(ArrayList<Building> buildings, ComboBox<Building> buildingComboBox){
@@ -45,34 +51,51 @@ public class FilteredBuildingBox {
 
         editor = buildingComboBox.getEditor();
 
-        textListener = (observable, oldValue, newValue) -> {
+        //The listener that tracks if the user types a letter into editor
+        textListener = (obs, oldValue, newValue) -> {
             Platform.runLater(() -> filter());
         };
         editor.textProperty().addListener(textListener);
 
+        //The listener that checks if the focus is changed from editor
         focusListener = (obs, wasFocused, isNowFocused) ->
                 Platform.runLater(() -> lostFocus(isNowFocused));
-
         editor.focusedProperty().addListener(focusListener);
 
+        //The listener that checks if a new value is selected
+        valueChangeListener = (obs, oldValue, newValue) -> {
+            Platform.runLater(() -> onChange());
+        };
+        buildingComboBox.valueProperty().addListener(valueChangeListener);
+
+        //The listener that checks if the backspace key is pressed
         editor.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 if(event.getCode() == BACK_SPACE){
-                    editor.textProperty().removeListener(textListener);
-                    editor.focusedProperty().removeListener(focusListener);
                     onBackspace();
-                    editor.textProperty().addListener(textListener);
-                    editor.focusedProperty().addListener(focusListener);
+                }
+                else if(event.getCode() == TAB){
+                    onTab();
                 }
             }
         });
+
+        //The listener that checks if an action takes place in buildingComboBox
+        onEnterListener = new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                onEnter();
+            }
+        };
+        buildingComboBox.setOnAction(onEnterListener);
     }
 
+    //Creates a list of buildings that are like the text inside editor
     public void filter() {
         int caretPosition = editor.getCaretPosition();
         String input = editor.getText();
-        ObservableList<Building> filteredList = FXCollections.observableArrayList();
+        filteredList = FXCollections.observableArrayList();
 
         boolean buildingSelected = false;
         for (Building b : oBuildings) {
@@ -97,6 +120,7 @@ public class FilteredBuildingBox {
         editor.positionCaret(caretPosition);
     }
 
+    //If the user clicks off buildingComboBox put the last selected value into buildingComboBox otherwise the box gets wiped
     public void lostFocus(Boolean isNowFocused){
         if(buildingComboBox.getValue() == null && lastNotNull != null && !isNowFocused){
             buildingComboBox.setValue(lastNotNull);
@@ -105,7 +129,64 @@ public class FilteredBuildingBox {
     }
 
     public void onBackspace(){
-        editor.setText("");
-        buildingComboBox.setValue(null);
+        //Disable other listeners so there isn't overlap
+        buildingComboBox.setOnAction(null);
+        editor.textProperty().removeListener(textListener);
+        editor.focusedProperty().removeListener(focusListener);
+
+        //if there is a building selected, clear the input
+        if(buildingComboBox.getValue() != null) {
+            editor.setText("");
+            buildingComboBox.setValue(null);
+            lastNotNull = null;
+        }
+
+        //re-enable listeners
+        buildingComboBox.setOnAction(onEnterListener);
+        editor.textProperty().addListener(textListener);
+        editor.focusedProperty().addListener(focusListener);
     }
+
+    //Store the selected value
+    public void onChange(){
+        if(buildingComboBox.getValue() != null){
+            lastNotNull = buildingComboBox.getValue();
+        }
+    }
+
+    public void onEnter(){
+        String value = buildingComboBox.getEditor().getText();
+        //If the text in editor is a building store it in lastNotNull
+        for(Building b: oBuildings){
+            if(b.getName().equals(value)){
+                lastNotNull = b;
+            }
+        }
+
+        //If the enter key is pressed, set the value of buildingComboBox to the highlighted value
+        if(value.isEmpty()){
+            buildingComboBox.setValue(lastNotNull);
+        }
+    }
+
+    public void onTab(){
+        //Disable other listeners so there isn't overlap
+        buildingComboBox.setOnAction(null);
+        editor.textProperty().removeListener(textListener);
+        editor.focusedProperty().removeListener(focusListener);
+
+        //Set the value of buildingComboBox to highlighted value
+        if(lastNotNull == null){
+            buildingComboBox.setValue(filteredList.getFirst());
+        }
+        else{
+            buildingComboBox.setValue(lastNotNull);
+        }
+
+        //re-enable listeners
+        buildingComboBox.setOnAction(onEnterListener);
+        editor.textProperty().addListener(textListener);
+        editor.focusedProperty().addListener(focusListener);
+    }
+
 }
