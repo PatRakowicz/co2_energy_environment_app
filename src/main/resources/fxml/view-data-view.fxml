@@ -52,7 +52,7 @@
                   <Insets bottom="2.0" left="5.0" top="10.0" />
                </VBox.margin>
             </Text>
-            <ComboBox fx:id="buildingComboBox" editable="true" maxWidth="1.7976931348623157E308" onAction="#onChange" prefWidth="150.0">
+            <ComboBox fx:id="buildingComboBox" editable="true" maxWidth="1.7976931348623157E308" prefWidth="150.0">
                <VBox.margin>
                   <Insets bottom="10.0" left="5.0" right="5.0" />
                </VBox.margin>
