@@ -22,7 +22,6 @@
               editable="true"
               layoutX="38.0"
               layoutY="59.0"
-              onAction="#onChange"
               prefWidth="150.0"/>
       <Button
               layoutX="3.0"

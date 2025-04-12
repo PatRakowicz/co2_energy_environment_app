@@ -7,6 +7,10 @@ import com.example.app.model.Building;
 import com.example.app.model.FilteredBuildingBox;
 import com.example.app.model.Gas;
 import com.example.app.model.Utility;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
@@ -39,25 +43,48 @@ public class AddDataController extends ApplicationController {
 
 
     public void clearErrors(){
-        electricityUsageError.setText("");
-        electricityCostError.setText("");
-        waterUsageError.setText("");
-        waterCostError.setText("");
-        sewageCostError.setText("");
-        miscCostError.setText("");
-        dateError.setText("");
-        buildingError.setText("");
+        electricityUsageError.setText(null);
+        electricityCostError.setText(null);
+        waterUsageError.setText(null);
+        waterCostError.setText(null);
+        sewageCostError.setText(null);
+        miscCostError.setText(null);
+        dateError.setText(null);
+        buildingError.setText(null);
     }
 
 
     public void clearInputs(){
-        electricityUsage.setText("");
-        electricityCost.setText("");
-        waterUsage.setText("");
-        waterCost.setText("");
-        sewageCost.setText("");
-        miscCost.setText("");
+        electricityUsage.setText(null);
+        electricityCost.setText(null);
+        waterUsage.setText(null);
+        waterCost.setText(null);
+        sewageCost.setText(null);
+        miscCost.setText(null);
         datePicker.setValue(null);
+    }
+
+    private void setDisabledAll(boolean d){
+        electricityUsage.setDisable(d);
+        electricityCost.setDisable(d);
+        waterUsage.setDisable(d);
+        waterCost.setDisable(d);
+        sewageCost.setDisable(d);
+        miscCost.setDisable(d);
+    }
+
+    private void setDisabledOnMaster(){
+        // disable electricity fields
+        electricityUsage.setDisable(true);
+        electricityCost.setDisable(true);
+        // clear electricity fields so no electricity data gets added by mistake
+        electricityUsage.setText(null);
+        electricityCost.setText(null);
+        // enable remaining fields in case they were disabled
+        waterCost.setDisable(false);
+        waterUsage.setDisable(false);
+        sewageCost.setDisable(false);
+        miscCost.setDisable(false);
     }
 
     // This is where the error checking happens
@@ -179,13 +206,15 @@ public class AddDataController extends ApplicationController {
         buildingRecords = new BuildingRecords(super.dbConn);
         buildings = buildingRecords.getBuildings();
         FilteredBuildingBox buildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
+
+        buildingComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            onChange();
+        });
     }
 
     public void onChange(){
         if(buildingComboBox.getValue() != null && datePicker.getValue() != null) {
-            String name = buildingComboBox.getValue().getName();
-            Date checkDate = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-            if(name.equals("Master Meter")){
+            if(buildingComboBox.getValue().getName().equals("Master Meter")){
                 electricityUsage.setDisable(false);
                 electricityCost.setDisable(false);
                 miscCost.setDisable(false);
@@ -197,37 +226,22 @@ public class AddDataController extends ApplicationController {
                 sewageCost.setText(null);
             }
             else {
-                for(int i = 0; i < buildings.size(); i++) {
-                    String checkName = buildings.get(i).getName();
-                    if (Objects.equals(checkName, name)) {
-                        Date checkDateStart = buildings.get(i).getStartShared();
-                        Date checkDateEnd = buildings.get(i).getEndShared();
-                        if (checkDateStart != null) {
-                            if (checkDateStart.before(checkDate)) {
-                                if (checkDateEnd == null) {
-                                    electricityCost.setDisable(true);
-                                    electricityUsage.setDisable(true);
-                                    electricityCost.setText(null);
-                                    electricityUsage.setText(null);
-                                } else if (checkDateEnd.after(checkDate)) {
-                                    electricityCost.setDisable(true);
-                                    electricityUsage.setDisable(true);
-                                    electricityCost.setText(null);
-                                    electricityUsage.setText(null);
-                                } else {
-                                    electricityUsage.setDisable(false);
-                                    electricityCost.setDisable(false);
-                                }
+                Date checkDate = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+                Date checkDateStart = buildingComboBox.getValue().getStartShared();
+                Date checkDateEnd = buildingComboBox.getValue().getEndShared();
 
-                            } else {
-                                electricityUsage.setDisable(false);
-                                electricityCost.setDisable(false);
-                            }
-                        } else {
-                            electricityUsage.setDisable(false);
-                            electricityCost.setDisable(false);
-                        }
-                        break;
+                if(checkDateStart == null && checkDateEnd == null){
+                    setDisabledAll(false);
+                }
+                else if(checkDateStart != null && checkDateEnd == null){
+                    setDisabledOnMaster();
+                }
+                else if(checkDateStart != null && checkDateEnd != null){
+                    if(checkDateEnd.before(checkDate) || checkDateEnd == checkDate){
+                        setDisabledAll(false);
+                    }
+                    else{
+                        setDisabledOnMaster();
                     }
                 }
             }
