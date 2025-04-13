@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.Button?>
+<BorderPane fx:id="rootPane" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.app.controllers.ApplicationController">
+    <top>
+        <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+            <children>
+                <Button fx:id="DBButton" mnemonicParsing="false" onAction="#openDBWindow" text="Database" />
+                <Button fx:id="addPageButton" mnemonicParsing="false" onAction="#switchToAddData" text="Add" />
+                <Button fx:id="updatePageButton" mnemonicParsing="false" onAction="#switchToUpdateData" text="Update" />
+                <Button fx:id="viewPageButton" mnemonicParsing="false" onAction="#switchToViewData" text="View" />
+                <Button fx:id="reportPageButton" mnemonicParsing="false" onAction="#switchToReport" text="Report" />
+            </children>
+        </HBox>
+    </top>
+    <center>
+        <!-- Will be set dynamically -->
+    </center>
+
+</BorderPane>

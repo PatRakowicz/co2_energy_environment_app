@@ -1,29 +1,25 @@
 package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
+import com.example.app.dao.DBConn;
 import com.example.app.dao.UtilityRecords;
 import com.example.app.dao.CsvLogic;
 import com.example.app.model.Building;
-import com.example.app.model.FilteredBuildingBox;
-import com.example.app.model.Gas;
+import com.example.app.utils.FilteredBuildingBox;
 import com.example.app.model.Utility;
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
-
 import java.io.File;
 import java.time.ZoneId;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Objects;
 
-public class AddDataController extends ApplicationController {
+public class AddDataController {
+    private DBConn dbConn;
     private BuildingRecords buildingRecords;
+    private ArrayList<Building> buildings;
     @FXML
     private Label electricityUsageError, electricityCostError, waterUsageError, waterCostError, sewageCostError,
             miscCostError, dateError, buildingError;
@@ -40,7 +36,26 @@ public class AddDataController extends ApplicationController {
     LocalDate date;
     Building building;
 
+    public AddDataController(){}
 
+    public AddDataController(DBConn conn){
+        this.dbConn = conn;
+    }
+
+    public void initialize() {
+        if (dbConn == null) {
+            System.out.println("No active database connection.");
+            return;
+        }
+
+        buildingRecords = new BuildingRecords(dbConn);
+        buildings = buildingRecords.getBuildings();
+        FilteredBuildingBox buildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
+
+        buildingComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
+            onChange();
+        });
+    }
 
     public void clearErrors(){
         electricityUsageError.setText(null);
@@ -192,24 +207,6 @@ public class AddDataController extends ApplicationController {
             }
         }
 
-    }
-
-    @Override
-    public void initialize() {
-        super.initialize();
-
-        if (dbConn == null) {
-            System.out.println("No active database connection.");
-            return;
-        }
-
-        buildingRecords = new BuildingRecords(super.dbConn);
-        buildings = buildingRecords.getBuildings();
-        FilteredBuildingBox buildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
-
-        buildingComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
-            onChange();
-        });
     }
 
     public void onChange(){

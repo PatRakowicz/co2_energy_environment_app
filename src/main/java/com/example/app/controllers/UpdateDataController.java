@@ -1,11 +1,11 @@
 package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
+import com.example.app.dao.DBConn;
 import com.example.app.dao.UpdateViewLogic;
 import com.example.app.model.Building;
-import com.example.app.model.FilteredBuildingBox;
+import com.example.app.utils.FilteredBuildingBox;
 import com.example.app.model.Utility;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -14,12 +14,14 @@ import javafx.scene.control.TextField;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Objects;
 
 
-public class UpdateDataController extends ApplicationController {
+public class UpdateDataController{
+    private DBConn dbConn;
     private BuildingRecords buildingRecords;
+    private ArrayList<Building> buildings;
     private UpdateViewLogic updateViewLogic;
     private FilteredBuildingBox buildingBox;
 
@@ -41,10 +43,13 @@ public class UpdateDataController extends ApplicationController {
     private float eUsage, eCost, wUsage, wCost, sCost, mCost;
     private LocalDate date;
 
-    @Override
-    public void initialize() {
-        super.initialize();
+    public UpdateDataController(){}
 
+    public UpdateDataController(DBConn conn){
+        dbConn = conn;
+    }
+
+    public void initialize() {
         if (dbConn == null) {
             System.out.println("No active database connection.");
             return;
