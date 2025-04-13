@@ -20,7 +20,7 @@ import javafx.scene.control.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class ViewDataController extends ApplicationController{
+public class ViewDataController{
     private DBConn dbConn;
     private BuildingRecords buildingRecords;
     private ArrayList<Building> buildings;

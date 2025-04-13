@@ -8,8 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -18,14 +17,13 @@ import java.util.ArrayList;
 
 public class ApplicationController {
     @FXML
-    private BorderPane rootPane;
-    private Scene scene;
+    private VBox rootPane;
+
     private Stage DBStage;
 
-    private ArrayList<Building> buildings;
-
     @FXML
-    private Button DBButton, addPageButton, updatePageButton, viewPageButton, reportPageButton;;
+    private Button DBButton, addPageButton, updatePageButton, viewPageButton, reportPageButton;
+
     private DBConn dbConn;
 
     private AddDataController addDataController;
@@ -33,22 +31,45 @@ public class ApplicationController {
     private UpdateDataController updateDataController;
     private ViewDataController viewDataController;
 
-
-    public void setCenterContent(Parent content){
-        rootPane.setCenter(content);
-    }
-
     @FXML
     public void initialize() {
-        dbConn = new DBConn();
-        updateDBButtonStatus();
-        addDataController = new AddDataController(dbConn);
-        reportController = new ReportController();
-        updateDataController = new UpdateDataController(dbConn);
-        viewDataController = new ViewDataController(dbConn);
+        try {
+            dbConn = new DBConn();
+            updateDBButtonStatus();
+            addDataController = new AddDataController(dbConn);
+            reportController = new ReportController();
+            updateDataController = new UpdateDataController(dbConn);
+            viewDataController = new ViewDataController(dbConn);
 
-        setCenterContent(loadPage("/fxml/view-data-view.fxml", viewDataController));
-        viewPageButton.setDisable(true);
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/view-data-view.fxml"));
+            fxmlLoader.setController(viewDataController);
+            BorderPane content = fxmlLoader.load();
+            rootPane.getChildren().add(content);
+            VBox.setVgrow(content, Priority.ALWAYS);
+            content.prefWidthProperty().bind(rootPane.widthProperty());
+            content.prefHeightProperty().bind(rootPane.heightProperty().subtract(40));
+            viewPageButton.setDisable(true);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void setPageContent(String fxmlFile, Object controller){
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
+            fxmlLoader.setController(controller);
+            BorderPane content = fxmlLoader.load();
+
+            rootPane.getChildren().set(1,content);
+
+            VBox.setVgrow(content, Priority.ALWAYS);
+            content.prefWidthProperty().bind(rootPane.widthProperty());
+            content.prefHeightProperty().bind(rootPane.heightProperty().subtract(40));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void enableButtons(){
@@ -102,39 +123,27 @@ public class ApplicationController {
     public void switchToAddData(ActionEvent event) {
         enableButtons();
         addPageButton.setDisable(true);
-        setCenterContent(loadPage("/fxml/add-data-view.fxml", addDataController));
+        setPageContent("/fxml/add-data-view.fxml", addDataController);
     }
 
     @FXML
     public void switchToReport(ActionEvent event) {
         enableButtons();
         reportPageButton.setDisable(true);
-        setCenterContent(loadPage("/fxml/report-view.fxml", reportController));
+        setPageContent("/fxml/report-view.fxml", reportController);
     }
 
     @FXML
     public void switchToUpdateData(ActionEvent event) {
         enableButtons();
         updatePageButton.setDisable(true);
-        setCenterContent(loadPage("/fxml/update-data-view.fxml", updateDataController));
+        setPageContent("/fxml/update-data-view.fxml", updateDataController);
     }
 
     @FXML
     public void switchToViewData(ActionEvent event) {
         enableButtons();
         viewPageButton.setDisable(true);
-        setCenterContent(loadPage("/fxml/view-data-view.fxml", viewDataController));
+        setPageContent("/fxml/view-data-view.fxml", viewDataController);
     }
-
-    private Parent loadPage(String fxmlFile, Object controller) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
-            fxmlLoader.setController(controller);
-            return fxmlLoader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
 }
