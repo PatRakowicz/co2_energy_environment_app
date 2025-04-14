@@ -44,15 +44,24 @@ public class CsvLogic implements DBQueries {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",", -1);
-                for (int i = 0; i < parts.length; i++) parts[i] = parts[i].trim();
-
-                if (parts.length < 8) {
-                    System.out.printf("Skipping row with too few columns: %s%n", line);
-                    continue;
+                for (int i = 0; i < parts.length; i++) {
+                    parts[i] = parts[i].trim();
                 }
 
                 String buildingName = parts[0];
                 if (buildingName.isEmpty()) continue;
+
+                boolean hasData = false;
+                for (int i = 1; i <= 7 && i < parts.length; i++) {
+                    if (!parts[i].isEmpty()) {
+                        hasData = true;
+                        break;
+                    }
+                }
+                if (!hasData) {
+                    System.out.printf("Skipping row with no data: %s%n", line);
+                    continue;
+                }
 
                 Building building = fetchBuildingByName(buildingName, conn);
                 if (building == null) {
@@ -63,13 +72,13 @@ public class CsvLogic implements DBQueries {
                 Utility utility = new Utility();
                 utility.setDate(sharedDate);
                 utility.setBuildingID(building.getBuildingID());
-                utility.setWaterUsage(parseOrDefault(parts[1]));
-                utility.setWaterCost(parseOrDefault(parts[2]));
-                utility.setElectricityUsage(parseOrDefault(parts[3]));
-                utility.setElectricityCost(parseOrDefault(parts[4]));
-                utility.setSewageCost(parseOrDefault(parts[5]));
-                utility.setUsageGal(parseOrDefault(parts[6]));
-                utility.setMiscCost(parseOrDefault(parts[7]));
+                utility.setWaterUsage(parts.length > 1 ? parseOrNull(parts[1]) : null);
+                utility.setWaterCost(parts.length > 2 ? parseOrNull(parts[2]) : null);
+                utility.setElectricityUsage(parts.length > 3 ? parseOrNull(parts[3]) : null);
+                utility.setElectricityCost(parts.length > 4 ? parseOrNull(parts[4]) : null);
+                utility.setSewageCost(parts.length > 5 ? parseOrNull(parts[5]) : null);
+                utility.setUsageGal(parts.length > 6 ? parseOrNull(parts[6]) : null);
+                utility.setMiscCost(parts.length > 7 ? parseOrNull(parts[7]) : null);
 
                 insertUtility(conn, building, utility);
             }
@@ -108,11 +117,11 @@ public class CsvLogic implements DBQueries {
         }
     }
 
-    private float parseOrDefault(String value) {
+    private Float parseOrNull(String value) {
         try {
-            return value.trim().isEmpty() ? 0f : Float.parseFloat(value.trim());
+            return value.trim().isEmpty() ? null : Float.parseFloat(value.trim());
         } catch (NumberFormatException e) {
-            return 0f;
+            return null;
         }
     }
 
@@ -154,16 +163,15 @@ public class CsvLogic implements DBQueries {
     private void insertUtility(Connection conn, Building building, Utility utility) throws SQLException {
         String insert = "INSERT INTO utility (buildingID, date, e_usage, e_cost, w_usage, w_cost, sw_cost, misc_cost) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-
         try (PreparedStatement stmt = conn.prepareStatement(insert)) {
             stmt.setInt(1, building.getBuildingID());
             stmt.setDate(2, new java.sql.Date(utility.getDate().getTime()));
-            stmt.setFloat(3, utility.getElectricityUsage());
-            stmt.setFloat(4, utility.getElectricityCost());
-            stmt.setFloat(5, utility.getWaterUsage());
-            stmt.setFloat(6, utility.getWaterCost());
-            stmt.setFloat(7, utility.getSewageCost());
-            stmt.setFloat(8, utility.getMiscCost());
+            stmt.setObject(3, utility.getElectricityUsage(), Types.FLOAT);
+            stmt.setObject(4, utility.getElectricityCost(), Types.FLOAT);
+            stmt.setObject(5, utility.getWaterUsage(), Types.FLOAT);
+            stmt.setObject(6, utility.getWaterCost(), Types.FLOAT);
+            stmt.setObject(7, utility.getSewageCost(), Types.FLOAT);
+            stmt.setObject(8, utility.getMiscCost(), Types.FLOAT);
 
             stmt.executeUpdate();
         }
