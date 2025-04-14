@@ -2,6 +2,8 @@ package com.example.app.dao;
 
 import com.example.app.model.Building;
 import com.example.app.model.Utility;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
 
 import java.io.*;
 import java.sql.*;
@@ -20,6 +22,9 @@ public class CsvLogic implements DBQueries {
 
 
     public void importUtilityCSV(File file) {
+        int insertedCount = 0;
+        int skippedCount = 0;
+
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             Connection conn = dbConn.getConnection();
             if (conn == null) {
@@ -44,12 +49,13 @@ public class CsvLogic implements DBQueries {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",", -1);
-                for (int i = 0; i < parts.length; i++) {
-                    parts[i] = parts[i].trim();
-                }
+                for (int i = 0; i < parts.length; i++) parts[i] = parts[i].trim();
 
                 String buildingName = parts[0];
-                if (buildingName.isEmpty()) continue;
+                if (buildingName.isEmpty()) {
+                    skippedCount++;
+                    continue;
+                }
 
                 boolean hasData = false;
                 for (int i = 1; i <= 7 && i < parts.length; i++) {
@@ -60,12 +66,14 @@ public class CsvLogic implements DBQueries {
                 }
                 if (!hasData) {
                     System.out.printf("Skipping row with no data: %s%n", line);
+                    skippedCount++;
                     continue;
                 }
 
                 Building building = fetchBuildingByName(buildingName, conn);
                 if (building == null) {
                     System.out.printf("Skipping unknown building: %s%n", buildingName);
+                    skippedCount++;
                     continue;
                 }
 
@@ -81,10 +89,29 @@ public class CsvLogic implements DBQueries {
                 utility.setMiscCost(parts.length > 7 ? parseOrNull(parts[7]) : null);
 
                 insertUtility(conn, building, utility);
+                insertedCount++;
             }
         } catch (IOException | SQLException e) {
             e.printStackTrace();
+            return;
         }
+
+        // Show results in alert
+        final int count = insertedCount;
+        final int skipped = skippedCount;
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("CSV Import Complete");
+                alert.setHeaderText(null);
+                alert.setContentText(
+                        count + " entries were successfully added.\n" +
+                                skipped + " rows were skipped."
+                );
+                alert.showAndWait();
+            }
+        });
     }
 
     public void exportCsvTemplate(File file) {
