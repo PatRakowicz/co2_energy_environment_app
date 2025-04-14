@@ -7,41 +7,41 @@ public class Utility {
     private int utilityID;
     private int buildingID;
     private Date date;
-    private float electricityCost;
-    private float waterCost;
-    private float sewageCost;
-    private float miscCost;
-    private float electricityUsage;
-    private float waterUsage;
-    private float usageGal;
-    private float usageKwh;
+    private Float electricityCost;
+    private Float waterCost;
+    private Float sewageCost;
+    private Float miscCost;
+    private Float electricityUsage;
+    private Float waterUsage;
+    private Float usageGal;
+    private Float usageKwh;
 
     // Getters
     public Date getDate() {
         return date;
     }
 
-    public float getElectricityCost() {
+    public Float getElectricityCost() {
         return electricityCost;
     }
 
-    public float getWaterCost() {
+    public Float getWaterCost() {
         return waterCost;
     }
 
-    public float getSewageCost() {
+    public Float getSewageCost() {
         return sewageCost;
     }
 
-    public float getMiscCost() {
+    public Float getMiscCost() {
         return miscCost;
     }
 
-    public float getElectricityUsage() {
+    public Float getElectricityUsage() {
         return electricityUsage;
     }
 
-    public float getWaterUsage() {
+    public Float getWaterUsage() {
         return waterUsage;
     }
 
@@ -62,35 +62,35 @@ public class Utility {
         this.date = date;
     }
 
-    public void setElectricityCost(float electricityCost) {
+    public void setElectricityCost(Float electricityCost) {
         this.electricityCost = electricityCost;
     }
 
-    public void setWaterCost(float waterCost) {
+    public void setWaterCost(Float waterCost) {
         this.waterCost = waterCost;
     }
 
-    public void setSewageCost(float sewageCost) {
+    public void setSewageCost(Float sewageCost) {
         this.sewageCost = sewageCost;
     }
 
-    public void setMiscCost(float miscCost) {
+    public void setMiscCost(Float miscCost) {
         this.miscCost = miscCost;
     }
 
-    public void setElectricityUsage(float electricityUsage) {
+    public void setElectricityUsage(Float electricityUsage) {
         this.electricityUsage = electricityUsage;
     }
 
-    public void setWaterUsage(float waterUsage) {
+    public void setWaterUsage(Float waterUsage) {
         this.waterUsage = waterUsage;
     }
 
-    public void setUsageGal(float usageGal) {
+    public void setUsageGal(Float usageGal) {
         this.usageGal = usageGal;
     }
 
-    public void setUsageKwh(float usageKwh) {
+    public void setUsageKwh(Float usageKwh) {
         this.usageKwh = usageKwh;
     }
 }
