@@ -30,7 +30,8 @@ public class AddDataController {
     @FXML
     private ComboBox<Building> buildingComboBox;
 
-    @FXML Button uploadCsvButton;
+    @FXML
+    Button uploadCsvButton, downloadCSVButton, addButton;
 
     float eUsage, eCost, wUsage, wCost, sCost, mCost;
     LocalDate date;
