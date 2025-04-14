@@ -78,7 +78,9 @@ public class ApplicationController {
             DBButton.setDisable(true);
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/DBWindow.fxml"));
+            loader.setController(dbConn);
             Parent DBRoot = loader.load();
+            
             Scene DBScene = new Scene(DBRoot);
             DBStage = new Stage();
             DBStage.initModality(Modality.APPLICATION_MODAL);
