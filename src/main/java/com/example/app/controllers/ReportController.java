@@ -1,7 +1,7 @@
 package com.example.app.controllers;
 
 
-public class ReportController extends ApplicationController{
+public class ReportController{
 
 
 

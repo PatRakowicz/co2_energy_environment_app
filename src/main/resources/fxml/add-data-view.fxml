@@ -53,7 +53,7 @@
    <top>
       <AnchorPane BorderPane.alignment="CENTER">
          <children>
-            <ComboBox fx:id="buildingComboBox" layoutX="69.0" layoutY="24.0" prefWidth="150.0" />
+            <ComboBox fx:id="buildingComboBox" layoutX="69.0" layoutY="24.0" prefWidth="150.0" editable="true"/>
             <DatePicker fx:id="datePicker" layoutX="353.0" layoutY="24.0" onAction="#onChange" />
             <Label layoutX="69.0" layoutY="7.0" text="Building" />
             <Label layoutX="353.0" layoutY="7.0" text="Date" />
