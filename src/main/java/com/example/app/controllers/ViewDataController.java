@@ -1,9 +1,10 @@
 package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
+import com.example.app.dao.DBConn;
 import com.example.app.dao.UtilityRecords;
 import com.example.app.model.Building;
-import com.example.app.model.FilteredBuildingBox;
+import com.example.app.utils.FilteredBuildingBox;
 import com.example.app.model.Gas;
 import com.example.app.model.Utility;
 import javafx.beans.property.SimpleFloatProperty;
@@ -12,17 +13,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.util.StringConverter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class ViewDataController extends ApplicationController{
+public class ViewDataController{
+    private DBConn dbConn;
     private BuildingRecords buildingRecords;
+    private ArrayList<Building> buildings;
     private UtilityRecords utilityRecords;
     private FilteredBuildingBox filteredBuildingBox;
 
@@ -56,6 +57,35 @@ public class ViewDataController extends ApplicationController{
     @FXML private TableColumn<Utility, Float> waterCostColumn;
     @FXML private TableColumn<Utility, Float> sewageCostColumn;
     @FXML private TableColumn<Utility, Float> miscCostColumn;
+
+    public ViewDataController(){}
+
+    public ViewDataController(DBConn conn){
+        dbConn = conn;
+    }
+
+    public void initialize() {
+        if (dbConn == null) {
+            System.out.println("No active database connection.");
+            return;
+        }
+
+        buildingRecords = new BuildingRecords(dbConn);
+        buildings = buildingRecords.getBuildings();
+        filteredBuildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
+
+        utilityRecords = new UtilityRecords(dbConn);
+
+        // https://docs.oracle.com/javase/8/javafx/api/javafx/beans/property/SimpleFloatProperty.html#SimpleFloatProperty-java.lang.Object-java.lang.String-
+        // Properties can be bound in ways that will automatically update the UI when something changes
+        dateColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDate().toString()));
+        electricityUsageColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getElectricityUsage()).asObject());
+        waterUsageColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getWaterUsage()).asObject());
+        electricityCostColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getElectricityCost()).asObject());
+        waterCostColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getWaterCost()).asObject());
+        sewageCostColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getSewageCost()).asObject());
+        miscCostColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getMiscCost()).asObject());
+    }
 
     @FXML public void refreshView(ActionEvent event) {
         Building building = buildingComboBox.getValue();
@@ -204,31 +234,4 @@ public class ViewDataController extends ApplicationController{
             }
         }
     }
-
-    @Override
-    public void initialize() {
-        super.initialize();
-
-        if (dbConn == null) {
-            System.out.println("No active database connection.");
-            return;
-        }
-
-        buildingRecords = new BuildingRecords(super.dbConn);
-        buildings = buildingRecords.getBuildings();
-        filteredBuildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
-
-        utilityRecords = new UtilityRecords(super.dbConn);
-
-        // https://docs.oracle.com/javase/8/javafx/api/javafx/beans/property/SimpleFloatProperty.html#SimpleFloatProperty-java.lang.Object-java.lang.String-
-        // Properties can be bound in ways that will automatically update the UI when something changes
-        dateColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDate().toString()));
-        electricityUsageColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getElectricityUsage()).asObject());
-        waterUsageColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getWaterUsage()).asObject());
-        electricityCostColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getElectricityCost()).asObject());
-        waterCostColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getWaterCost()).asObject());
-        sewageCostColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getSewageCost()).asObject());
-        miscCostColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getMiscCost()).asObject());
-    }
-
 }

@@ -1,5 +1,6 @@
-package com.example.app.model;
+package com.example.app.utils;
 
+import com.example.app.model.Building;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;

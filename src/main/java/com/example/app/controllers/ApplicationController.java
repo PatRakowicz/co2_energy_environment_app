@@ -2,59 +2,81 @@ package com.example.app.controllers;
 
 import com.example.app.dao.DBConn;
 import com.example.app.model.Building;
-import com.example.app.utils.ViewManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ApplicationController {
-    protected Stage stage;
-    protected Scene scene;
-    protected Parent root;
-
-    protected ArrayList<Building> buildings;
-
     @FXML
-    private Button DBButton;
-    protected DBConn dbConn;
+    private VBox rootPane;
+
     private Stage DBStage;
 
-    public ApplicationController() {
-//        dbController = new DBController();
-        // We need to not create a new DBController by default
-        // updated the emissionsApp to pass DBController
-    }
+    @FXML
+    private Button DBButton, addPageButton, updatePageButton, viewPageButton, reportPageButton;
 
-//    public ApplicationController(Stage newStage) {
-//        try {
-//            root = FXMLLoader.load(getClass().getResource("/fxml/home-view.fxml"));
-//            scene = new Scene(root);
-//            newStage.setTitle("home");
-//            newStage.setScene(scene);
-//            newStage.setMinHeight(400);
-//            newStage.setMinWidth(600);
-//            newStage.show();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+    private DBConn dbConn;
+
+    private AddDataController addDataController;
+    private ReportController reportController;
+    private UpdateDataController updateDataController;
+    private ViewDataController viewDataController;
 
     @FXML
     public void initialize() {
-        updateDBButtonStatus();
+        try {
+            dbConn = new DBConn();
+            updateDBButtonStatus();
+            addDataController = new AddDataController(dbConn);
+            reportController = new ReportController();
+            updateDataController = new UpdateDataController(dbConn);
+            viewDataController = new ViewDataController(dbConn);
+
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/view-data-view.fxml"));
+            fxmlLoader.setController(viewDataController);
+            BorderPane content = fxmlLoader.load();
+            rootPane.getChildren().add(content);
+            VBox.setVgrow(content, Priority.ALWAYS);
+            content.prefWidthProperty().bind(rootPane.widthProperty());
+            content.prefHeightProperty().bind(rootPane.heightProperty().subtract(40));
+            viewPageButton.setDisable(true);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
-    public void setDbController(DBConn dbConn) {
-        this.dbConn = dbConn;
+    public void setPageContent(String fxmlFile, Object controller){
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
+            fxmlLoader.setController(controller);
+            BorderPane content = fxmlLoader.load();
+
+            rootPane.getChildren().set(1,content);
+
+            VBox.setVgrow(content, Priority.ALWAYS);
+            content.prefWidthProperty().bind(rootPane.widthProperty());
+            content.prefHeightProperty().bind(rootPane.heightProperty().subtract(40));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void enableButtons(){
+        addPageButton.setDisable(false);
+        reportPageButton.setDisable(false);
+        viewPageButton.setDisable(false);
+        updatePageButton.setDisable(false);
     }
 
     private void updateDBButtonStatus() {
@@ -101,44 +123,29 @@ public class ApplicationController {
 
     @FXML
     public void switchToAddData(ActionEvent event) {
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        ViewManager.setScene(stage, "/fxml/add-data-view.fxml", dbConn, "Dashboard");
-    }
-
-    @FXML
-    public void switchToPrediction(ActionEvent event) {
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        ViewManager.setScene(stage, "/fxml/prediction-view.fxml", dbConn, "Dashboard");
+        enableButtons();
+        addPageButton.setDisable(true);
+        setPageContent("/fxml/add-data-view.fxml", addDataController);
     }
 
     @FXML
     public void switchToReport(ActionEvent event) {
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        ViewManager.setScene(stage, "/fxml/report-view.fxml", dbConn, "Dashboard");
-    }
-
-    @FXML
-    public void switchToScenarios(ActionEvent event) {
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        ViewManager.setScene(stage, "/fxml/scenarios-view.fxml", dbConn, "Dashboard");
+        enableButtons();
+        reportPageButton.setDisable(true);
+        setPageContent("/fxml/report-view.fxml", reportController);
     }
 
     @FXML
     public void switchToUpdateData(ActionEvent event) {
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        ViewManager.setScene(stage, "/fxml/update-data-view.fxml", dbConn, "Dashboard");
+        enableButtons();
+        updatePageButton.setDisable(true);
+        setPageContent("/fxml/update-data-view.fxml", updateDataController);
     }
 
     @FXML
     public void switchToViewData(ActionEvent event) {
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        ViewManager.setScene(stage, "/fxml/view-data-view.fxml", dbConn, "Dashboard");
+        enableButtons();
+        viewPageButton.setDisable(true);
+        setPageContent("/fxml/view-data-view.fxml", viewDataController);
     }
-
-    @FXML
-    public void switchToHome(ActionEvent event) {
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        ViewManager.setScene(stage, "/fxml/home-view.fxml", dbConn, "Dashboard");
-    }
-
 }

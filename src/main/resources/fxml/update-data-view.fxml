@@ -5,48 +5,45 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<AnchorPane
-        maxHeight="-Infinity"
-        maxWidth="-Infinity"
-        minHeight="-Infinity"
-        minWidth="-Infinity"
-        prefHeight="400.0"
-        prefWidth="600.0"
-        xmlns="http://javafx.com/javafx/23.0.1"
-        xmlns:fx="http://javafx.com/fxml">
-   <children>
-      <ComboBox fx:id="buildingComboBox" editable="true" layoutX="38.0" layoutY="59.0" prefWidth="150.0"/>
-      <Button layoutX="3.0" layoutY="3.0" mnemonicParsing="false" onAction="#switchToHome" prefHeight="25.0" prefWidth="44.0" text="Back" />
-      <Button layoutX="50.0" layoutY="3.0" fx:id="loadDataButton" text="Load Data" onAction="#loadData" />
-      <HBox spacing="10" layoutX="350.0" layoutY="59.0">
-         <ComboBox fx:id="monthComboBox" prefWidth="120" promptText="Month"/>
-         <ComboBox fx:id="yearComboBox" prefWidth="100" promptText="Year"/>
-      </HBox>
-      <Label layoutX="40.0" layoutY="43.0" text="Building" />
-      <Label layoutX="356.0" layoutY="44.0" text="Date" />
-      <TextField fx:id="electricityUsage" disable="true" layoutX="37.0" layoutY="125.0" />
-      <TextField fx:id="electricityCost" disable="true" layoutX="363.0" layoutY="126.0" />
-      <TextField fx:id="waterUsage" disable="true" layoutX="36.0" layoutY="210.0" />
-      <TextField fx:id="sewageCost" disable="true" layoutX="37.0" layoutY="301.0" prefHeight="11.0" prefWidth="149.0" />
-      <TextField fx:id="miscCost" disable="true" layoutX="369.0" layoutY="303.0" />
-      <TextField fx:id="waterCost" disable="true" layoutX="366.0" layoutY="210.0" />
-      <Button fx:id="updateButton" disable="true" layoutX="205.0" layoutY="361.0" mnemonicParsing="false" onAction="#update" text="Update" />
-      <Label layoutX="37.0" layoutY="108.0" text="Electricity Usage" />
-      <Label layoutX="37.0" layoutY="193.0" text="Water Usage" />
-      <Label layoutX="38.0" layoutY="283.0" text="Sewage Cost" />
-      <Label layoutX="364.0" layoutY="109.0" text="Electricity Cost" />
-      <Label layoutX="367.0" layoutY="193.0" text="Water Cost" />
-      <Label layoutX="371.0" layoutY="285.0" text="Misc. Cost" />
-      <Label fx:id="electricityUsageError" alignment="CENTER" layoutX="1.0" layoutY="150.0" prefHeight="17.0" prefWidth="259.0" textAlignment="CENTER" textFill="RED" />
-      <Label fx:id="electricityCostError" alignment="CENTER" layoutX="308.0" layoutY="150.0" prefHeight="17.0" prefWidth="259.0" textFill="RED" />
-      <Label fx:id="waterUsageError" alignment="CENTER" layoutX="1.0" layoutY="234.0" prefHeight="17.0" prefWidth="259.0" textFill="RED" />
-      <Label fx:id="waterCostError" alignment="CENTER" layoutX="314.0" layoutY="234.0" prefHeight="17.0" prefWidth="259.0" textFill="RED" />
-      <Label fx:id="sewageCostError" alignment="CENTER" layoutX="1.0" layoutY="327.0" prefHeight="17.0" prefWidth="259.0" textFill="RED" />
-      <Label fx:id="miscCostError" alignment="CENTER" layoutX="314.0" layoutY="327.0" prefHeight="17.0" prefWidth="259.0" textFill="RED" />
-      <Label fx:id="buildingError" alignment="CENTER" layoutX="1.0" layoutY="85.0" prefHeight="17.0" prefWidth="259.0" textAlignment="CENTER" textFill="RED" />
-      <Label fx:id="dateError" alignment="CENTER" layoutX="314.0" layoutY="85.0" prefHeight="17.0" prefWidth="259.0" textAlignment="CENTER" textFill="RED" />
-      <Button fx:id="deleteButton" disable="true" layoutX="314.0" layoutY="361.0" mnemonicParsing="false" onAction="#delete" text="Delete" />
-   </children>
-</AnchorPane>
+
+
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <ComboBox fx:id="buildingComboBox" editable="true" layoutX="38.0" layoutY="59.0" prefWidth="150.0" />
+            <Button fx:id="loadDataButton" layoutX="50.0" layoutY="3.0" onAction="#loadData" text="Load Data" />
+            <HBox layoutX="350.0" layoutY="59.0" spacing="10">
+               <ComboBox fx:id="monthComboBox" prefWidth="120" promptText="Month" />
+               <ComboBox fx:id="yearComboBox" prefWidth="100" promptText="Year" />
+            </HBox>
+            <Label layoutX="40.0" layoutY="43.0" text="Building" />
+            <Label layoutX="356.0" layoutY="44.0" text="Date" />
+            <TextField fx:id="electricityUsage" disable="true" layoutX="37.0" layoutY="125.0" />
+            <TextField fx:id="electricityCost" disable="true" layoutX="363.0" layoutY="126.0" />
+            <TextField fx:id="waterUsage" disable="true" layoutX="36.0" layoutY="210.0" />
+            <TextField fx:id="sewageCost" disable="true" layoutX="37.0" layoutY="301.0" prefHeight="11.0" prefWidth="149.0" />
+            <TextField fx:id="miscCost" disable="true" layoutX="369.0" layoutY="303.0" />
+            <TextField fx:id="waterCost" disable="true" layoutX="366.0" layoutY="210.0" />
+            <Button fx:id="updateButton" disable="true" layoutX="205.0" layoutY="361.0" mnemonicParsing="false" onAction="#update" text="Update" />
+            <Label layoutX="37.0" layoutY="108.0" text="Electricity Usage" />
+            <Label layoutX="37.0" layoutY="193.0" text="Water Usage" />
+            <Label layoutX="38.0" layoutY="283.0" text="Sewage Cost" />
+            <Label layoutX="364.0" layoutY="109.0" text="Electricity Cost" />
+            <Label layoutX="367.0" layoutY="193.0" text="Water Cost" />
+            <Label layoutX="371.0" layoutY="285.0" text="Misc. Cost" />
+            <Label fx:id="electricityUsageError" alignment="CENTER" layoutX="1.0" layoutY="150.0" prefHeight="17.0" prefWidth="259.0" textAlignment="CENTER" textFill="RED" />
+            <Label fx:id="electricityCostError" alignment="CENTER" layoutX="308.0" layoutY="150.0" prefHeight="17.0" prefWidth="259.0" textFill="RED" />
+            <Label fx:id="waterUsageError" alignment="CENTER" layoutX="1.0" layoutY="234.0" prefHeight="17.0" prefWidth="259.0" textFill="RED" />
+            <Label fx:id="waterCostError" alignment="CENTER" layoutX="314.0" layoutY="234.0" prefHeight="17.0" prefWidth="259.0" textFill="RED" />
+            <Label fx:id="sewageCostError" alignment="CENTER" layoutX="1.0" layoutY="327.0" prefHeight="17.0" prefWidth="259.0" textFill="RED" />
+            <Label fx:id="miscCostError" alignment="CENTER" layoutX="314.0" layoutY="327.0" prefHeight="17.0" prefWidth="259.0" textFill="RED" />
+            <Label fx:id="buildingError" alignment="CENTER" layoutX="1.0" layoutY="85.0" prefHeight="17.0" prefWidth="259.0" textAlignment="CENTER" textFill="RED" />
+            <Label fx:id="dateError" alignment="CENTER" layoutX="314.0" layoutY="85.0" prefHeight="17.0" prefWidth="259.0" textAlignment="CENTER" textFill="RED" />
+            <Button fx:id="deleteButton" disable="true" layoutX="314.0" layoutY="361.0" mnemonicParsing="false" onAction="#delete" text="Delete" />
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
