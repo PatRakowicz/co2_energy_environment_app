@@ -76,7 +76,15 @@ public class DBConn {
     }
 
     private Connection connectToDatabase(String ip, String user, String password) {
-        String url = "jdbc:mysql://" + ip + ":3306/wcuemissions";
+        try {
+            Class.forName("org.mariadb.jdbc.Driver");
+            System.out.println("MariaDB driver loaded");
+        } catch (ClassNotFoundException e) {
+            System.out.println("MariaDB driver NOT found");
+            e.printStackTrace();
+        }
+
+        String url = "jdbc:mariadb://" + ip + ":3306/wcuemissions";
 //        System.out.printf("Attempting to connect to %s with user %s%n", url, user);
         try {
 //            System.out.println("Got here 1");
