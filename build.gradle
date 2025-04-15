@@ -43,7 +43,9 @@ jlink {
         skipInstaller = false
     }
 
-    forceMerge 'mariadb-java-client', 'slf4j-api'
+    addExtraDependencies("org.mariadb.jdbc")
+
+    forceMerge 'mariadb-java-client'
 
     mergedModule {
         requires 'java.sql'
