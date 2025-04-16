@@ -22,16 +22,20 @@ public class AddDataController {
     private ArrayList<Building> buildings;
     @FXML
     private Label electricityUsageError, electricityCostError, waterUsageError, waterCostError, sewageCostError,
-            miscCostError, dateError, buildingError;
+            miscCostError, dateError, buildingError, currentChargesError, meterReadError, fromBillingError,
+            toBillingError, billedCCFError, utilityDateLabel;
     @FXML
-    private TextField electricityUsage, electricityCost, waterUsage, waterCost, sewageCost, miscCost;
+    private TextField electricityUsage, electricityCost, waterUsage, waterCost, sewageCost, miscCost, currentCharges,
+            meterRead, billedCCF;
     @FXML
-    private DatePicker datePicker;
+    private DatePicker utilityDate, fromBilling, toBilling;
     @FXML
     private ComboBox<Building> buildingComboBox;
-
     @FXML
-    Button uploadCsvButton, downloadCSVButton, addButton;
+    Button uploadUtilityCSVButton, downloadUtilityCSVButton, addUtilityButton, uplaodGasCSVButton, downloadGasCSVButton,
+    addGasButton;
+    @FXML
+    private Tab utilityTab, gasTab;
 
     float eUsage, eCost, wUsage, wCost, sCost, mCost;
     LocalDate date;
@@ -58,7 +62,7 @@ public class AddDataController {
         });
     }
 
-    public void clearErrors(){
+    public void clearUtilityErrors(){
         electricityUsageError.setText(null);
         electricityCostError.setText(null);
         waterUsageError.setText(null);
@@ -69,15 +73,31 @@ public class AddDataController {
         buildingError.setText(null);
     }
 
+    public void clearGasErrors(){
+        currentChargesError.setText(null);
+        meterReadError.setText(null);
+        fromBillingError.setText(null);
+        toBillingError.setText(null);
+        billedCCFError.setText(null);
+    }
 
-    public void clearInputs(){
+
+    public void clearUtilityInputs(){
         electricityUsage.setText(null);
         electricityCost.setText(null);
         waterUsage.setText(null);
         waterCost.setText(null);
         sewageCost.setText(null);
         miscCost.setText(null);
-        datePicker.setValue(null);
+        utilityDate.setValue(null);
+    }
+
+    public void clearGasInputs(){
+        currentCharges.setText(null);
+        meterRead.setText(null);
+        fromBilling.setValue(null);
+        toBilling.setValue(null);
+        billedCCF.setText(null);
     }
 
     private void setDisabledAll(boolean d){
@@ -103,8 +123,8 @@ public class AddDataController {
         miscCost.setDisable(false);
     }
 
-    // This is where the error checking happens
-    public boolean validity(){
+    // This is where the error checking for the utility tab happens
+    public boolean utilityValidity(){
         boolean valid = true;
         try {
             eUsage = Float.parseFloat(electricityUsage.getText());
@@ -160,12 +180,12 @@ public class AddDataController {
             }
         }
 
-        if(datePicker.getValue() == null){
+        if(utilityDate.getValue() == null){
             dateError.setText("ERROR: invalid date");
             valid = false;
         }
         else{
-            date = datePicker.getValue();
+            date = utilityDate.getValue();
         }
 
         if(buildingComboBox.getValue() == null){
@@ -180,9 +200,28 @@ public class AddDataController {
         return valid;
     }
 
-    public void add(){
-        clearErrors();
-        if(validity()){
+    public boolean gasValidity(){
+        boolean valid = true;
+
+        if(buildingComboBox.getValue() == null){
+            buildingError.setText("ERROR: building must be selected");
+            valid = false;
+        }
+        else{
+            building = buildingComboBox.getValue();
+        }
+
+        //check if textfields are proper
+
+        //check is from billing and to billing dates make sense
+
+
+        return valid;
+    }
+
+    public void addUtility(){
+        clearUtilityErrors();
+        if(utilityValidity()){
             Utility utility = new Utility();
             utility.setBuildingID(building.getBuildingID());
             utility.setDate(java.sql.Date.valueOf(date));
@@ -199,7 +238,7 @@ public class AddDataController {
             if (success) {
                 // Log inserted data here
                 System.out.println("Data inserted.");
-                clearInputs();
+                clearUtilityInputs();
             } else {
                 System.out.println("Failed to insert data.");
             }
@@ -210,8 +249,12 @@ public class AddDataController {
 
     }
 
+    public void addGas(){
+
+    }
+
     public void onChange(){
-        if(buildingComboBox.getValue() != null && datePicker.getValue() != null) {
+        if(buildingComboBox.getValue() != null && utilityDate.getValue() != null) {
             if(buildingComboBox.getValue().getName().equals("Master Meter")){
                 electricityUsage.setDisable(false);
                 electricityCost.setDisable(false);
@@ -224,7 +267,7 @@ public class AddDataController {
                 sewageCost.setText(null);
             }
             else {
-                Date checkDate = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+                Date checkDate = Date.from(utilityDate.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
                 Date checkDateStart = buildingComboBox.getValue().getStartShared();
                 Date checkDateEnd = buildingComboBox.getValue().getEndShared();
 
@@ -247,7 +290,7 @@ public class AddDataController {
     }
 
     @FXML
-    public void handleUploadCsv() {
+    public void handleUploadUtilityCsv() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Select CSV File.");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV File", "*.csv"));
@@ -261,7 +304,7 @@ public class AddDataController {
     }
 
     @FXML
-    public void handleDownloadCsvTemplate() {
+    public void handleDownloadUtilityCsvTemplate() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save CSV Template");
         fileChooser.setInitialFileName("utility_template.csv");
@@ -275,8 +318,29 @@ public class AddDataController {
         }
     }
 
+    public void handleUploadGasCsv(){
+
+    }
+
+    public void handleDownloadGasCsvTemplate(){
+
+    }
 
     public void averageMasterMeter(float masterCost, float masterUsage){
 
+    }
+
+    public void tabChanged(){
+        if(utilityTab != null && gasTab != null) {
+            if (utilityTab.isSelected()) {
+                utilityDate.setVisible(true);
+                utilityDateLabel.setVisible(true);
+                dateError.setVisible(true);
+            } else if (gasTab.isSelected()) {
+                utilityDate.setVisible(false);
+                utilityDateLabel.setVisible(false);
+                dateError.setVisible(false);
+            }
+        }
     }
 }
