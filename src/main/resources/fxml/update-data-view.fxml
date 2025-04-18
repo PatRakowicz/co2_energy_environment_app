@@ -2,48 +2,258 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-
-<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="322.0" minWidth="620.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <center>
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
+      <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+         <tabs>
+            <Tab fx:id="utilityTab" onSelectionChanged="#tabChanged" text="Utility">
+               <content>
+                  <GridPane>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="285.0" prefWidth="285.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="30.0" minWidth="30.0" prefWidth="30.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="285.0" prefWidth="285.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="64.0" prefHeight="64.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="64.0" prefHeight="64.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="64.0" prefHeight="64.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <HBox alignment="BOTTOM_RIGHT" maxHeight="25.0" maxWidth="1.7976931348623157E308" minHeight="25.0" minWidth="244.0" prefHeight="25.0" GridPane.columnIndex="3" GridPane.rowIndex="4">
+                           <children>
+                              <Button fx:id="loadDataButton" mnemonicParsing="false" onAction="#loadUtilityData" text="Load" />
+                              <Button fx:id="updateUtilityButton" mnemonicParsing="false" onAction="#updateUtility" text="Update" />
+                              <Button fx:id="deleteUtilityButton" mnemonicParsing="false" text="Delete" />
+                           </children>
+                        </HBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <children>
+                              <Label text="Electricity Usage (KWH)" />
+                              <TextField fx:id="electricityUsage" />
+                              <Label fx:id="electricityUsageError" contentDisplay="CENTER" textAlignment="CENTER" textFill="RED" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <children>
+                              <Label text="Water Usage (gal)" />
+                              <TextField fx:id="waterUsage" />
+                              <Label fx:id="waterUsageError" textFill="RED" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                           <children>
+                              <Label text="Sewage Cost ($)" />
+                              <TextField fx:id="sewageCost" />
+                              <Label fx:id="sewageCostError" textFill="RED" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                           <children>
+                              <Label text="Electricity Cost ($)" />
+                              <TextField fx:id="electricityCost" />
+                              <Label fx:id="electricityCostError" textFill="RED" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                           <children>
+                              <Label text="Water Cost ($)" />
+                              <TextField fx:id="waterCost" />
+                              <Label fx:id="waterCostError" textFill="RED" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
+                           <children>
+                              <Label text="Misc. Cost ($)" />
+                              <TextField fx:id="miscCost" />
+                              <Label fx:id="miscCostError" textFill="RED" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </GridPane>
+               </content>
+            </Tab>
+            <Tab fx:id="gasTab" onSelectionChanged="#tabChanged" text="Gas">
+               <content>
+                  <GridPane>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="30.0" minWidth="30.0" prefWidth="30.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="25.0" minHeight="25.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <children>
+                              <Label text="Current Charges" />
+                              <TextField fx:id="currentCharges" />
+                              <Label fx:id="currentChargesError" textFill="RED" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                           <children>
+                              <Label text="Meter Read" />
+                              <TextField fx:id="meterRead" />
+                              <Label fx:id="meterReadError" textFill="RED" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <children>
+                              <Label text="From Billing" />
+                              <DatePicker fx:id="fromBilling" />
+                              <Label fx:id="fromBillingError" textFill="RED" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                           <children>
+                              <Label text="Billed CCF" />
+                              <TextField fx:id="billedCCF" />
+                              <Label fx:id="billedCCFError" textFill="RED" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                           <children>
+                              <Label text="To Billing" />
+                              <DatePicker fx:id="toBilling" />
+                              <Label fx:id="toBillingError" textFill="RED" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                        <HBox alignment="BOTTOM_RIGHT" GridPane.columnIndex="3" GridPane.rowIndex="4">
+                           <children>
+                              <Button fx:id="loadGasButton" mnemonicParsing="false" text="Load" />
+                              <Button fx:id="updateGasButton" mnemonicParsing="false" text="Update" />
+                              <Button fx:id="deleteGasButton" mnemonicParsing="false" text="Delete" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </GridPane>
+               </content>
+            </Tab>
+            <Tab fx:id="buildingTab" text="Building">
+               <content>
+                  <GridPane>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                  </GridPane>
+               </content>
+               <content>
+                  <GridPane>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="30.0" minWidth="30.0" prefWidth="30.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <children>
+                              <Label text="Name" />
+                              <TextField />
+                              <Label fx:id="currentChargesError1" textFill="RED" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                           <children>
+                              <Label text="Location" />
+                              <TextField />
+                              <Label fx:id="meterReadError1" textFill="RED" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <children>
+                              <Label text="Square Feet" />
+                              <TextField />
+                              <Label fx:id="fromBillingError1" textFill="RED" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                           <children>
+                              <Label text="Construction Date" />
+                              <DatePicker />
+                              <Label fx:id="toBillingError1" textFill="RED" />
+                           </children>
+                        </VBox>
+                        <HBox alignment="BOTTOM_RIGHT" GridPane.columnIndex="3" GridPane.rowIndex="4">
+                           <children>
+                              <Button fx:id="loadBuildingButton" mnemonicParsing="false" text="Load" />
+                              <Button fx:id="updateBuildingButton" mnemonicParsing="false" text="Update" />
+                           </children>
+                        </HBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                           <children>
+                              <Label text="Date Started on Master Meter" />
+                              <DatePicker />
+                              <Label textFill="RED" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
+                           <children>
+                              <Label text="Date Ended on Master Meter" />
+                              <DatePicker />
+                              <Label textFill="RED" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </GridPane>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+   </center>
+   <top>
+      <AnchorPane BorderPane.alignment="CENTER">
          <children>
-            <ComboBox fx:id="buildingComboBox" editable="true" layoutX="38.0" layoutY="59.0" prefWidth="150.0" />
-            <Button fx:id="loadDataButton" layoutX="50.0" layoutY="3.0" onAction="#loadData" text="Load Data" />
-            <HBox layoutX="350.0" layoutY="59.0" spacing="10">
-               <ComboBox fx:id="monthComboBox" prefWidth="120" promptText="Month" />
-               <ComboBox fx:id="yearComboBox" prefWidth="100" promptText="Year" />
-            </HBox>
-            <Label layoutX="40.0" layoutY="43.0" text="Building" />
-            <Label layoutX="356.0" layoutY="44.0" text="Date" />
-            <TextField fx:id="electricityUsage" disable="true" layoutX="37.0" layoutY="125.0" />
-            <TextField fx:id="electricityCost" disable="true" layoutX="363.0" layoutY="126.0" />
-            <TextField fx:id="waterUsage" disable="true" layoutX="36.0" layoutY="210.0" />
-            <TextField fx:id="sewageCost" disable="true" layoutX="37.0" layoutY="301.0" prefHeight="11.0" prefWidth="149.0" />
-            <TextField fx:id="miscCost" disable="true" layoutX="369.0" layoutY="303.0" />
-            <TextField fx:id="waterCost" disable="true" layoutX="366.0" layoutY="210.0" />
-            <Button fx:id="updateButton" disable="true" layoutX="205.0" layoutY="361.0" mnemonicParsing="false" onAction="#update" text="Update" />
-            <Label layoutX="37.0" layoutY="108.0" text="Electricity Usage" />
-            <Label layoutX="37.0" layoutY="193.0" text="Water Usage" />
-            <Label layoutX="38.0" layoutY="283.0" text="Sewage Cost" />
-            <Label layoutX="364.0" layoutY="109.0" text="Electricity Cost" />
-            <Label layoutX="367.0" layoutY="193.0" text="Water Cost" />
-            <Label layoutX="371.0" layoutY="285.0" text="Misc. Cost" />
-            <Label fx:id="electricityUsageError" alignment="CENTER" layoutX="1.0" layoutY="150.0" prefHeight="17.0" prefWidth="259.0" textAlignment="CENTER" textFill="RED" />
-            <Label fx:id="electricityCostError" alignment="CENTER" layoutX="308.0" layoutY="150.0" prefHeight="17.0" prefWidth="259.0" textFill="RED" />
-            <Label fx:id="waterUsageError" alignment="CENTER" layoutX="1.0" layoutY="234.0" prefHeight="17.0" prefWidth="259.0" textFill="RED" />
-            <Label fx:id="waterCostError" alignment="CENTER" layoutX="314.0" layoutY="234.0" prefHeight="17.0" prefWidth="259.0" textFill="RED" />
-            <Label fx:id="sewageCostError" alignment="CENTER" layoutX="1.0" layoutY="327.0" prefHeight="17.0" prefWidth="259.0" textFill="RED" />
-            <Label fx:id="miscCostError" alignment="CENTER" layoutX="314.0" layoutY="327.0" prefHeight="17.0" prefWidth="259.0" textFill="RED" />
-            <Label fx:id="buildingError" alignment="CENTER" layoutX="1.0" layoutY="85.0" prefHeight="17.0" prefWidth="259.0" textAlignment="CENTER" textFill="RED" />
-            <Label fx:id="dateError" alignment="CENTER" layoutX="314.0" layoutY="85.0" prefHeight="17.0" prefWidth="259.0" textAlignment="CENTER" textFill="RED" />
-            <Button fx:id="deleteButton" disable="true" layoutX="314.0" layoutY="361.0" mnemonicParsing="false" onAction="#delete" text="Delete" />
+            <ComboBox fx:id="buildingComboBox" editable="true" layoutX="69.0" layoutY="24.0" prefWidth="150.0" />
+            <Label fx:id="buildingBoxLabel" layoutX="69.0" layoutY="7.0" text="Building" />
+            <Label fx:id="buildingError" layoutY="49.0" prefHeight="17.0" prefWidth="300.0" textAlignment="CENTER" textFill="RED" />
+            <Label fx:id="dateError" layoutX="300.0" layoutY="49.0" prefHeight="17.0" prefWidth="300.0" textAlignment="CENTER" textFill="RED" />
+            <ComboBox fx:id="monthComboBox" layoutX="344.0" layoutY="24.0" prefHeight="25.0" prefWidth="118.0" />
+            <ComboBox fx:id="yearComboBox" layoutX="514.0" layoutY="24.0" prefHeight="25.0" prefWidth="81.0" />
+            <Label fx:id="monthLabel" layoutX="344.0" layoutY="7.0" text="Month" />
+            <Label fx:id="yearLabel" layoutX="514.0" layoutY="7.0" text="Year" />
          </children>
       </AnchorPane>
-   </center>
+   </top>
 </BorderPane>

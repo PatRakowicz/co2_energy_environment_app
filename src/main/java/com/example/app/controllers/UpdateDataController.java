@@ -7,10 +7,7 @@ import com.example.app.model.Building;
 import com.example.app.utils.FilteredBuildingBox;
 import com.example.app.model.Utility;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -27,18 +24,21 @@ public class UpdateDataController{
 
     @FXML
     private Label electricityUsageError, electricityCostError, waterUsageError,
-            waterCostError, sewageCostError, miscCostError, dateError, buildingError;
+            waterCostError, sewageCostError, miscCostError, dateError, buildingError, buildingBoxLabel, monthLabel,
+            yearLabel;
 
     @FXML
     private TextField electricityUsage, electricityCost, waterUsage, waterCost, sewageCost, miscCost;
     @FXML
     private ComboBox<Building> buildingComboBox;
     @FXML
-    private Button updateButton, deleteButton, loadDataButton;
+    private Button updateUtilityButton, deleteUtilityButton, loadUtilityDataButton;
     @FXML
     private ComboBox<String> monthComboBox;
     @FXML
     private ComboBox<Integer> yearComboBox;
+    @FXML
+    private Tab utilityTab, gasTab, buildingTab;
 
     private float eUsage, eCost, wUsage, wCost, sCost, mCost;
     private LocalDate date;
@@ -74,7 +74,7 @@ public class UpdateDataController{
     }
 
 
-    public void loadData() {
+    public void loadUtilityData() {
         Building selectedBuilding = buildingComboBox.getValue();
         Integer selectedYear = yearComboBox.getValue();
         int selectedMonthIndex = monthComboBox.getSelectionModel().getSelectedIndex();
@@ -105,10 +105,10 @@ public class UpdateDataController{
         }
     }
 
-    public void update() {
+    public void updateUtility() {
         clearErrors();
 
-        if (validity()) {
+        if (utilityValidity()) {
             Utility utility = new Utility();
             utility.setDate(java.sql.Date.valueOf(date));
             utility.setElectricityUsage(eUsage);
@@ -126,11 +126,11 @@ public class UpdateDataController{
         }
     }
 
-    public void delete() {
+    public void deleteUtility() {
         // TODO: implement delete logic
     }
 
-    private boolean validity() {
+    private boolean utilityValidity() {
         boolean valid = true;
 
         try {
@@ -231,8 +231,8 @@ public class UpdateDataController{
         waterCost.setDisable(d);
         sewageCost.setDisable(d);
         miscCost.setDisable(d);
-        updateButton.setDisable(d);
-        deleteButton.setDisable(d);
+        updateUtilityButton.setDisable(d);
+        deleteUtilityButton.setDisable(d);
     }
 
     private void setDisabledOnMaster(){
@@ -290,5 +290,34 @@ public class UpdateDataController{
         else {
             setDisabledAll(true);
         }
+    }
+
+    public void tabChanged(){
+        if(utilityTab != null && gasTab != null) {
+            if (utilityTab.isSelected()) {
+                setUtilityDateVisability(true);
+                setBuildingBoxVisability(true);
+            } else if (gasTab.isSelected()) {
+                setUtilityDateVisability(false);
+                setBuildingBoxVisability(true);
+            }else if (buildingTab.isSelected()){
+                setUtilityDateVisability(false);
+                setBuildingBoxVisability(true);
+            }
+        }
+    }
+
+    public void setBuildingBoxVisability(boolean b){
+        buildingBoxLabel.setVisible(b);
+        buildingComboBox.setVisible(b);
+        buildingError.setVisible(b);
+    }
+
+    public void setUtilityDateVisability(boolean b){
+        monthComboBox.setVisible(b);
+        yearComboBox.setVisible(b);
+        monthLabel.setVisible(b);
+        yearLabel.setVisible(b);
+        dateError.setVisible(b);
     }
 }
