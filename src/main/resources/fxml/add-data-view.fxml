@@ -4,6 +4,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
@@ -15,7 +16,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="322.0" minWidth="620.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app.controllers.AddDataController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="322.0" minWidth="620.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
@@ -155,6 +156,78 @@
                   </GridPane>
                </content>
           </Tab>
+            <Tab fx:id="buildingTab" text="Building">
+               <content>
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                  </GridPane>
+               </content>
+               <content>
+                  <GridPane>
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="30.0" minWidth="30.0" prefWidth="30.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="10.0" minWidth="10.0" prefWidth="10.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints maxHeight="10.0" minHeight="10.0" prefHeight="10.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="25.0" minHeight="25.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <children>
+                              <Label text="Name" />
+                              <TextField />
+                              <Label fx:id="currentChargesError1" textFill="RED" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                           <children>
+                              <Label text="Location" />
+                              <TextField />
+                              <Label fx:id="meterReadError1" textFill="RED" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <children>
+                              <Label text="Square Feet" />
+                              <TextField />
+                              <Label fx:id="fromBillingError1" textFill="RED" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                           <children>
+                              <RadioButton mnemonicParsing="false" text="On Master Meter" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                           <children>
+                              <Label text="Construction Date" />
+                              <TextField />
+                              <Label fx:id="toBillingError1" textFill="RED" />
+                           </children>
+                        </VBox>
+                        <HBox alignment="BOTTOM_RIGHT" GridPane.columnIndex="3" GridPane.rowIndex="3">
+                           <children>
+                              <Button mnemonicParsing="false" text="Add" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </GridPane>
+               </content>
+            </Tab>
         </tabs>
       </TabPane>
    </center>
@@ -163,7 +236,7 @@
          <children>
             <ComboBox fx:id="buildingComboBox" editable="true" layoutX="69.0" layoutY="24.0" prefWidth="150.0" />
             <DatePicker fx:id="utilityDate" layoutX="353.0" layoutY="24.0" onAction="#onChange" />
-            <Label layoutX="69.0" layoutY="7.0" text="Building" />
+            <Label fx:id="buildingBoxLabel" layoutX="69.0" layoutY="7.0" text="Building" />
             <Label fx:id="utilityDateLabel" layoutX="353.0" layoutY="7.0" text="Date" />
             <Label fx:id="buildingError" layoutY="49.0" prefHeight="17.0" prefWidth="300.0" textAlignment="CENTER" textFill="RED" />
             <Label fx:id="dateError" layoutX="300.0" layoutY="49.0" prefHeight="17.0" prefWidth="300.0" textAlignment="CENTER" textFill="RED" />

@@ -23,7 +23,7 @@ public class AddDataController {
     @FXML
     private Label electricityUsageError, electricityCostError, waterUsageError, waterCostError, sewageCostError,
             miscCostError, dateError, buildingError, currentChargesError, meterReadError, fromBillingError,
-            toBillingError, billedCCFError, utilityDateLabel;
+            toBillingError, billedCCFError, utilityDateLabel, buildingBoxLabel;
     @FXML
     private TextField electricityUsage, electricityCost, waterUsage, waterCost, sewageCost, miscCost, currentCharges,
             meterRead, billedCCF;
@@ -35,7 +35,7 @@ public class AddDataController {
     Button uploadUtilityCSVButton, downloadUtilityCSVButton, addUtilityButton, uplaodGasCSVButton, downloadGasCSVButton,
     addGasButton;
     @FXML
-    private Tab utilityTab, gasTab;
+    private Tab utilityTab, gasTab, buildingTab;
 
     float eUsage, eCost, wUsage, wCost, sCost, mCost;
     LocalDate date;
@@ -333,14 +333,27 @@ public class AddDataController {
     public void tabChanged(){
         if(utilityTab != null && gasTab != null) {
             if (utilityTab.isSelected()) {
-                utilityDate.setVisible(true);
-                utilityDateLabel.setVisible(true);
-                dateError.setVisible(true);
+                setUtilityDateVisability(true);
+                setBuildingBoxVisability(true);
             } else if (gasTab.isSelected()) {
-                utilityDate.setVisible(false);
-                utilityDateLabel.setVisible(false);
-                dateError.setVisible(false);
+                setUtilityDateVisability(false);
+                setBuildingBoxVisability(true);
+            }else if (buildingTab.isSelected()){
+                setUtilityDateVisability(false);
+                setBuildingBoxVisability(false);
             }
         }
+    }
+
+    public void setBuildingBoxVisability(boolean b){
+        buildingBoxLabel.setVisible(b);
+        buildingComboBox.setVisible(b);
+        buildingError.setVisible(b);
+    }
+
+    public void setUtilityDateVisability(boolean b){
+        utilityDate.setVisible(b);
+        utilityDateLabel.setVisible(b);
+        dateError.setVisible(b);
     }
 }
