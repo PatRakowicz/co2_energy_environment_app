@@ -6,6 +6,7 @@ import com.example.app.dao.DBConn;
 import com.example.app.dao.UtilityRecords;
 import com.example.app.model.Building;
 import com.example.app.model.Utility;
+import com.example.app.utils.Alerts;
 import com.example.app.utils.FilteredBuildingBox;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -17,7 +18,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class AddUtilityController {
+public class AddUtilityController implements Alerts {
     private DBConn dbConn;
     private ArrayList<Building> buildings;
     @FXML
@@ -197,28 +198,16 @@ public class AddUtilityController {
 
             if (success) {
                 // Log inserted data here
-                alertSuccsess();
+                insertSuccessful();
                 clearUtilityInputs();
                 if(buildingComboBox.getValue().getName().equals("Master Meter")){
                     averageMasterMeter(eCost, eUsage);
                 }
             } else {
-                alertFailure();
+                insertFail();
             }
         }
 
-    }
-
-    public void alertSuccsess(){
-        Alert a = new Alert(Alert.AlertType.NONE);
-        a.setContentText("Data Inserted Successfully!");
-        a.show();
-    }
-
-    public void alertFailure(){
-        Alert a = new Alert(Alert.AlertType.ERROR);
-        a.setContentText("Failed to insert data \n Please try again or check database connection");
-        a.show();
     }
 
     public void onChange(){

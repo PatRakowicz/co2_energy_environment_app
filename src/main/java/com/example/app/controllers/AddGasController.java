@@ -5,6 +5,7 @@ import com.example.app.dao.DBConn;
 import com.example.app.dao.GasRecords;
 import com.example.app.model.Building;
 import com.example.app.model.Gas;
+import com.example.app.utils.Alerts;
 import com.example.app.utils.FilteredBuildingBox;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -12,7 +13,7 @@ import javafx.scene.control.*;
 import java.util.ArrayList;
 import java.sql.Date;
 
-public class AddGasController {
+public class AddGasController implements Alerts {
     private DBConn dbConn;
     private ArrayList<Building> buildings;
     @FXML
@@ -155,23 +156,12 @@ public class AddGasController {
 
             if (success) {
                 // Log inserted data here
-                alertSuccsess();
+                insertSuccessful();
                 clearGasInputs();
             } else {
-                alertFailure();
+                insertFail();
             }
         }
-    }
-    public void alertSuccsess(){
-        Alert a = new Alert(Alert.AlertType.NONE);
-        a.setContentText("Data Inserted Successfully!");
-        a.show();
-    }
-
-    public void alertFailure(){
-        Alert a = new Alert(Alert.AlertType.ERROR);
-        a.setContentText("Failed to insert data \n Please try again or check database connection");
-        a.show();
     }
 
 

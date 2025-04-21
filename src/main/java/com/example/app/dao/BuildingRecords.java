@@ -18,11 +18,13 @@ public class BuildingRecords implements DBQueries {
         String table = "building";
         String columns = "name, location, sqFT, date, start_shared, end_shared";
 
-        String location, sqFT, date, start_shared, end_shared;
+        String name, location, sqFT, date, start_shared, end_shared;
+        name = "'" + building.getName() + "'";
+
         if(building.getLocation() == null){
             location = "NULL";
         }else{
-            location = building.getLocation();
+            location = "'" + building.getLocation() + "'";
         }
 
         if(building.getSqFT() == 0){
@@ -51,7 +53,7 @@ public class BuildingRecords implements DBQueries {
 
         String values = String.format(
                 "%s, %s, %s, %s, %s, %s",
-                building.getName(),
+                name,
                 location,
                 sqFT,
                 date,
