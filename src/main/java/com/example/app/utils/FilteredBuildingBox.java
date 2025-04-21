@@ -190,4 +190,8 @@ public class FilteredBuildingBox {
         editor.focusedProperty().addListener(focusListener);
     }
 
+    public void setList(ArrayList<Building> buildings){
+        oBuildings = FXCollections.observableArrayList(buildings);
+    }
+
 }

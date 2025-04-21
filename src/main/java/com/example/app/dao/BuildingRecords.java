@@ -2,10 +2,7 @@ package com.example.app.dao;
 
 import com.example.app.model.Building;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class BuildingRecords implements DBQueries {
@@ -15,6 +12,54 @@ public class BuildingRecords implements DBQueries {
 
     public BuildingRecords(DBConn dbConn) {
         this.dbConn = dbConn;
+    }
+
+    public boolean insertBuilding(Building building){
+        String table = "building";
+        String columns = "name, location, sqFT, date, start_shared, end_shared";
+
+        String location, sqFT, date, start_shared, end_shared;
+        if(building.getLocation() == null){
+            location = "NULL";
+        }else{
+            location = building.getLocation();
+        }
+
+        if(building.getSqFT() == 0){
+            sqFT = "NULL";
+        }else{
+            sqFT = Integer.toString(building.getSqFT());
+        }
+
+        if(building.getDate() == null){
+            date = "NULL";
+        }else{
+            date = String.format("'%s'", new Date(building.getDate().getTime()));
+        }
+
+        if(building.getStartShared() == null){
+            start_shared = "NULL";
+        }else{
+            start_shared = String.format("'%s'", new Date(building.getStartShared().getTime()));
+        }
+
+        if(building.getEndShared() == null){
+            end_shared = "NULL";
+        }else{
+            end_shared = String.format("'%s'", new Date(building.getEndShared().getTime()));
+        }
+
+        String values = String.format(
+                "%s, %s, %s, %s, %s, %s",
+                building.getName(),
+                location,
+                sqFT,
+                date,
+                start_shared,
+                end_shared
+        );
+
+        return insert(table, columns, values, dbConn);
     }
 
     public ArrayList<Building> getBuildings() {
