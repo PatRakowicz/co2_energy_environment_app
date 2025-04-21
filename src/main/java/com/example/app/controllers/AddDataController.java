@@ -1,9 +1,6 @@
 package com.example.app.controllers;
 
-import com.example.app.dao.BuildingRecords;
-import com.example.app.dao.DBConn;
-import com.example.app.dao.UtilityRecords;
-import com.example.app.dao.CsvLogic;
+import com.example.app.dao.*;
 import com.example.app.model.Building;
 import com.example.app.utils.FilteredBuildingBox;
 import com.example.app.model.Utility;
@@ -297,7 +294,7 @@ public class AddDataController {
         File file = fileChooser.showOpenDialog(null);
 
         if (file != null && dbConn != null) {
-            CsvLogic uploader = new CsvLogic(dbConn);
+            UtilityCsvLogic uploader = new UtilityCsvLogic(dbConn);
             uploader.importUtilityCSV(file);
             System.out.println("CSV Upload Complete.");
         }
@@ -312,18 +309,37 @@ public class AddDataController {
         File file = fileChooser.showSaveDialog(null);
 
         if (file != null && dbConn != null) {
-            CsvLogic exporter = new CsvLogic(dbConn);
+            UtilityCsvLogic exporter = new UtilityCsvLogic(dbConn);
             exporter.exportCsvTemplate(file);
             System.out.println("CSV Template Exported.");
         }
     }
 
     public void handleUploadGasCsv(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select CSV File.");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV File", "*.csv"));
+        File file = fileChooser.showOpenDialog(null);
 
+        if (file != null && dbConn != null) {
+            GasCsvLogic uploader = new GasCsvLogic(dbConn);
+            uploader.importGasCSV(file);
+            System.out.println("CSV Upload Complete.");
+        }
     }
 
     public void handleDownloadGasCsvTemplate(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save CSV Template");
+        fileChooser.setInitialFileName("utility_template.csv");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV File", "*.csv"));
+        File file = fileChooser.showSaveDialog(null);
 
+        if (file != null && dbConn != null) {
+            GasCsvLogic exporter = new GasCsvLogic(dbConn);
+            exporter.importGasCSV(file);
+            System.out.println("CSV Template Exported.");
+        }
     }
 
     public void averageMasterMeter(float masterCost, float masterUsage){

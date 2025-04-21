@@ -9,7 +9,7 @@ import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class CsvLogic implements DBQueries {
+public class UtilityCsvLogic implements DBQueries {
     private DBConn dbConn;
 
     private final String[] HEADERS = {
@@ -17,7 +17,7 @@ public class CsvLogic implements DBQueries {
             "Sewage Cost", "Misc Cost"
     };
 
-    public CsvLogic(DBConn dbConn) {
+    public UtilityCsvLogic(DBConn dbConn) {
         this.dbConn = dbConn;
     }
 
