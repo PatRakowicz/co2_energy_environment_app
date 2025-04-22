@@ -43,11 +43,14 @@ jlink {
         skipInstaller = false
     }
 
+    addOptions('--add-modules', 'ALL-MODULE-PATH')
+
     addExtraDependencies("org.mariadb.jdbc")
 
-    forceMerge 'mariadb-java-client'
-
-    mergedModule {
-        requires 'java.sql'
-    }
+//    forceMerge 'mariadb-java-client'
+//
+//    mergedModule {
+//        requires 'java.sql'
+//        requires 'org.mariadb.jdbc'
+//    }
 }
