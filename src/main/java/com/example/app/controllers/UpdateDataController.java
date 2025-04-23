@@ -2,26 +2,22 @@ package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
 import com.example.app.dao.DBConn;
-import com.example.app.dao.UpdateViewLogic;
+import com.example.app.dao.UpdateUtilityLogic;
 import com.example.app.model.Building;
 import com.example.app.utils.FilteredBuildingBox;
-import com.example.app.model.Utility;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 
 
 public class UpdateDataController{
     private DBConn dbConn;
     private BuildingRecords buildingRecords;
     private ArrayList<Building> buildings;
-    private UpdateViewLogic updateViewLogic;
+    private UpdateUtilityLogic updateUtilityLogic;
     private FilteredBuildingBox buildingBox;
 
 

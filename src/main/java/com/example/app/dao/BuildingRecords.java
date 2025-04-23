@@ -21,13 +21,13 @@ public class BuildingRecords implements DBQueries {
         String name, location, sqFT, date, start_shared, end_shared;
         name = "'" + building.getName() + "'";
 
-        if(building.getLocation() == null){
+        if(building.getLocation().isEmpty()){
             location = "NULL";
         }else{
             location = "'" + building.getLocation() + "'";
         }
 
-        if(building.getSqFT() == 0){
+        if(building.getSqFT() < 0){
             sqFT = "NULL";
         }else{
             sqFT = Integer.toString(building.getSqFT());

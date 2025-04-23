@@ -110,12 +110,20 @@ public class AddBuildingController implements Alerts {
             }
         }
 
-        if(!squareFeet.getText().isEmpty()){
-            try{
-                sqft = Integer.parseInt(squareFeet.getText());
-            } catch (NumberFormatException e) {
-                squareFeetError.setText("ERROR: Square Feet must be a number");
-                valid = false;
+        if(squareFeet.getText().isEmpty()){
+            sqft = -1;
+        }else {
+            if (!squareFeet.getText().isEmpty()) {
+                try {
+                    sqft = Integer.parseInt(squareFeet.getText());
+                    if(sqft < 0){
+                        squareFeetError.setText("ERROR: Square Feet can't be negative");
+                        valid = false;
+                    }
+                } catch (NumberFormatException e) {
+                    squareFeetError.setText("ERROR: Square Feet must be a number");
+                    valid = false;
+                }
             }
         }
 

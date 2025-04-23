@@ -2,7 +2,6 @@ package com.example.app.dao;
 
 import com.example.app.model.Building;
 import com.example.app.model.Utility;
-import com.example.app.utils.Alerts;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,10 +9,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-public class UpdateViewLogic implements DBQueries{
+public class UpdateUtilityLogic implements DBQueries{
     private final DBConn dbConn;
 
-    public UpdateViewLogic(DBConn dbConn) {
+    public UpdateUtilityLogic(DBConn dbConn) {
         this.dbConn = dbConn;
     }
 

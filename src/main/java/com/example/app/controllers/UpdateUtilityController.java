@@ -2,7 +2,7 @@ package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
 import com.example.app.dao.DBConn;
-import com.example.app.dao.UpdateViewLogic;
+import com.example.app.dao.UpdateUtilityLogic;
 import com.example.app.model.Building;
 import com.example.app.model.Utility;
 import com.example.app.utils.FilteredBuildingBox;
@@ -23,7 +23,7 @@ public class UpdateUtilityController {
     private DBConn dbConn;
     private BuildingRecords buildingRecords;
     private ArrayList<Building> buildings;
-    private UpdateViewLogic updateViewLogic;
+    private UpdateUtilityLogic updateUtilityLogic;
     private FilteredBuildingBox buildingBox;
 
     @FXML
@@ -55,7 +55,7 @@ public class UpdateUtilityController {
         buildings = buildingRecords.getBuildings();
         buildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
 
-        updateViewLogic = new UpdateViewLogic(dbConn);
+        updateUtilityLogic = new UpdateUtilityLogic(dbConn);
 
         monthComboBox.getItems().addAll(
                 "January", "February", "March", "April", "May", "June",
@@ -63,7 +63,7 @@ public class UpdateUtilityController {
         );
 
         int currentYear = LocalDate.now().getYear();
-        int minYear = updateViewLogic.getMinUtilityYear();
+        int minYear = updateUtilityLogic.getMinUtilityYear();
         for (int year = currentYear; year >= minYear; year--) {
             yearComboBox.getItems().add(year);
         }
@@ -84,7 +84,7 @@ public class UpdateUtilityController {
             clearInputs();
 
 
-            Utility utility = updateViewLogic.getUtilityForDate(selectedBuilding.getBuildingID(), selectedYear, selectedMonthIndex);
+            Utility utility = updateUtilityLogic.getUtilityForDate(selectedBuilding.getBuildingID(), selectedYear, selectedMonthIndex);
 
             if (utility != null) {
                 selectedUtility = utility;
@@ -146,7 +146,7 @@ public class UpdateUtilityController {
             utility.setMiscCost(mCost);
 
             Building building = buildingComboBox.getValue();
-            boolean success = updateViewLogic.updateUtility(building, utility);
+            boolean success = updateUtilityLogic.updateUtility(building, utility);
 
             if (success){
                 clearInputs();
