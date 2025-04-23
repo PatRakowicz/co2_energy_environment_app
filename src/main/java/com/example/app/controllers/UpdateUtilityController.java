@@ -5,6 +5,7 @@ import com.example.app.dao.DBConn;
 import com.example.app.dao.UpdateUtilityLogic;
 import com.example.app.model.Building;
 import com.example.app.model.Utility;
+import com.example.app.utils.Alerts;
 import com.example.app.utils.FilteredBuildingBox;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -19,7 +20,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.sql.Date;
 
-public class UpdateUtilityController {
+public class UpdateUtilityController implements Alerts {
     private DBConn dbConn;
     private BuildingRecords buildingRecords;
     private ArrayList<Building> buildings;
@@ -152,10 +153,10 @@ public class UpdateUtilityController {
                 clearInputs();
                 yearComboBox.setValue(null);
                 monthComboBox.setValue(null);
-                // TODO create data update alert success
+                updateSuccessful();
             }
             else {
-                // TODO create data update alert fail
+                updateFail();
             }
         }
     }

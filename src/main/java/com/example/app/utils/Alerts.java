@@ -48,4 +48,12 @@ public interface Alerts {
     default void insertFail(){
         alert("/fxml/alert-insert-fail.fxml");
     }
+
+    default void updateSuccessful(){
+        alert("/fxml/alert-update-successful.fxml");
+    }
+
+    default void updateFail(){
+        alert("/fxml/alert-update-fail.fxml");
+    }
 }
