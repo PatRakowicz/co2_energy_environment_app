@@ -21,8 +21,6 @@ import java.util.Date;
 
 public class AddDataController {
     private DBConn dbConn;
-    private BuildingRecords buildingRecords;
-    private ArrayList<Building> buildings;
     @FXML
     private Tab utilityTab, gasTab, buildingTab;
 
@@ -65,15 +63,6 @@ public class AddDataController {
             System.out.println("No active database connection.");
             return;
         }
-
-        //get the current building list
-        buildingRecords = new BuildingRecords(dbConn);
-        buildings = buildingRecords.getBuildings();
-
-        //update building list in each tab controller
-        addUtilityController.setBuildings(buildings);
-        addGasController.setBuildings(buildings);
-        addBuildingController.setBuildings(buildings);
 
         //set tab content
         utilityTab.setContent(utilityPane);

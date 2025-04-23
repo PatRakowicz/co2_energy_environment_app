@@ -55,10 +55,6 @@ public class AddUtilityController implements Alerts {
         });
     }
 
-    public void setBuildings(ArrayList<Building> buildings) {
-        buildingBox.setList(buildings);
-    }
-
     private void setDisabledAll(boolean d){
         electricityUsage.setDisable(d);
         electricityCost.setDisable(d);

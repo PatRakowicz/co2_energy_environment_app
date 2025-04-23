@@ -46,10 +46,6 @@ public class AddGasController implements Alerts {
         buildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
     }
 
-    public void setBuildings(ArrayList<Building> buildings) {
-        buildingBox.setList(buildings);
-    }
-
     public void clearGasErrors(){
         currentChargesError.setText(null);
         meterReadError.setText(null);

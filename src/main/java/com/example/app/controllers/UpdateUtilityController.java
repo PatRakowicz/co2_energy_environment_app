@@ -398,8 +398,4 @@ public class UpdateUtilityController implements Alerts {
             setDisabledAll(true);
         }
     }
-
-    public void setBuildings(ArrayList<Building> buildings) {
-        this.buildings = buildings;
-    }
 }

@@ -30,10 +30,6 @@ public class AddBuildingController implements Alerts {
         dbConn = c;
     }
 
-    public void setBuildings(ArrayList<Building> buildings) {
-        this.buildings = buildings;
-    }
-
     public void initialize() {
         buildingRecords = new BuildingRecords(dbConn);
         buildings = buildingRecords.getBuildings();
