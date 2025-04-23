@@ -68,11 +68,6 @@ public class UpdateDataController{
         buildingRecords = new BuildingRecords(dbConn);
         buildings = buildingRecords.getBuildings();
 
-        //update building list in each tab controller
-        updateUtilityController.setBuildings(buildings);
-        updateGasController.setBuildings(buildings);
-        updateBuildingController.setBuildings(buildings);
-
         //set tab content
         utilityTab.setContent(utilityPane);
         gasTab.setContent(gasPane);
