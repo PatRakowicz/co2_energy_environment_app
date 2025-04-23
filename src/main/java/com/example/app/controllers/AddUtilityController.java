@@ -111,6 +111,10 @@ public class AddUtilityController implements Alerts {
         }else {
             try {
                 eUsage = Float.parseFloat(electricityUsage.getText());
+                if(eUsage < 0){
+                    electricityUsageError.setText("ERROR: Electricity Usage can't be negative");
+                    valid = false;
+                }
             } catch (NumberFormatException ex) {
                 if (!electricityUsage.getText().isEmpty()) {
                     electricityUsageError.setText("ERROR: Electricity Usage must be a number");
@@ -124,6 +128,10 @@ public class AddUtilityController implements Alerts {
         }else {
             try {
                 eCost = Float.parseFloat(electricityCost.getText());
+                if(eCost < 0){
+                    electricityCostError.setText("ERROR: Electricity Cost can't be negative");
+                    valid = false;
+                }
             } catch (NumberFormatException e) {
                 if (!electricityCost.getText().isEmpty()) {
                     electricityCostError.setText("ERROR: Electricity Cost must be a number");
@@ -137,6 +145,10 @@ public class AddUtilityController implements Alerts {
         }else {
             try {
                 wUsage = Float.parseFloat(waterUsage.getText());
+                if(wUsage < 0){
+                    waterUsageError.setText("ERROR: Water Usage can't be negative");
+                    valid = false;
+                }
             } catch (NumberFormatException e) {
                 if (!waterUsage.getText().isEmpty()) {
                     waterUsageError.setText("ERROR: Water Usage must be a number");
@@ -150,6 +162,10 @@ public class AddUtilityController implements Alerts {
         }else {
             try {
                 wCost = Float.parseFloat(waterCost.getText());
+                if(wCost < 0){
+                    waterCostError.setText("ERROR: Water Cost can't be negative");
+                    valid = false;
+                }
             } catch (NumberFormatException e) {
                 if (!waterCost.getText().isEmpty()) {
                     waterCostError.setText("ERROR: Water Cost must be a number");
@@ -163,6 +179,10 @@ public class AddUtilityController implements Alerts {
         }else {
             try {
                 sCost = Float.parseFloat(sewageCost.getText());
+                if(sCost < 0){
+                    sewageCostError.setText("ERROR: Sewage Cost can't be negative");
+                    valid = false;
+                }
             } catch (NumberFormatException e) {
                 if (!sewageCost.getText().isEmpty()) {
                     sewageCostError.setText("ERROR: Sewage Cost must be a number");
@@ -176,6 +196,10 @@ public class AddUtilityController implements Alerts {
         }else {
             try {
                 mCost = Float.parseFloat(miscCost.getText());
+                if(mCost < 0){
+                    miscCostError.setText("ERROR: Misc. Cost can't be negative");
+                    valid = false;
+                }
             } catch (NumberFormatException e) {
                 if (!miscCost.getText().isEmpty()) {
                     miscCostError.setText("ERROR: Misc. Cost must be a number");

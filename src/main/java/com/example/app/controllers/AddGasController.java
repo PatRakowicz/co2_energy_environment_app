@@ -83,6 +83,10 @@ public class AddGasController implements Alerts {
         }else{
             try{
                 cCharges = Float.parseFloat(currentCharges.getText());
+                if(cCharges < 0){
+                    currentChargesError.setText("ERROR: Current Charges can't be negative");
+                    valid = false;
+                }
             } catch (NumberFormatException e) {
                 currentChargesError.setText("ERROR: Current Charges must be a number");
                 valid = false;
@@ -95,6 +99,10 @@ public class AddGasController implements Alerts {
         }else{
             try{
                 mRead = Float.parseFloat(meterRead.getText());
+                if(mRead < 0){
+                    meterReadError.setText("Meter Read can't be negative");
+                    valid = false;
+                }
             } catch (NumberFormatException e) {
                 meterReadError.setText("ERROR: Meter Read must be a number");
                 valid = false;
@@ -107,6 +115,10 @@ public class AddGasController implements Alerts {
         }else{
             try{
                 bCCF = Float.parseFloat(billedCCF.getText());
+                if(bCCF < 0){
+                    billedCCFError.setText("ERROR: Billed CCF can't be negative");
+                    valid = false;
+                }
             } catch (NumberFormatException e) {
                 billedCCFError.setText("ERROR: Billed CCF must be a number");
                 valid = false;
