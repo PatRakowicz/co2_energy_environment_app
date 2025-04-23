@@ -106,57 +106,81 @@ public class AddUtilityController implements Alerts {
     // This is where the error checking happens
     public boolean validity(){
         boolean valid = true;
-        try {
-            eUsage = Float.parseFloat(electricityUsage.getText());
-        } catch (NumberFormatException ex) {
-            if(!electricityUsage.getText().isEmpty()){
-                electricityUsageError.setText("ERROR: Electricity Usage must be a number");
-                valid = false;
+        if(electricityUsage.getText().isEmpty()){
+            eUsage = -1;
+        }else {
+            try {
+                eUsage = Float.parseFloat(electricityUsage.getText());
+            } catch (NumberFormatException ex) {
+                if (!electricityUsage.getText().isEmpty()) {
+                    electricityUsageError.setText("ERROR: Electricity Usage must be a number");
+                    valid = false;
+                }
             }
         }
 
-        try {
-            eCost = Float.parseFloat(electricityCost.getText());
-        } catch (NumberFormatException e) {
-            if(!electricityCost.getText().isEmpty()){
-                electricityCostError.setText("ERROR: Electricity Cost must be a number");
-                valid = false;
+        if(electricityCost.getText().isEmpty()){
+            eCost = -1;
+        }else {
+            try {
+                eCost = Float.parseFloat(electricityCost.getText());
+            } catch (NumberFormatException e) {
+                if (!electricityCost.getText().isEmpty()) {
+                    electricityCostError.setText("ERROR: Electricity Cost must be a number");
+                    valid = false;
+                }
             }
         }
 
-        try {
-            wUsage = Float.parseFloat(waterUsage.getText());
-        } catch (NumberFormatException e) {
-            if(!waterUsage.getText().isEmpty()){
-                waterUsageError.setText("ERROR: Water Usage must be a number");
-                valid = false;
+        if(waterUsage.getText().isEmpty()){
+            wUsage = -1;
+        }else {
+            try {
+                wUsage = Float.parseFloat(waterUsage.getText());
+            } catch (NumberFormatException e) {
+                if (!waterUsage.getText().isEmpty()) {
+                    waterUsageError.setText("ERROR: Water Usage must be a number");
+                    valid = false;
+                }
             }
         }
 
-        try {
-            wCost = Float.parseFloat(waterCost.getText());
-        } catch (NumberFormatException e) {
-            if(!waterCost.getText().isEmpty()){
-                waterCostError.setText("ERROR: Water Cost must be a number");
-                valid = false;
+        if(waterCost.getText().isEmpty()){
+            wCost = -1;
+        }else {
+            try {
+                wCost = Float.parseFloat(waterCost.getText());
+            } catch (NumberFormatException e) {
+                if (!waterCost.getText().isEmpty()) {
+                    waterCostError.setText("ERROR: Water Cost must be a number");
+                    valid = false;
+                }
             }
         }
 
-        try {
-            sCost = Float.parseFloat(sewageCost.getText());
-        } catch (NumberFormatException e) {
-            if(!sewageCost.getText().isEmpty()){
-                sewageCostError.setText("ERROR: Sewage Cost must be a number");
-                valid = false;
+        if(sewageCost.getText().isEmpty()){
+            sCost = -1;
+        }else {
+            try {
+                sCost = Float.parseFloat(sewageCost.getText());
+            } catch (NumberFormatException e) {
+                if (!sewageCost.getText().isEmpty()) {
+                    sewageCostError.setText("ERROR: Sewage Cost must be a number");
+                    valid = false;
+                }
             }
         }
 
-        try {
-            mCost = Float.parseFloat(miscCost.getText());
-        } catch (NumberFormatException e) {
-            if(!miscCost.getText().isEmpty()){
-                miscCostError.setText("ERROR: Misc. Cost must be a number");
-                valid = false;
+        if(miscCost.getText().isEmpty()){
+            mCost = -1;
+        }else {
+            try {
+                mCost = Float.parseFloat(miscCost.getText());
+            } catch (NumberFormatException e) {
+                if (!miscCost.getText().isEmpty()) {
+                    miscCostError.setText("ERROR: Misc. Cost must be a number");
+                    valid = false;
+                }
             }
         }
 
