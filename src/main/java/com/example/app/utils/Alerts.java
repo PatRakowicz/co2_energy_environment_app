@@ -4,7 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
-import javafx.stage.Modality;
+
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -55,5 +55,13 @@ public interface Alerts {
 
     default void updateFail(){
         alert("/fxml/alert-update-fail.fxml");
+    }
+
+    default void deleteSuccessful(){
+        alert("/fxml/alert-delete-successful.fxml");
+    }
+
+    default void deleteFail(){
+        alert("/fxml/alert-delete-fail.fxml");
     }
 }

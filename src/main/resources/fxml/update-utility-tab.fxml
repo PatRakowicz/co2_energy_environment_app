@@ -30,7 +30,7 @@
     <HBox alignment="BOTTOM_RIGHT" maxHeight="25.0" maxWidth="1.7976931348623157E308" minHeight="25.0" minWidth="244.0" prefHeight="25.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
         <children>
             <Button fx:id="updateUtilityButton" mnemonicParsing="false" onAction="#updateUtility" text="Update" />
-            <Button fx:id="deleteUtilityButton" mnemonicParsing="false" text="Delete" />
+            <Button fx:id="deleteUtilityButton" mnemonicParsing="false" onAction="#deleteUtility" text="Delete" />
         </children>
     </HBox>
     <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="2">

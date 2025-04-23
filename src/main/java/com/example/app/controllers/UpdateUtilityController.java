@@ -10,10 +10,16 @@ import com.example.app.utils.FilteredBuildingBox;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -129,6 +135,9 @@ public class UpdateUtilityController implements Alerts {
                 clearInputs();
                 setInputDisabled(true);
             }
+        }else{
+            clearInputs();
+            setDisabledAll(true);
         }
     }
 
@@ -153,6 +162,7 @@ public class UpdateUtilityController implements Alerts {
                 clearInputs();
                 yearComboBox.setValue(null);
                 monthComboBox.setValue(null);
+                selectedUtility = null;
                 updateSuccessful();
             }
             else {
@@ -162,7 +172,44 @@ public class UpdateUtilityController implements Alerts {
     }
 
     public void deleteUtility() {
-        // TODO: implement delete logic
+        if(buildingComboBox.getValue() != null && yearComboBox.getValue() != null && !monthComboBox.getValue().isEmpty()){
+            try {
+                //load resource file into new stage
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/delete-confirmation.fxml"));
+                Parent root = loader.load();
+                Scene scene = new Scene(root);
+                Stage stage = new Stage();
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setScene(scene);
+                stage.setResizable(false);
+                stage.initStyle(StageStyle.UTILITY);
+
+                Button yes = (Button) scene.lookup("#yes");
+                Button no = (Button) scene.lookup("#no");
+
+                yes.setOnAction(e -> {
+                    boolean success = updateUtilityLogic.deleteUtility(selectedUtility);
+                    if(success){
+                        deleteSuccessful();
+                        clearInputs();
+                        yearComboBox.setValue(null);
+                        monthComboBox.setValue(null);
+                        selectedUtility = null;
+                        stage.close();
+                    }else{
+                        deleteFail();
+                    }
+                });
+
+                no.setOnAction(e -> {
+                    stage.close();
+                });
+
+                stage.show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private boolean utilityValidity() {

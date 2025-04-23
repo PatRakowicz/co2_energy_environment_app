@@ -140,4 +140,10 @@ public class UpdateUtilityLogic implements DBQueries{
         }
         return LocalDate.now().getYear();
     }
+
+    public boolean deleteUtility(Utility utility){
+        String table = "utility";
+        String condition = String.format("utilityID = %d", utility.getUtilityID());
+        return delete(table, condition, dbConn);
+    }
 }
