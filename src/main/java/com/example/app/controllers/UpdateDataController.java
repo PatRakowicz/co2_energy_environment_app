@@ -15,11 +15,6 @@ import java.util.ArrayList;
 
 public class UpdateDataController{
     private DBConn dbConn;
-    private BuildingRecords buildingRecords;
-    private ArrayList<Building> buildings;
-    private UpdateUtilityLogic updateUtilityLogic;
-    private FilteredBuildingBox buildingBox;
-
 
     @FXML
     private Tab utilityTab, gasTab, buildingTab;
@@ -64,9 +59,6 @@ public class UpdateDataController{
             System.out.println("No active database connection.");
             return;
         }
-
-        buildingRecords = new BuildingRecords(dbConn);
-        buildings = buildingRecords.getBuildings();
 
         //set tab content
         utilityTab.setContent(utilityPane);

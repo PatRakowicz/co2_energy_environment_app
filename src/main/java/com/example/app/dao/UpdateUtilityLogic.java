@@ -119,12 +119,7 @@ public class UpdateUtilityLogic implements DBQueries{
 
         String condition =String.format("utilityID = %d", utility.getUtilityID());
 
-        try{
-            update(table, setClause, condition, dbConn);
-        } catch (Exception e) {
-            return false;
-        }
-        return true;
+        return update(table, setClause, condition, dbConn);
     }
 
     public int getMinUtilityYear() {
