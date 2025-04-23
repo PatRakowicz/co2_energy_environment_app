@@ -76,26 +76,22 @@ public class DBConn {
     }
 
     private Connection connectToDatabase(String ip, String user, String password) {
-        try {
-            Class.forName("org.mariadb.jdbc.Driver");
-            System.out.println("MariaDB driver loaded");
-        } catch (ClassNotFoundException e) {
-            System.out.println("MariaDB driver NOT found");
-            e.printStackTrace();
-        }
+//        try {
+////            Class.forName("org.mariadb.jdbc.Driver");
+//            Class.forName("mysql.connector.java;");
+//            System.out.println("MariaDB driver loaded");
+//        } catch (ClassNotFoundException e) {
+//            System.out.println("MariaDB driver NOT found");
+//            e.printStackTrace();
+//        }
 
-        String url = "jdbc:mariadb://" + ip + ":3306/wcuemissions";
-//        System.out.printf("Attempting to connect to %s with user %s%n", url, user);
+        String url = "jdbc:mysql://" + ip + ":3306/wcuemissions";
         try {
-//            System.out.println("Got here 1");
             conn = DriverManager.getConnection(url, user, password);
-//            System.out.println("Got here 2");
             connectionSuccessful = (conn != null);
-//            System.out.println("Got here 3");
             return conn;
         } catch (SQLException e) {
             handleSQLException(e);
-//            e.printStackTrace();
             return null;
         }
     }

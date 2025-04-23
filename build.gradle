@@ -13,7 +13,8 @@ def javafxVersion = '17'
 dependencies {
     implementation "org.openjfx:javafx-controls:$javafxVersion"
     implementation "org.openjfx:javafx-fxml:$javafxVersion"
-    implementation 'org.mariadb.jdbc:mariadb-java-client:3.5.3'
+//    implementation 'org.mariadb.jdbc:mariadb-java-client:3.5.3'
+    implementation 'com.mysql:mysql-connector-j:8.3.0'
 }
 
 javafx {
@@ -45,7 +46,8 @@ jlink {
 
     addOptions('--add-modules', 'ALL-MODULE-PATH')
 
-    addExtraDependencies("org.mariadb.jdbc")
+//    addExtraDependencies("org.mariadb.jdbc")
+    addExtraDependencies("java.sql")
 
 //    forceMerge 'mariadb-java-client'
 //
