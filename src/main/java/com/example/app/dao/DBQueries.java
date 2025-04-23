@@ -62,7 +62,6 @@ public interface DBQueries {
         if (!condition.isEmpty()) {
             query += String.format(" WHERE %s", condition);
         }
-
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             int rowsAffected = statement.executeUpdate();
             System.out.println("Rows updated: " + rowsAffected);

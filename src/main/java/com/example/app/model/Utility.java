@@ -49,6 +49,8 @@ public class Utility {
         return buildingID;
     }
 
+    public int getUtilityID() {return utilityID;}
+
     // Setters
     public void setUtilityID(int utilityID) {
         this.utilityID = utilityID;
