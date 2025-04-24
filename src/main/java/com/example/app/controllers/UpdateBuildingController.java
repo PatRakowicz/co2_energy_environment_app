@@ -200,13 +200,13 @@ public class UpdateBuildingController implements Alerts {
                 startShared.setValue(null);
             }else {
                 //convert from Date to String to LocalDate. This is the quickest way I could make it work
-                startShared.setValue(LocalDate.parse(building.getDate().toString()));
+                startShared.setValue(LocalDate.parse(building.getStartShared().toString()));
             }
             if(building.getEndShared() == null){
                 endShared.setValue(null);
             }else{
                 //convert from Date to String to LocalDate. This is the quickest way I could make it work
-                endShared.setValue(LocalDate.parse(building.getDate().toString()));
+                endShared.setValue(LocalDate.parse(building.getEndShared().toString()));
             }
         }else{
             clearInputs();

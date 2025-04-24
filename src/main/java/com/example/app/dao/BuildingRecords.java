@@ -101,7 +101,7 @@ public class BuildingRecords implements DBQueries {
 
         name = building.getName();
 
-        if(building.getLocation().isEmpty()){
+        if(building.getLocation() == null){
             location = "NULL";
         }else{
             location = "'" + building.getLocation() + "'";
