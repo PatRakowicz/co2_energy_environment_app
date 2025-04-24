@@ -50,6 +50,27 @@ public class UpdateBuildingController implements Alerts {
         buildingComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
             onChange();
         });
+
+        constructionDate.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (!isNowFocused) {
+                constructionDate.setValue(constructionDate.getConverter()
+                        .fromString(constructionDate.getEditor().getText()));
+            }
+        });
+
+        startShared.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (!isNowFocused) {
+                startShared.setValue(startShared.getConverter()
+                        .fromString(startShared.getEditor().getText()));
+            }
+        });
+
+        endShared.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (!isNowFocused) {
+                endShared.setValue(endShared.getConverter()
+                        .fromString(endShared.getEditor().getText()));
+            }
+        });
     }
 
     public void clearErrors(){
@@ -86,10 +107,16 @@ public class UpdateBuildingController implements Alerts {
         }
 
         if(startShared.getValue() != null){
-            sShared = Date.valueOf(startShared.getValue());
-            if(squareFeet.getText().isEmpty()){
-                squareFeetError.setText("ERROR: Square Feet can't be nothing if building id on the master meter");
-                valid = false;
+            if(startShared.getEditor().getText().isEmpty()){
+                sShared = null;
+                startShared.setValue(null);
+            }
+            else {
+                sShared = Date.valueOf(startShared.getValue());
+                if (squareFeet.getText() == null) {
+                    squareFeetError.setText("ERROR: Square Feet can't be nothing if building is on the master meter");
+                    valid = false;
+                }
             }
         }
 
@@ -101,13 +128,18 @@ public class UpdateBuildingController implements Alerts {
         }
 
         if(startShared.getValue() != null && endShared.getValue() != null){
-            eShared = Date.valueOf(endShared.getValue());
-            if(eShared.before(sShared)){
-                endSharedError.setText("ERROR: building can't be removed from master meter before it is added");
-                valid = false;
-            } else if (eShared.equals(sShared)) {
-                startSharedError.setText("ERROR: Building can't be added to master meter and removed from it on the same day");
-                valid = false;
+            if(endShared.getEditor().getText().isEmpty()){
+                eShared = null;
+                endShared.setValue(null);
+            }else {
+                eShared = Date.valueOf(endShared.getValue());
+                if (eShared.before(sShared)) {
+                    endSharedError.setText("ERROR: building can't be removed from master meter before it is added");
+                    valid = false;
+                } else if (eShared.equals(sShared)) {
+                    startSharedError.setText("ERROR: Building can't be added to master meter and removed from it on the same day");
+                    valid = false;
+                }
             }
         }
 
@@ -152,6 +184,9 @@ public class UpdateBuildingController implements Alerts {
             building.setBuildingID(buildingComboBox.getValue().getBuildingID());
             building.setLocation(buildingLocation.getText());
             if(squareFeet.getText() == null){
+                building.setSqFT(-1);
+            }
+            else if(squareFeet.getText().isEmpty()){
                 building.setSqFT(-1);
             }else{
                 building.setSqFT(Integer.parseInt(squareFeet.getText()));
