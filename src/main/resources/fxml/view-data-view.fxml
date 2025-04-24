@@ -28,40 +28,43 @@
                <padding>
                   <Insets bottom="5.0" left="10.0" right="10.0" top="5.0" />
                </padding>
+               <VBox.margin>
+                  <Insets left="10.0" right="10.0" top="5.0" />
+               </VBox.margin>
             </Button>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Building">
                <VBox.margin>
-                  <Insets bottom="2.0" left="5.0" top="10.0" />
+                  <Insets left="10.0" right="10.0" top="5.0" />
                </VBox.margin>
             </Text>
             <ComboBox fx:id="buildingComboBox" editable="true" maxWidth="1.7976931348623157E308" prefWidth="150.0">
                <VBox.margin>
-                  <Insets bottom="10.0" left="5.0" right="5.0" />
+                  <Insets left="10.0" right="10.0" top="5.0" />
                </VBox.margin>
             </ComboBox>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Date Range">
                <VBox.margin>
-                  <Insets bottom="2.0" left="5.0" top="10.0" />
+                  <Insets left="10.0" right="10.0" top="5.0" />
                </VBox.margin>
             </Text>
             <DatePicker fx:id="startDatePicker" prefHeight="25.0" prefWidth="104.0" promptText="Start Date">
                <VBox.margin>
-                  <Insets bottom="2.0" left="5.0" />
+                  <Insets left="10.0" right="10.0" top="5.0" />
                </VBox.margin>
             </DatePicker>
             <DatePicker fx:id="endDatePicker" prefHeight="25.0" prefWidth="104.0" promptText="End Date">
                <VBox.margin>
-                  <Insets bottom="5.0" left="5.0" top="2.0" />
+                  <Insets left="10.0" right="10.0" top="5.0" />
                </VBox.margin>
             </DatePicker>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Toggle Types">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Utility Toggle Types">
                <VBox.margin>
-                  <Insets bottom="2.0" left="5.0" top="10.0" />
+                  <Insets left="10.0" right="10.0" top="5.0" />
                </VBox.margin>
             </Text>
             <CheckBox fx:id="electricityUsageCheck" mnemonicParsing="false" text="Electricity Usage">
                <VBox.margin>
-                  <Insets />
+                  <Insets left="10.0" right="10.0" top="5.0" />
                </VBox.margin>
                <padding>
                   <Insets left="5.0" />
@@ -71,26 +74,41 @@
                <padding>
                   <Insets left="5.0" />
                </padding>
+               <VBox.margin>
+                  <Insets left="10.0" right="10.0" top="5.0" />
+               </VBox.margin>
             </CheckBox>
             <CheckBox fx:id="electricityCostCheck" mnemonicParsing="false" text="Electricty Cost">
                <padding>
                   <Insets left="5.0" />
                </padding>
+               <VBox.margin>
+                  <Insets left="10.0" right="10.0" top="5.0" />
+               </VBox.margin>
             </CheckBox>
             <CheckBox fx:id="waterCostCheck" mnemonicParsing="false" text="Water Cost">
                <padding>
                   <Insets left="5.0" />
                </padding>
+               <VBox.margin>
+                  <Insets left="10.0" right="10.0" top="5.0" />
+               </VBox.margin>
             </CheckBox>
             <CheckBox fx:id="sewageCostCheck" mnemonicParsing="false" text="Sewage Cost">
                <padding>
                   <Insets left="5.0" />
                </padding>
+               <VBox.margin>
+                  <Insets left="10.0" right="10.0" top="5.0" />
+               </VBox.margin>
             </CheckBox>
             <CheckBox fx:id="miscCostCheck" mnemonicParsing="false" text="Misc Cost">
                <padding>
                   <Insets left="5.0" />
                </padding>
+               <VBox.margin>
+                  <Insets left="10.0" right="10.0" top="5.0" />
+               </VBox.margin>
             </CheckBox>
          </children>
       </VBox>
