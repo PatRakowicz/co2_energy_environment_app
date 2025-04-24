@@ -175,7 +175,7 @@
                                            <TableColumn fx:id="fromBillingColumn" text="From Billing" />
                                            <TableColumn fx:id="toBillingColumn" text="To Billing" />
                                            <TableColumn fx:id="meterReadColumn" text="Meter Read" />
-                                           <TableColumn fx:id="billedCcfColumn" text="Billed CCF" />
+                                           <TableColumn fx:id="billedCCFColumn" text="Billed CCF" />
                                        </columns>
                               <columnResizePolicy>
                                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

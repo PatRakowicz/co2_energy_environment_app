@@ -4,28 +4,28 @@ import java.util.Date;
 
 public class Gas {
     private int buildingID;
-    private double currentCharges;
+    private Float currentCharges;
     private String rate;
     private Date fromBilling;
     private Date toBilling;
-    private double meterRead;
-    private double billedCCF;
+    private Float meterRead;
+    private Float billedCCF;
 
     // Getters and Setters for billed_ccf
-    public double getBilledCCF() {
+    public Float getBilledCCF() {
         return billedCCF;
     }
 
-    public void setBilledCCF(double billedCCF) {
+    public void setBilledCCF(Float billedCCF) {
         this.billedCCF = billedCCF;
     }
 
     // Getters and Setters for meter_read
-    public double getMeterRead() {
+    public Float getMeterRead() {
         return meterRead;
     }
 
-    public void setMeterRead(double meterRead) {
+    public void setMeterRead(Float meterRead) {
         this.meterRead = meterRead;
     }
 
@@ -57,18 +57,15 @@ public class Gas {
     }
 
     // Getters and Setters for current_charges
-    public double getCurrentCharges() {
+    public Float getCurrentCharges() {
         return currentCharges;
     }
 
-    public void setCurrentCharges(double currentCharges) {
+    public void setCurrentCharges(Float currentCharges) {
         this.currentCharges = currentCharges;
     }
 
-    // Getters and Setters for buildingID
-    public int getBuildingID() {
-        return buildingID;
-    }
+    // Setter for buildingID
 
     public void setBuildingID(int buildingID) {
         this.buildingID = buildingID;

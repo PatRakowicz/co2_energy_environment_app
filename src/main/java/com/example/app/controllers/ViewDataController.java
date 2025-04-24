@@ -2,11 +2,13 @@ package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
 import com.example.app.dao.DBConn;
+import com.example.app.dao.GasRecords;
 import com.example.app.dao.UtilityRecords;
 import com.example.app.model.Building;
 import com.example.app.utils.FilteredBuildingBox;
 import com.example.app.model.Gas;
 import com.example.app.model.Utility;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -25,6 +27,7 @@ public class ViewDataController{
     private BuildingRecords buildingRecords;
     private ArrayList<Building> buildings;
     private UtilityRecords utilityRecords;
+    private GasRecords gasRecords;
     private FilteredBuildingBox filteredBuildingBox;
 
     private Utility utility = new Utility();
@@ -58,6 +61,14 @@ public class ViewDataController{
     @FXML private TableColumn<Utility, Float> sewageCostColumn;
     @FXML private TableColumn<Utility, Float> miscCostColumn;
 
+    @FXML private TableColumn<Gas, String> rateColumn;
+    @FXML private TableColumn<Gas, Float> currentChargeColumn;
+    @FXML private TableColumn<Gas, String> fromBillingColumn;
+    @FXML private TableColumn<Gas, String> toBillingColumn;
+    @FXML private TableColumn<Gas, Float> meterReadColumn;
+    @FXML private TableColumn<Gas, Float> billedCCFColumn;
+
+
     public ViewDataController(){}
 
     public ViewDataController(DBConn conn){
@@ -75,6 +86,8 @@ public class ViewDataController{
         filteredBuildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
 
         utilityRecords = new UtilityRecords(dbConn);
+        gasRecords = new GasRecords(dbConn);
+
 
         // https://docs.oracle.com/javase/8/javafx/api/javafx/beans/property/SimpleFloatProperty.html#SimpleFloatProperty-java.lang.Object-java.lang.String-
         // Properties can be bound in ways that will automatically update the UI when something changes
@@ -85,6 +98,15 @@ public class ViewDataController{
         waterCostColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getWaterCost()).asObject());
         sewageCostColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getSewageCost()).asObject());
         miscCostColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getMiscCost()).asObject());
+
+        fromBillingColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getFromBilling().toString()));
+        toBillingColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getToBilling().toString()));
+        rateColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getRate()));
+        currentChargeColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getCurrentCharges()).asObject());
+        meterReadColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getMeterRead()).asObject());
+        billedCCFColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getBilledCCF()).asObject());
+
+
     }
 
     @FXML public void refreshView(ActionEvent event) {
@@ -119,14 +141,26 @@ public class ViewDataController{
         populateChart(utilities, showElectricityUsage, showWaterUsage, showElectricityCost,
                         showWaterCost, showSewageCost, showMiscCost);
 
-        populateTable(utilities);
+        populateUtilityTable(utilities);
+
+        ArrayList<Gas> gasList = gasRecords.getGas(building.getBuildingID(), startDate, endDate, dbConn);
+
+        populateGasTable(gasList);
+
     }
 
-    private void populateTable(ArrayList<Utility> utilities) {
+    private void populateUtilityTable(ArrayList<Utility> utilities) {
         utilityTableView.getItems().clear();
 
         ObservableList<Utility> oUtilities = FXCollections.observableArrayList(utilities);
         utilityTableView.setItems(oUtilities);
+    }
+
+    private void populateGasTable(ArrayList<Gas> gasList) {
+        gasTableView.getItems().clear();
+
+        ObservableList<Gas> oGas = FXCollections.observableArrayList(gasList);
+        gasTableView.setItems(oGas);
     }
 
     private void populateChart(ArrayList<Utility> utilities, boolean showElectricityUsage, boolean showWaterUsage, boolean showElectricityCost,
