@@ -197,41 +197,31 @@ public class ViewDataController{
         bar chart for some reason.
          */
 
-        if (electricityUsage != null) {
-            Float value = utility.getElectricityUsage();
-            if (value != null) {
-                lineChart.getData().add(electricityUsage);
-            }
+//        if (electricityUsage != null) {
+//            Float value = utility.getElectricityUsage();
+//            if (value != null) {
+//                lineChart.getData().add(electricityUsage);
+//            }
+//        }
+// This is currently only checking if the last utility in the list. Previous utilities with values are skipped leading
+// to the graph being empty in the majority of situations.
+        if (electricityUsage != null && !electricityUsage.getData().isEmpty()) {
+            lineChart.getData().add(electricityUsage);
         }
-        if (waterUsage != null) {
-            Float value = utility.getWaterUsage();
-            if (value != null) {
-                lineChart.getData().add(waterUsage);
-            }
+        if (waterUsage != null && !waterUsage.getData().isEmpty()) {
+            lineChart.getData().add(waterUsage);
         }
-        if (electricityCost != null) {
-            Float value = utility.getElectricityCost();
-            if (value != null) {
-                lineChart.getData().add(electricityCost);
-            }
+        if (electricityCost != null && !electricityCost.getData().isEmpty()) {
+            lineChart.getData().add(electricityCost);
         }
-        if (waterCost != null) {
-            Float value = utility.getWaterCost();
-            if (value != null) {
-                lineChart.getData().add(waterCost);
-            }
+        if (waterCost != null && !waterCost.getData().isEmpty()) {
+            lineChart.getData().add(waterCost);
         }
-        if (sewageCost != null) {
-            Float value = utility.getSewageCost();
-            if (value != null) {
-                lineChart.getData().add(sewageCost);
-            }
+        if (sewageCost != null && !sewageCost.getData().isEmpty()) {
+            lineChart.getData().add(sewageCost);
         }
-        if (miscCost != null) {
-            Float value = utility.getMiscCost();
-            if (value != null) {
-                lineChart.getData().add(miscCost);
-            }
+        if (miscCost != null && !miscCost.getData().isEmpty()) {
+            lineChart.getData().add(miscCost);
         }
     }
 }
