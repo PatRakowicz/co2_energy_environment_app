@@ -73,9 +73,24 @@ public class UpdateGasController implements Alerts {
         ChangeListener valueChangeListener = (obs, oldValue, newValue) -> {
             Platform.runLater(() -> onChange());
         };
+
         buildingComboBox.valueProperty().addListener(valueChangeListener);
         yearComboBox.valueProperty().addListener(valueChangeListener);
         monthComboBox.valueProperty().addListener(valueChangeListener);
+
+        fromBilling.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (!isNowFocused) {
+                fromBilling.setValue(fromBilling.getConverter()
+                        .fromString(fromBilling.getEditor().getText()));
+            }
+        });
+
+        toBilling.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (!isNowFocused) {
+                toBilling.setValue(toBilling.getConverter()
+                        .fromString(toBilling.getEditor().getText()));
+            }
+        });
     }
 
     public void clearGasErrors(){

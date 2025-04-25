@@ -33,6 +33,27 @@ public class AddBuildingController implements Alerts {
     public void initialize() {
         buildingRecords = new BuildingRecords(dbConn);
         buildings = buildingRecords.getBuildings();
+
+        constructionDate.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (!isNowFocused) {
+                constructionDate.setValue(constructionDate.getConverter()
+                        .fromString(constructionDate.getEditor().getText()));
+            }
+        });
+
+        startShared.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (!isNowFocused) {
+                startShared.setValue(startShared.getConverter()
+                        .fromString(startShared.getEditor().getText()));
+            }
+        });
+
+        endShared.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (!isNowFocused) {
+                endShared.setValue(endShared.getConverter()
+                        .fromString(endShared.getEditor().getText()));
+            }
+        });
     }
 
     public void clearErrors(){

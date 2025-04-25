@@ -53,6 +53,13 @@ public class AddUtilityController implements Alerts {
         buildingComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
             onChange();
         });
+
+        utilityDate.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            if (!isNowFocused) {
+                utilityDate.setValue(utilityDate.getConverter()
+                        .fromString(utilityDate.getEditor().getText()));
+            }
+        });
     }
 
     private void setDisabledAll(boolean d){
