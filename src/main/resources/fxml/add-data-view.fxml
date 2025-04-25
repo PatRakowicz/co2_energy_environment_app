@@ -4,71 +4,37 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="322.0" minWidth="620.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <center>
       <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
-          <Tab text="Utility">
+          <Tab fx:id="utilityTab" text="Utility">
             <content>
-              <AnchorPane minHeight="-Infinity" minWidth="-Infinity">
-                     <children>
-                        <TextField fx:id="electricityUsage" layoutX="73.0" layoutY="49.0" />
-                        <TextField fx:id="waterUsage" layoutX="73.0" layoutY="126.0" />
-                        <TextField fx:id="sewageCost" layoutX="73.0" layoutY="203.0" />
-                        <TextField fx:id="electricityCost" layoutX="362.0" layoutY="49.0" />
-                        <TextField fx:id="waterCost" layoutX="362.0" layoutY="126.0" />
-                        <TextField fx:id="miscCost" layoutX="362.0" layoutY="203.0" />
-                        <Label layoutX="73.0" layoutY="32.0" text="Electricity Usage (KWH)" />
-                        <Label layoutX="73.0" layoutY="109.0" text="Water Usage (gal)" />
-                        <Label layoutX="73.0" layoutY="186.0" text="Sewage Cost ($)" />
-                        <Label layoutX="362.0" layoutY="32.0" text="Electricity Cost ($)" />
-                        <Label layoutX="362.0" layoutY="109.0" text="Water Cost ($)" />
-                        <Label layoutX="362.0" layoutY="186.0" text="Misc. Cost ($)" />
-                        <Label fx:id="electricityUsageError" layoutY="74.0" prefHeight="17.0" prefWidth="300.0" textAlignment="CENTER" textFill="RED" />
-                        <Label fx:id="electricityCostError" layoutX="300.0" layoutY="74.0" prefHeight="17.0" prefWidth="300.0" textAlignment="CENTER" textFill="RED" />
-                        <Label fx:id="waterUsageError" layoutY="151.0" prefHeight="17.0" prefWidth="300.0" textAlignment="CENTER" textFill="RED" />
-                        <Label fx:id="waterCostError" layoutX="299.0" layoutY="151.0" prefHeight="17.0" prefWidth="300.0" textAlignment="CENTER" textFill="RED" />
-                        <Label fx:id="sewageCostError" layoutY="228.0" prefHeight="17.0" prefWidth="300.0" textAlignment="CENTER" textFill="RED" />
-                        <Label fx:id="miscCostError" layoutX="299.0" layoutY="228.0" prefHeight="17.0" prefWidth="300.0" textAlignment="CENTER" textFill="RED" />
-                     </children>
-                  </AnchorPane>
+
             </content>
           </Tab>
-          <Tab text="Gas">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-            </content>
+          <Tab fx:id="gasTab" text="Gas">
+               <content>
+
+               </content>
           </Tab>
+            <Tab fx:id="buildingTab" text="Building">
+               <content>
+
+               </content>
+            </Tab>
         </tabs>
       </TabPane>
    </center>
-   <top>
-      <AnchorPane BorderPane.alignment="CENTER">
-         <children>
-            <ComboBox fx:id="buildingComboBox" layoutX="69.0" layoutY="24.0" prefWidth="150.0" editable="true"/>
-            <DatePicker fx:id="datePicker" layoutX="353.0" layoutY="24.0" onAction="#onChange" />
-            <Label layoutX="69.0" layoutY="7.0" text="Building" />
-            <Label layoutX="353.0" layoutY="7.0" text="Date" />
-            <Label fx:id="buildingError" layoutY="49.0" prefHeight="17.0" prefWidth="300.0" textAlignment="CENTER" textFill="RED" />
-            <Label fx:id="dateError" layoutX="300.0" layoutY="49.0" prefHeight="17.0" prefWidth="300.0" textAlignment="CENTER" textFill="RED" />
-         </children>
-      </AnchorPane>
-   </top>
-   <bottom>
-      <HBox alignment="TOP_RIGHT" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="addButton" mnemonicParsing="false" onAction="#add" text="Add" />
-            <Button fx:id="downloadCSVButton" mnemonicParsing="false" onAction="#handleDownloadCsvTemplate" text="Download CSV Template" />
-            <Button fx:id="uploadCsvButton" mnemonicParsing="false" onAction="#handleUploadCsv" text="Upload CSV Data" />
-         </children>
-      </HBox>
-   </bottom>
 </BorderPane>
