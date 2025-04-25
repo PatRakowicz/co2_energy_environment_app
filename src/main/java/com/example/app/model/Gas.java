@@ -1,50 +1,73 @@
 package com.example.app.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class Gas {
-    private int gasID;
     private int buildingID;
-    private float current_charges;
+    private Float currentCharges;
     private String rate;
-    private Date from_billing;
-    private Date to_billing;
-    private float meter_read;
-    private float billed_ccf;
+    private Date fromBilling;
+    private Date toBilling;
+    private Float meterRead;
+    private Float billedCCF;
 
-    //getters
+    // Getters and Setters for billed_ccf
+    public Float getBilledCCF() {
+        return billedCCF;
+    }
 
-    public int getGasID() {return gasID;}
+    public void setBilledCCF(Float billedCCF) {
+        this.billedCCF = billedCCF;
+    }
 
-    public int getBuildingID() {return buildingID;}
+    // Getters and Setters for meter_read
+    public Float getMeterRead() {
+        return meterRead;
+    }
 
-    public float getCurrent_charges() {return current_charges;}
+    public void setMeterRead(Float meterRead) {
+        this.meterRead = meterRead;
+    }
 
-    public String getRate() {return rate;}
+    // Getters and Setters for to_billing
+    public Date getToBilling() {
+        return toBilling;
+    }
 
-    public Date getFrom_billing() {return from_billing;}
+    public void setToBilling(Date toBilling) {
+        this.toBilling = toBilling;
+    }
 
-    public Date getTo_billing() {return to_billing;}
+    // Getters and Setters for from_building
+    public Date getFromBilling() {
+        return fromBilling;
+    }
 
-    public float getMeter_read() {return meter_read;}
+    public void setFromBilling(Date fromBilling) {
+        this.fromBilling = fromBilling;
+    }
 
-    public float getBilled_ccf() {return billed_ccf;}
+    // Getters and Setters for rate
+    public String getRate() {
+        return rate;
+    }
 
-    //setters
+    public void setRate(String rate) {
+        this.rate = rate;
+    }
 
-    public void setGasID(int gasID) {this.gasID = gasID;}
+    // Getters and Setters for current_charges
+    public Float getCurrentCharges() {
+        return currentCharges;
+    }
 
-    public void setBuildingID(int buildingID) {this.buildingID = buildingID;}
+    public void setCurrentCharges(Float currentCharges) {
+        this.currentCharges = currentCharges;
+    }
 
-    public void setCurrent_charges(float current_charges) {this.current_charges = current_charges;}
+    // Setter for buildingID
 
-    public void setRate(String rate) {this.rate = rate;}
-
-    public void setFrom_billing(Date from_billing) {this.from_billing = from_billing;}
-
-    public void setTo_billing(Date to_billing) {this.to_billing = to_billing;}
-
-    public void setMeter_read(float meter_read) {this.meter_read = meter_read;}
-
-    public void setBilled_ccf(float billed_ccf) {this.billed_ccf = billed_ccf;}
+    public void setBuildingID(int buildingID) {
+        this.buildingID = buildingID;
+    }
 }
