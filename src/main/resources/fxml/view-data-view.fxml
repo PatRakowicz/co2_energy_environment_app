@@ -122,7 +122,7 @@
                        <TabPane fx:id="graphTabPane" style="-fx-border-color: #000000;" tabClosingPolicy="UNAVAILABLE">
 
                            <tabs>
-                               <Tab text="Line Chart">
+                               <Tab text="Utilities Over Time">
                                    <LineChart fx:id="lineChart" animated="true" createSymbols="false" legendSide="RIGHT" title="Utility Data Over Time">
                                        <xAxis>
                                            <CategoryAxis label="Date" />
@@ -132,8 +132,8 @@
                                        </yAxis>
                                    </LineChart>
                                </Tab>
-                               <Tab text="Bar Chart">
-                                   <BarChart fx:id="barChart" legendSide="RIGHT" title="Bar Chart Example">
+                               <Tab text="Building Utility Usage">
+                                   <BarChart fx:id="barChart" legendSide="RIGHT" title="Total Usage By Building">
                                        <xAxis>
                                            <CategoryAxis label="Category" />
                                        </xAxis>
@@ -142,9 +142,9 @@
                                        </yAxis>
                                    </BarChart>
                                </Tab>
-                        <Tab text="Pie Chart">
+                        <Tab text="Building Utility Cost">
                            <content>
-                              <PieChart fx:id="pieChart" legendSide="RIGHT" title="Pie Chart Example" />
+                              <PieChart fx:id="pieChart" legendSide="RIGHT" title="Total Usage Cost By Building" />
                            </content>
                         </Tab>
                            </tabs>

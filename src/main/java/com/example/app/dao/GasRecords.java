@@ -19,6 +19,7 @@ public class GasRecords implements DBQueries {
     }
 
     public ArrayList<Gas> getGas(int buildingID, LocalDate toBilling, LocalDate fromBilling, DBConn dbConn) {
+        gasList.clear();
 
         String query = "SELECT * FROM gas "
                 + "WHERE buildingID = ? "

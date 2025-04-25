@@ -15,12 +15,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ViewDataController{
     private DBConn dbConn;
@@ -47,6 +51,8 @@ public class ViewDataController{
     // Table View
     @FXML private SplitPane mainSplitPane;
     @FXML private LineChart<String, Number> lineChart;
+    @FXML private BarChart<String, Number> barChart;
+    @FXML private PieChart pieChart;
     @FXML private TabPane tabPane;
     @FXML private Tab utilityTab;
     @FXML private Tab gasTab;
@@ -87,6 +93,12 @@ public class ViewDataController{
 
         utilityRecords = new UtilityRecords(dbConn);
         gasRecords = new GasRecords(dbConn);
+
+        // Disable manual typing in datePicker
+        startDatePicker.getEditor().setDisable(true);
+        startDatePicker.getEditor().setOpacity(1);
+        endDatePicker.getEditor().setDisable(true);
+        endDatePicker.getEditor().setOpacity(1);
 
 
         // https://docs.oracle.com/javase/8/javafx/api/javafx/beans/property/SimpleFloatProperty.html#SimpleFloatProperty-java.lang.Object-java.lang.String-
@@ -138,33 +150,31 @@ public class ViewDataController{
 
         ArrayList<Utility> utilities = utilityRecords.getUtilities(building.getBuildingID(), startDate, endDate, dbConn);
 
-        populateChart(utilities, showElectricityUsage, showWaterUsage, showElectricityCost,
+        populateCharts(utilities, showElectricityUsage, showWaterUsage, showElectricityCost,
                         showWaterCost, showSewageCost, showMiscCost);
-
-        populateUtilityTable(utilities);
 
         ArrayList<Gas> gasList = gasRecords.getGas(building.getBuildingID(), startDate, endDate, dbConn);
 
-        populateGasTable(gasList);
-
+        populateTables(utilities, gasList);
     }
 
-    private void populateUtilityTable(ArrayList<Utility> utilities) {
+    private void populateTables(ArrayList<Utility> utilities, ArrayList<Gas> gasList) {
+        // Utility
         utilityTableView.getItems().clear();
 
         ObservableList<Utility> oUtilities = FXCollections.observableArrayList(utilities);
         utilityTableView.setItems(oUtilities);
-    }
 
-    private void populateGasTable(ArrayList<Gas> gasList) {
+        // Gas
         gasTableView.getItems().clear();
 
         ObservableList<Gas> oGas = FXCollections.observableArrayList(gasList);
         gasTableView.setItems(oGas);
     }
 
-    private void populateChart(ArrayList<Utility> utilities, boolean showElectricityUsage, boolean showWaterUsage, boolean showElectricityCost,
-                               boolean showWaterCost, boolean showSewageCost, boolean showMiscCost) {
+    private void populateCharts(ArrayList<Utility> utilities, boolean showElectricityUsage, boolean showWaterUsage, boolean showElectricityCost,
+                                boolean showWaterCost, boolean showSewageCost, boolean showMiscCost) {
+        // LineChart
         lineChart.getData().clear();
         XYChart.Series<String, Number> electricityUsage = null;
         XYChart.Series<String, Number> waterUsage = null;
@@ -257,5 +267,20 @@ public class ViewDataController{
         if (miscCost != null && !miscCost.getData().isEmpty()) {
             lineChart.getData().add(miscCost);
         }
+
+        // Bar Chart
+        barChart.getData().clear();
+
+        Map<String, Float> usageDictionary = utilityRecords.getBuildingTotalUsage();
+
+        XYChart.Series<String, Number> usageByBuilding = new XYChart.Series<>();
+        usageByBuilding.setName("Total Usage");
+
+        for (Map.Entry<String, Float> entry : usageDictionary.entrySet()) {
+            XYChart.Data<String, Number> data = new XYChart.Data<>(entry.getKey(), entry.getValue());
+            usageByBuilding.getData().add(data);
+        }
+
+        barChart.getData().add(usageByBuilding);
     }
 }
