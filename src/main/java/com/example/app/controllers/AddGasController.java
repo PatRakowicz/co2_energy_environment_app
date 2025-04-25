@@ -226,7 +226,7 @@ public class AddGasController implements Alerts {
 
         if (file != null && dbConn != null) {
             GasCsvLogic exporter = new GasCsvLogic(dbConn);
-            exporter.importGasCSV(file);
+            exporter.exportCsvTemplate(file);
             System.out.println("CSV Template Exported.");
         }
     }
