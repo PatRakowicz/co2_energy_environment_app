@@ -172,7 +172,7 @@ public class UpdateUtilityController implements Alerts {
     }
 
     public void deleteUtility() {
-        if(buildingComboBox.getValue() != null && yearComboBox.getValue() != null && !monthComboBox.getValue().isEmpty()){
+        if(buildingComboBox.getValue() != null && yearComboBox.getValue() != null && monthComboBox.getValue() != null){
             try {
                 //load resource file into new stage
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/delete-confirmation.fxml"));
@@ -215,79 +215,102 @@ public class UpdateUtilityController implements Alerts {
     private boolean utilityValidity() {
         boolean valid = true;
 
-        if(electricityUsage.getText().isEmpty()){
+        if(electricityUsage.getText() == null || electricityUsage.getText().isEmpty()){
             eUsage = -1;
         }else {
             try {
                 eUsage = Float.parseFloat(electricityUsage.getText());
-            } catch (NumberFormatException e) {
-                if (!electricityUsage.getText().isEmpty()) {
+                if(eUsage < 0){
+                    electricityUsageError.setText("ERROR: Electricity Usage can't be negative");
+                    valid = false;
+                }
+            } catch (NumberFormatException ex) {
+                if (electricityUsage.getText() != null) {
                     electricityUsageError.setText("ERROR: Electricity Usage must be a number");
                     valid = false;
                 }
             }
         }
 
-        if(electricityCost.getText().isEmpty()){
+        if(electricityCost.getText() == null || electricityCost.getText().isEmpty()){
             eCost = -1;
-        }
-        else {
+        }else {
             try {
                 eCost = Float.parseFloat(electricityCost.getText());
+                if(eCost < 0){
+                    electricityCostError.setText("ERROR: Electricity Cost can't be negative");
+                    valid = false;
+                }
             } catch (NumberFormatException e) {
-                if (!electricityCost.getText().isEmpty()) {
+                if (electricityCost.getText() != null) {
                     electricityCostError.setText("ERROR: Electricity Cost must be a number");
                     valid = false;
                 }
             }
         }
 
-        if(waterUsage.getText().isEmpty()){
+        if(waterUsage.getText() == null || waterUsage.getText().isEmpty()){
             wUsage = -1;
         }else {
             try {
                 wUsage = Float.parseFloat(waterUsage.getText());
+                if(wUsage < 0){
+                    waterUsageError.setText("ERROR: Water Usage can't be negative");
+                    valid = false;
+                }
             } catch (NumberFormatException e) {
-                if (!waterUsage.getText().isEmpty()) {
+                if (waterUsage.getText() != null) {
                     waterUsageError.setText("ERROR: Water Usage must be a number");
                     valid = false;
                 }
             }
         }
 
-        if(waterCost.getText().isEmpty()){
+        if(waterCost.getText() == null || waterCost.getText().isEmpty()){
             wCost = -1;
         }else {
             try {
                 wCost = Float.parseFloat(waterCost.getText());
+                if(wCost < 0){
+                    waterCostError.setText("ERROR: Water Cost can't be negative");
+                    valid = false;
+                }
             } catch (NumberFormatException e) {
-                if (!waterCost.getText().isEmpty()) {
+                if (waterCost.getText() != null) {
                     waterCostError.setText("ERROR: Water Cost must be a number");
                     valid = false;
                 }
             }
         }
 
-        if(sewageCost.getText().isEmpty()){
+        if(sewageCost.getText() == null || sewageCost.getText().isEmpty()){
             sCost = -1;
         }else {
             try {
                 sCost = Float.parseFloat(sewageCost.getText());
+                if(sCost < 0){
+                    sewageCostError.setText("ERROR: Sewage Cost can't be negative");
+                    valid = false;
+                }
             } catch (NumberFormatException e) {
-                if (!sewageCost.getText().isEmpty()) {
+                if (sewageCost.getText() != null) {
                     sewageCostError.setText("ERROR: Sewage Cost must be a number");
                     valid = false;
                 }
             }
         }
 
-        if(miscCost.getText().isEmpty()){
+        if(miscCost.getText() == null || miscCost.getText().isEmpty()){
             mCost = -1;
         }else {
             try {
                 mCost = Float.parseFloat(miscCost.getText());
+                if(mCost < 0){
+                    miscCostError.setText("ERROR: Misc. Cost can't be negative");
+                    valid = false;
+                }
             } catch (NumberFormatException e) {
-                if (!miscCost.getText().isEmpty()) {
+                if (miscCost.getText() != null) {
                     miscCostError.setText("ERROR: Misc. Cost must be a number");
                     valid = false;
                 }
@@ -338,8 +361,6 @@ public class UpdateUtilityController implements Alerts {
         waterCost.setDisable(d);
         sewageCost.setDisable(d);
         miscCost.setDisable(d);
-        updateUtilityButton.setDisable(d);
-        deleteUtilityButton.setDisable(d);
     }
 
     private void setDisabledOnMaster(){

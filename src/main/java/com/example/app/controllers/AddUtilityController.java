@@ -109,7 +109,7 @@ public class AddUtilityController implements Alerts {
     // This is where the error checking happens
     public boolean validity(){
         boolean valid = true;
-        if(electricityUsage.getText().isEmpty()){
+        if(electricityUsage.getText() == null || electricityUsage.getText().isEmpty()){
             eUsage = -1;
         }else {
             try {
@@ -119,14 +119,14 @@ public class AddUtilityController implements Alerts {
                     valid = false;
                 }
             } catch (NumberFormatException ex) {
-                if (!electricityUsage.getText().isEmpty()) {
+                if (electricityUsage.getText() != null) {
                     electricityUsageError.setText("ERROR: Electricity Usage must be a number");
                     valid = false;
                 }
             }
         }
 
-        if(electricityCost.getText().isEmpty()){
+        if(electricityCost.getText() == null || electricityCost.getText().isEmpty()){
             eCost = -1;
         }else {
             try {
@@ -136,14 +136,14 @@ public class AddUtilityController implements Alerts {
                     valid = false;
                 }
             } catch (NumberFormatException e) {
-                if (!electricityCost.getText().isEmpty()) {
+                if (electricityCost.getText() != null) {
                     electricityCostError.setText("ERROR: Electricity Cost must be a number");
                     valid = false;
                 }
             }
         }
 
-        if(waterUsage.getText().isEmpty()){
+        if(waterUsage.getText() == null || waterUsage.getText().isEmpty()){
             wUsage = -1;
         }else {
             try {
@@ -153,14 +153,14 @@ public class AddUtilityController implements Alerts {
                     valid = false;
                 }
             } catch (NumberFormatException e) {
-                if (!waterUsage.getText().isEmpty()) {
+                if (waterUsage.getText() != null) {
                     waterUsageError.setText("ERROR: Water Usage must be a number");
                     valid = false;
                 }
             }
         }
 
-        if(waterCost.getText().isEmpty()){
+        if(waterCost.getText() == null || waterCost.getText().isEmpty()){
             wCost = -1;
         }else {
             try {
@@ -170,14 +170,14 @@ public class AddUtilityController implements Alerts {
                     valid = false;
                 }
             } catch (NumberFormatException e) {
-                if (!waterCost.getText().isEmpty()) {
+                if (waterCost.getText() != null) {
                     waterCostError.setText("ERROR: Water Cost must be a number");
                     valid = false;
                 }
             }
         }
 
-        if(sewageCost.getText().isEmpty()){
+        if(sewageCost.getText() == null || sewageCost.getText().isEmpty()){
             sCost = -1;
         }else {
             try {
@@ -187,14 +187,14 @@ public class AddUtilityController implements Alerts {
                     valid = false;
                 }
             } catch (NumberFormatException e) {
-                if (!sewageCost.getText().isEmpty()) {
+                if (sewageCost.getText() != null) {
                     sewageCostError.setText("ERROR: Sewage Cost must be a number");
                     valid = false;
                 }
             }
         }
 
-        if(miscCost.getText().isEmpty()){
+        if(miscCost.getText() == null || miscCost.getText().isEmpty()){
             mCost = -1;
         }else {
             try {
@@ -204,7 +204,7 @@ public class AddUtilityController implements Alerts {
                     valid = false;
                 }
             } catch (NumberFormatException e) {
-                if (!miscCost.getText().isEmpty()) {
+                if (miscCost.getText() != null) {
                     miscCostError.setText("ERROR: Misc. Cost must be a number");
                     valid = false;
                 }

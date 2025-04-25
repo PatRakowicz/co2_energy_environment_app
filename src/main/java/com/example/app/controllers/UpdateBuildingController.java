@@ -107,7 +107,7 @@ public class UpdateBuildingController implements Alerts {
         }
 
         if(startShared.getValue() != null){
-            if(startShared.getEditor().getText().isEmpty()){
+            if(startShared.getEditor().getText() == null){
                 sShared = null;
                 startShared.setValue(null);
             }
@@ -128,7 +128,7 @@ public class UpdateBuildingController implements Alerts {
         }
 
         if(startShared.getValue() != null && endShared.getValue() != null){
-            if(endShared.getEditor().getText().isEmpty()){
+            if(endShared.getEditor().getText() == null){
                 eShared = null;
                 endShared.setValue(null);
             }else {
@@ -154,10 +154,10 @@ public class UpdateBuildingController implements Alerts {
             }
         }
 
-        if(squareFeet.getText() == null){
+        if(squareFeet.getText() == null || squareFeet.getText().isEmpty()){
             sqft = -1;
         }else {
-            if (!squareFeet.getText().isEmpty()) {
+            if (squareFeet.getText() != null) {
                 try {
                     sqft = Integer.parseInt(squareFeet.getText());
                     if(sqft < 0){
@@ -186,7 +186,7 @@ public class UpdateBuildingController implements Alerts {
             if(squareFeet.getText() == null){
                 building.setSqFT(-1);
             }
-            else if(squareFeet.getText().isEmpty()){
+            else if(squareFeet.getText() == null){
                 building.setSqFT(-1);
             }else{
                 building.setSqFT(Integer.parseInt(squareFeet.getText()));

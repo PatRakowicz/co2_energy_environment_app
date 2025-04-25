@@ -87,7 +87,7 @@ public class AddGasController implements Alerts {
             building = buildingComboBox.getValue();
         }
 
-        if(currentCharges.getText().isEmpty()){
+        if(currentCharges.getText() == null){
             currentChargesError.setText("ERROR: Current Charges can't be nothing");
             valid = false;
         }else{
@@ -103,7 +103,7 @@ public class AddGasController implements Alerts {
             }
         }
 
-        if(meterRead.getText().isEmpty()){
+        if(meterRead.getText() == null){
             meterReadError.setText("ERROR: Meter Read can't be nothing");
             valid = false;
         }else{
@@ -119,7 +119,7 @@ public class AddGasController implements Alerts {
             }
         }
 
-        if(billedCCF.getText().isEmpty()){
+        if(billedCCF.getText() == null){
             billedCCFError.setText("ERROR: Billed CCF can't be nothing");
             valid = false;
         }else{
@@ -144,9 +144,23 @@ public class AddGasController implements Alerts {
             toBillingError.setText("ERROR: To Billing can't be nothing");
         }
 
-        if(fromBilling.getValue() != null && toBilling.getValue() != null){
+        // if the input text is empty set from billing to null
+        if(fromBilling.getEditor().getText() == null){
+            fBilling = null;
+            fromBilling.setValue(null);
+        }else {
             fBilling = Date.valueOf(fromBilling.getValue());
+        }
+
+        // if the input text is empty set to billing to null
+        if(toBilling.getEditor().getText() == null){
+            tBilling = null;
+            toBilling.setValue(null);
+        }else {
             tBilling = Date.valueOf(toBilling.getValue());
+        }
+
+        if(fromBilling.getValue() != null && toBilling.getValue() != null){
             if(fBilling.after(tBilling)){
                 fromBillingError.setText("ERROR: From Billing can't be after To Billing");
                 toBillingError.setText("ERROR: To Billing can't be before From Billing");

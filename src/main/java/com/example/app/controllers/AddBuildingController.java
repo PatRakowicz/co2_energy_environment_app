@@ -77,7 +77,7 @@ public class AddBuildingController implements Alerts {
     public boolean validity(){
         boolean valid = true;
 
-        if(buildingName.getText().isEmpty()){
+        if(buildingName.getText() == null || buildingName.getText().isEmpty()){
             nameError.setText("ERROR: building needs a name");
             valid = false;
         }else {
@@ -92,7 +92,7 @@ public class AddBuildingController implements Alerts {
 
         if(startShared.getValue() != null){
             sShared = Date.valueOf(startShared.getValue());
-            if(squareFeet.getText().isEmpty()){
+            if(squareFeet.getText() == null){
                 squareFeetError.setText("ERROR: Square Feet can't be nothing if building id on the master meter");
                 valid = false;
             }
@@ -127,10 +127,10 @@ public class AddBuildingController implements Alerts {
             }
         }
 
-        if(squareFeet.getText().isEmpty()){
+        if(squareFeet.getText() == null || squareFeet.getText().isEmpty()){
             sqft = -1;
         }else {
-            if (!squareFeet.getText().isEmpty()) {
+            if (squareFeet.getText() != null) {
                 try {
                     sqft = Integer.parseInt(squareFeet.getText());
                     if(sqft < 0){

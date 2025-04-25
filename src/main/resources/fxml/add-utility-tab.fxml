@@ -82,7 +82,7 @@
         <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
             <children>
                 <Label text="Date" />
-                <DatePicker fx:id="utilityDate"/>
+                <DatePicker fx:id="utilityDate" onAction="#onChange"/>
                 <Label fx:id="dateError" textFill="RED" />
             </children>
         </VBox>
