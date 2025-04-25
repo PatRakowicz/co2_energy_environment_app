@@ -1,8 +1,8 @@
 package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
-import com.example.app.dao.CsvLogic;
 import com.example.app.dao.DBConn;
+import com.example.app.dao.UtilityCsvLogic;
 import com.example.app.dao.UtilityRecords;
 import com.example.app.model.Building;
 import com.example.app.model.Utility;
@@ -305,7 +305,7 @@ public class AddUtilityController implements Alerts {
         File file = fileChooser.showOpenDialog(null);
 
         if (file != null && dbConn != null) {
-            CsvLogic uploader = new CsvLogic(dbConn);
+            UtilityCsvLogic uploader = new UtilityCsvLogic(dbConn);
             uploader.importUtilityCSV(file);
             System.out.println("CSV Upload Complete.");
         }
@@ -320,7 +320,7 @@ public class AddUtilityController implements Alerts {
         File file = fileChooser.showSaveDialog(null);
 
         if (file != null && dbConn != null) {
-            CsvLogic exporter = new CsvLogic(dbConn);
+            UtilityCsvLogic exporter = new UtilityCsvLogic(dbConn);
             exporter.exportCsvTemplate(file);
             System.out.println("CSV Template Exported.");
         }

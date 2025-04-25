@@ -7,8 +7,9 @@ import javafx.scene.control.Alert;
 
 import java.io.*;
 import java.sql.*;
+import java.util.ArrayList;
 
-public class CsvLogic implements DBQueries {
+public class UtilityCsvLogic implements DBQueries {
     private DBConn dbConn;
 
     private final String[] HEADERS = {
@@ -16,7 +17,7 @@ public class CsvLogic implements DBQueries {
             "Sewage Cost", "Misc Cost"
     };
 
-    public CsvLogic(DBConn dbConn) {
+    public UtilityCsvLogic(DBConn dbConn) {
         this.dbConn = dbConn;
     }
 
@@ -24,6 +25,7 @@ public class CsvLogic implements DBQueries {
     public void importUtilityCSV(File file) {
         int insertedCount = 0;
         int skippedCount = 0;
+        ArrayList<String> errorMessages = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             Connection conn = dbConn.getConnection();
@@ -34,7 +36,8 @@ public class CsvLogic implements DBQueries {
 
             String headerLine = reader.readLine();
             if (headerLine == null) {
-                System.out.println("Empty file.");
+                errorMessages.add("Empty CSV file.");
+                showResultsAlert(insertedCount, skippedCount, errorMessages);
                 return;
             }
 
@@ -42,7 +45,8 @@ public class CsvLogic implements DBQueries {
             String sharedDateString = headers[headers.length - 1].trim();
             Date sharedDate = parseDateOrNull(sharedDateString);
             if (sharedDate == null) {
-                System.out.println("Invalid or missing shared date in header: " + sharedDateString);
+                errorMessages.add("Invalid or missing shared date in header: " + sharedDateString);
+                showResultsAlert(insertedCount, skippedCount, errorMessages);
                 return;
             }
 
@@ -93,25 +97,12 @@ public class CsvLogic implements DBQueries {
             }
         } catch (IOException | SQLException e) {
             e.printStackTrace();
+            errorMessages.add("General error during file processing: " + e.getMessage());
             return;
         }
 
         // Show results in alert
-        final int count = insertedCount;
-        final int skipped = skippedCount;
-        Platform.runLater(new Runnable() {
-            @Override
-            public void run() {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("CSV Import Complete");
-                alert.setHeaderText(null);
-                alert.setContentText(
-                        count + " entries were successfully added.\n" +
-                                skipped + " rows were skipped."
-                );
-                alert.showAndWait();
-            }
-        });
+        showResultsAlert(insertedCount, skippedCount, errorMessages);
     }
 
     public void exportCsvTemplate(File file) {
@@ -141,6 +132,23 @@ public class CsvLogic implements DBQueries {
             }
         } catch (IOException | SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void insertUtility(Connection conn, Building building, Utility utility) throws SQLException {
+        String insert = "INSERT INTO utility (buildingID, date, e_usage, e_cost, w_usage, w_cost, sw_cost, misc_cost) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(insert)) {
+            stmt.setInt(1, building.getBuildingID());
+            stmt.setDate(2, new java.sql.Date(utility.getDate().getTime()));
+            stmt.setObject(3, utility.getElectricityUsage(), Types.FLOAT);
+            stmt.setObject(4, utility.getElectricityCost(), Types.FLOAT);
+            stmt.setObject(5, utility.getWaterUsage(), Types.FLOAT);
+            stmt.setObject(6, utility.getWaterCost(), Types.FLOAT);
+            stmt.setObject(7, utility.getSewageCost(), Types.FLOAT);
+            stmt.setObject(8, utility.getMiscCost(), Types.FLOAT);
+
+            stmt.executeUpdate();
         }
     }
 
@@ -187,20 +195,23 @@ public class CsvLogic implements DBQueries {
         return null;
     }
 
-    private void insertUtility(Connection conn, Building building, Utility utility) throws SQLException {
-        String insert = "INSERT INTO utility (buildingID, date, e_usage, e_cost, w_usage, w_cost, sw_cost, misc_cost) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    private void showResultsAlert(int insertedCount, int skippedCount, ArrayList<String> errors) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("CSV Import Complete");
+            alert.setHeaderText(null);
 
-        try (PreparedStatement stmt = conn.prepareStatement(insert)) {
-            stmt.setInt(1, building.getBuildingID());
-            stmt.setDate(2, new java.sql.Date(utility.getDate().getTime()));
-            stmt.setObject(3, utility.getElectricityUsage(), Types.FLOAT);
-            stmt.setObject(4, utility.getElectricityCost(), Types.FLOAT);
-            stmt.setObject(5, utility.getWaterUsage(), Types.FLOAT);
-            stmt.setObject(6, utility.getWaterCost(), Types.FLOAT);
-            stmt.setObject(7, utility.getSewageCost(), Types.FLOAT);
-            stmt.setObject(8, utility.getMiscCost(), Types.FLOAT);
+            StringBuilder message = new StringBuilder();
+            message.append(insertedCount).append(" entries were successfully added.\n");
+            message.append(skippedCount).append(" rows were skipped.\n");
 
-            stmt.executeUpdate();
-        }
+            if (!errors.isEmpty()) {
+                message.append("\nDetails:\n");
+                for (String error : errors) message.append("- ").append(error).append("\n");
+            }
+
+            alert.setContentText(message.toString());
+            alert.showAndWait();
+        });
     }
 }
