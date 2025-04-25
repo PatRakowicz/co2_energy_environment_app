@@ -331,13 +331,13 @@ public class AddDataController {
     public void handleDownloadGasCsvTemplate(){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save CSV Template");
-        fileChooser.setInitialFileName("utility_template.csv");
+        fileChooser.setInitialFileName("gas_template.csv");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV File", "*.csv"));
         File file = fileChooser.showSaveDialog(null);
 
         if (file != null && dbConn != null) {
             GasCsvLogic exporter = new GasCsvLogic(dbConn);
-            exporter.importGasCSV(file);
+            exporter.exportCsvTemplate(file);
             System.out.println("CSV Template Exported.");
         }
     }

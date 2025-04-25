@@ -135,6 +135,23 @@ public class UtilityCsvLogic implements DBQueries {
         }
     }
 
+    private void insertUtility(Connection conn, Building building, Utility utility) throws SQLException {
+        String insert = "INSERT INTO utility (buildingID, date, e_usage, e_cost, w_usage, w_cost, sw_cost, misc_cost) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(insert)) {
+            stmt.setInt(1, building.getBuildingID());
+            stmt.setDate(2, new java.sql.Date(utility.getDate().getTime()));
+            stmt.setObject(3, utility.getElectricityUsage(), Types.FLOAT);
+            stmt.setObject(4, utility.getElectricityCost(), Types.FLOAT);
+            stmt.setObject(5, utility.getWaterUsage(), Types.FLOAT);
+            stmt.setObject(6, utility.getWaterCost(), Types.FLOAT);
+            stmt.setObject(7, utility.getSewageCost(), Types.FLOAT);
+            stmt.setObject(8, utility.getMiscCost(), Types.FLOAT);
+
+            stmt.executeUpdate();
+        }
+    }
+
     private Float parseOrNull(String value) {
         try {
             return value.trim().isEmpty() ? null : Float.parseFloat(value.trim());
@@ -176,23 +193,6 @@ public class UtilityCsvLogic implements DBQueries {
             }
         }
         return null;
-    }
-
-    private void insertUtility(Connection conn, Building building, Utility utility) throws SQLException {
-        String insert = "INSERT INTO utility (buildingID, date, e_usage, e_cost, w_usage, w_cost, sw_cost, misc_cost) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-
-        try (PreparedStatement stmt = conn.prepareStatement(insert)) {
-            stmt.setInt(1, building.getBuildingID());
-            stmt.setDate(2, new java.sql.Date(utility.getDate().getTime()));
-            stmt.setObject(3, utility.getElectricityUsage(), Types.FLOAT);
-            stmt.setObject(4, utility.getElectricityCost(), Types.FLOAT);
-            stmt.setObject(5, utility.getWaterUsage(), Types.FLOAT);
-            stmt.setObject(6, utility.getWaterCost(), Types.FLOAT);
-            stmt.setObject(7, utility.getSewageCost(), Types.FLOAT);
-            stmt.setObject(8, utility.getMiscCost(), Types.FLOAT);
-
-            stmt.executeUpdate();
-        }
     }
 
     private void showResultsAlert(int insertedCount, int skippedCount, ArrayList<String> errors) {

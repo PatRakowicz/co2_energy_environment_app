@@ -4,10 +4,7 @@ import com.example.app.model.Building;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,7 +23,6 @@ public class GasCsvLogic implements DBQueries {
         int insertedCount = 0;
         int skippedCount = 0;
         ArrayList<String> errorMessages = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             Connection conn = dbConn.getConnection();
@@ -63,6 +59,19 @@ public class GasCsvLogic implements DBQueries {
                     continue;
                 }
 
+                boolean hasData = false;
+                for (int i = 1; i <= 5; i++) {
+                    if (!parts[i].isEmpty()) {
+                        hasData = true;
+                        break;
+                    }
+                }
+                if (!hasData) {
+                    skippedCount++;
+                    System.out.printf("Skipping row with no data: %s%n", line);
+                    continue;
+                }
+
                 Building building = fetchBuildingByName(buildingName, conn);
                 if (building == null) {
                     skippedCount++;
@@ -72,14 +81,14 @@ public class GasCsvLogic implements DBQueries {
 
                 try {
                     Float currentCharges = parseOrNull(parts[1]);
-                    Date fromBilling = sdf.parse(parts[2]);
-                    Date toBilling = sdf.parse(parts[3]);
+                    Date fromBilling = parseDateOrNull(parts[2]);
+                    Date toBilling = parseDateOrNull(parts[3]);
                     Float meterRead = parseOrNull(parts[4]);
                     Float billedCCF = parseOrNull(parts[5]);
 
                     insertGas(conn, building.getBuildingID(), currentCharges, fromBilling, toBilling, meterRead, billedCCF);
                     insertedCount++;
-                } catch (NumberFormatException | ParseException | SQLException e) {
+                } catch (NumberFormatException | SQLException e) {
                     skippedCount++;
                     errorMessages.add("Line " + lineNumber + ": Error parsing or inserting - " + e.getMessage());
                 }
@@ -92,11 +101,31 @@ public class GasCsvLogic implements DBQueries {
         showResultsAlert(insertedCount, skippedCount, errorMessages);
     }
 
-    private Float parseOrNull(String value) {
-        try {
-            return value.trim().isEmpty() ? null : Float.parseFloat(value);
-        } catch (NumberFormatException e) {
-            return null;
+    public void exportCsvTemplate(File file) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            Connection conn = dbConn.getConnection();
+            if (conn == null) {
+                System.out.println("No active DB connection");
+                return;
+            }
+
+            writer.write(String.join(",", new String[]{
+                    "Building Name", "Current Charges", "From Billing", "To Billing", "Meter Read", "Billed CCF"
+            }));
+            writer.newLine();
+
+            String query = "SELECT name FROM building";
+            try (PreparedStatement stmt = conn.prepareStatement(query);
+                 ResultSet rs = stmt.executeQuery()) {
+
+                while (rs.next()) {
+                    String buildingName = rs.getString("name");
+                    writer.write(buildingName + ",,,,,");
+                    writer.newLine();
+                }
+            }
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -108,11 +137,39 @@ public class GasCsvLogic implements DBQueries {
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, buildingID);
             stmt.setObject(2, currentCharges, Types.FLOAT);
-            stmt.setDate(3, new java.sql.Date(fromBilling.getTime()));
-            stmt.setDate(4, new java.sql.Date(toBilling.getTime()));
+            stmt.setObject(3, fromBilling, Types.DATE);
+            stmt.setObject(4, toBilling, Types.DATE);
             stmt.setObject(5, meterRead, Types.FLOAT);
             stmt.setObject(6, billedCCF, Types.FLOAT);
             stmt.executeUpdate();
+        }
+    }
+
+    private Float parseOrNull(String value) {
+        try {
+            return value.trim().isEmpty() ? null : Float.parseFloat(value);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    private Date parseDateOrNull(String value) {
+        try {
+            if (value.trim().isEmpty()) return null;
+
+            String[] parts = value.trim().split("/");
+            if (parts.length != 3) return null;
+
+            int day = Integer.parseInt(parts[0]);
+            int month = Integer.parseInt(parts[1]);
+            int year = Integer.parseInt(parts[2]);
+
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            cal.setLenient(false);
+            cal.set(year, month - 1, day);
+            return new java.sql.Date(cal.getTimeInMillis());
+        } catch (Exception e) {
+            return null;
         }
     }
 
