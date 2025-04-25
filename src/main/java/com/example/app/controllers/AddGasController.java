@@ -220,7 +220,7 @@ public class AddGasController implements Alerts {
     public void handleDownloadGasCsvTemplate(){
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save CSV Template");
-        fileChooser.setInitialFileName("utility_template.csv");
+        fileChooser.setInitialFileName("gas_template.csv");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV File", "*.csv"));
         File file = fileChooser.showSaveDialog(null);
 
