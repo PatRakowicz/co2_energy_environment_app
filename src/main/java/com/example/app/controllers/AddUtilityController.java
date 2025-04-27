@@ -106,9 +106,21 @@ public class AddUtilityController implements Alerts {
         buildingError.setText(null);
     }
 
+    public void clearStored(){
+        eUsage = 0;
+        eCost = 0;
+        wUsage = 0;
+        wCost = 0;
+        sCost = 0;
+        mCost = 0;
+    }
+
     // This is where the error checking happens
     public boolean validity(){
+        clearStored();
+
         boolean valid = true;
+
         if(electricityUsage.getText() == null || electricityUsage.getText().isEmpty()){
             eUsage = -1;
         }else {
@@ -254,6 +266,7 @@ public class AddUtilityController implements Alerts {
                     // Log inserted data here
                     insertSuccessful();
                     clearUtilityInputs();
+                    clearStored();
                     if (buildingComboBox.getValue().getName().equals("Master Meter")) {
                         averageMasterMeter(eCost, eUsage);
                     }

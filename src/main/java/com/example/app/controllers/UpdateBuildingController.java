@@ -98,7 +98,17 @@ public class UpdateBuildingController implements Alerts {
         endShared.setDisable(d);
     }
 
+    public void clearStored(){
+        loc = null;
+        sqft = 0;
+        cDate = null;
+        sShared = null;
+        eShared = null;
+    }
+
     public boolean validity(){
+        clearStored();
+
         boolean valid = true;
 
         if(buildingComboBox.getValue() == null){
@@ -186,7 +196,7 @@ public class UpdateBuildingController implements Alerts {
             if(squareFeet.getText() == null){
                 building.setSqFT(-1);
             }
-            else if(squareFeet.getText() == null){
+            else if(squareFeet.getText() == null || squareFeet.getText().isEmpty()){
                 building.setSqFT(-1);
             }else{
                 building.setSqFT(Integer.parseInt(squareFeet.getText()));
@@ -216,6 +226,7 @@ public class UpdateBuildingController implements Alerts {
     }
 
     public void onChange(){
+        clearErrors();
         if(buildingComboBox.getValue() != null){
             setDisableInput(false);
             Building building = buildingComboBox.getValue();

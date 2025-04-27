@@ -120,7 +120,17 @@ public class UpdateGasController implements Alerts {
         billedCCF.setDisable(d);
     }
 
+    public void clearStored(){
+        cCharges = 0;
+        mRead = 0;
+        fBilling = null;
+        tBilling = null;
+        bCCF = 0;
+    }
+
     public boolean validity(){
+        clearStored();
+
         boolean valid = true;
 
         if(buildingComboBox.getValue() == null){
@@ -131,7 +141,7 @@ public class UpdateGasController implements Alerts {
             building = buildingComboBox.getValue();
         }
 
-        if(currentCharges.getText() == null){
+        if(currentCharges.getText() == null || currentCharges.getText().isEmpty()){
             currentChargesError.setText("ERROR: Current Charges can't be nothing");
             valid = false;
         }else{
@@ -147,7 +157,7 @@ public class UpdateGasController implements Alerts {
             }
         }
 
-        if(meterRead.getText() == null){
+        if(meterRead.getText() == null || meterRead.getText().isEmpty()){
             meterReadError.setText("ERROR: Meter Read can't be nothing");
             valid = false;
         }else{
@@ -163,7 +173,7 @@ public class UpdateGasController implements Alerts {
             }
         }
 
-        if(billedCCF.getText() == null){
+        if(billedCCF.getText() == null || billedCCF.getText().isEmpty()){
             billedCCFError.setText("ERROR: Billed CCF can't be nothing");
             valid = false;
         }else{
@@ -291,6 +301,7 @@ public class UpdateGasController implements Alerts {
     }
 
     public void onChange(){
+        clearGasErrors();
         if(buildingComboBox.getValue() != null && yearComboBox.getValue() != null && monthComboBox.getValue() != null){
             Building selectedBuilding = buildingComboBox.getValue();
             int selectedYear = yearComboBox.getValue();

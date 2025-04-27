@@ -80,7 +80,17 @@ public class AddBuildingController implements Alerts {
         endShared.setValue(null);
     }
 
+    public void clearStored(){
+        loc = null;
+        sqft = 0;
+        cDate = null;
+        sShared = null;
+        eShared = null;
+    }
+
     public boolean validity(){
+        clearStored();
+
         boolean valid = true;
 
         if(buildingName.getText() == null || buildingName.getText().isEmpty()){
@@ -190,6 +200,7 @@ public class AddBuildingController implements Alerts {
                         insertSuccessful();
                         stage.close();
                         clearInputs();
+                        clearStored();
                     } else {
                         stage.close();
                         insertFail();

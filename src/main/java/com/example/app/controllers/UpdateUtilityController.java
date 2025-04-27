@@ -84,6 +84,7 @@ public class UpdateUtilityController implements Alerts {
     }
 
     public void onChange() {
+        clearErrors();
         if(buildingComboBox.getValue() != null && yearComboBox.getValue() != null && monthComboBox.getValue() != null) {
             Building selectedBuilding = buildingComboBox.getValue();
             int selectedYear = yearComboBox.getValue();
@@ -163,6 +164,7 @@ public class UpdateUtilityController implements Alerts {
                 yearComboBox.setValue(null);
                 monthComboBox.setValue(null);
                 selectedUtility = null;
+                clearStored();
                 updateSuccessful();
             }
             else {
@@ -213,6 +215,8 @@ public class UpdateUtilityController implements Alerts {
     }
 
     private boolean utilityValidity() {
+        clearStored();
+
         boolean valid = true;
 
         if(electricityUsage.getText() == null || electricityUsage.getText().isEmpty()){
@@ -375,6 +379,15 @@ public class UpdateUtilityController implements Alerts {
         waterUsage.setDisable(false);
         sewageCost.setDisable(false);
         miscCost.setDisable(false);
+    }
+
+    public void clearStored(){
+        eUsage = 0;
+        eCost = 0;
+        wUsage = 0;
+        wCost = 0;
+        sCost = 0;
+        mCost = 0;
     }
 
     private void setInputDisabled(boolean disabled) {
