@@ -2,9 +2,7 @@ package com.example.app.dao;
 
 import com.example.app.model.Gas;
 
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -49,5 +47,23 @@ public class GasRecords implements DBQueries{
             gasses.add(gas);
         }
         return gasses;
+    }
+
+    public boolean findGas(int year, int month, int id){
+        Connection connection = dbConn.getConnection();
+        String query = String.format(
+                "SELECT * FROM gas WHERE YEAR(to_billing) = %d AND MONTH(to_billing) = %d AND buildingID = %d",
+                year, month, id);
+        System.out.println(query);
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            ResultSet result = statement.executeQuery();
+            if (result != null && result.next()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            return false;
+        }
     }
 }

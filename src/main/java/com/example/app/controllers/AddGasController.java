@@ -193,12 +193,16 @@ public class AddGasController implements Alerts {
             GasRecords gasRecords = new GasRecords(dbConn);
             boolean success = gasRecords.insertGas(gas);
 
-            if (success) {
-                // Log inserted data here
-                insertSuccessful();
-                clearGasInputs();
-            } else {
-                insertFail();
+            if(gasRecords.findGas(toBilling.getValue().getYear(), toBilling.getValue().getMonthValue(), gas.getBuildingID())){
+                alreadyExists();
+            }else {
+                if (success) {
+                    // Log inserted data here
+                    insertSuccessful();
+                    clearGasInputs();
+                } else {
+                    insertFail();
+                }
             }
         }
     }
