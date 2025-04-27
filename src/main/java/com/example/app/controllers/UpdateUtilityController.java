@@ -2,6 +2,7 @@ package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
 import com.example.app.dao.DBConn;
+import com.example.app.dao.MasterMeterLogic;
 import com.example.app.dao.UpdateUtilityLogic;
 import com.example.app.model.Building;
 import com.example.app.model.Utility;
@@ -166,6 +167,10 @@ public class UpdateUtilityController implements Alerts {
                 selectedUtility = null;
                 clearStored();
                 updateSuccessful();
+                if (utility.getBuildingID() == 40) {
+                    MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn);
+                    masterMeterLogic.singleUpdate(utility);
+                }
             }
             else {
                 updateFail();

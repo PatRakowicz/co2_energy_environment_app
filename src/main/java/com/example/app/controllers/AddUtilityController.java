@@ -1,9 +1,6 @@
 package com.example.app.controllers;
 
-import com.example.app.dao.BuildingRecords;
-import com.example.app.dao.DBConn;
-import com.example.app.dao.UtilityCsvLogic;
-import com.example.app.dao.UtilityRecords;
+import com.example.app.dao.*;
 import com.example.app.model.Building;
 import com.example.app.model.Utility;
 import com.example.app.utils.Alerts;
@@ -267,8 +264,9 @@ public class AddUtilityController implements Alerts {
                     insertSuccessful();
                     clearUtilityInputs();
                     clearStored();
-                    if (buildingComboBox.getValue().getName().equals("Master Meter")) {
-                        averageMasterMeter(eCost, eUsage);
+                    if (utility.getBuildingID() == 40) {
+                        MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn);
+                        masterMeterLogic.singleUpdate(utility);
                     }
                 } else {
                     insertFail();
@@ -341,9 +339,5 @@ public class AddUtilityController implements Alerts {
             exporter.exportCsvTemplate(file);
             System.out.println("CSV Template Exported.");
         }
-    }
-
-    public void averageMasterMeter(float masterCost, float masterUsage){
-
     }
 }
