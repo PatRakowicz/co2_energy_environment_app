@@ -5,7 +5,13 @@ import com.example.app.dao.DBConn;
 import com.example.app.model.Building;
 import com.example.app.utils.Alerts;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -152,24 +158,51 @@ public class AddBuildingController implements Alerts {
     public void add(){
         clearErrors();
         if(validity()){
-            Building building = new Building();
+            try {
+                //load resource file into new stage
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/building-add-confirmation.fxml"));
+                Parent root = loader.load();
+                Scene scene = new Scene(root);
+                Stage stage = new Stage();
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setScene(scene);
+                stage.setResizable(false);
+                stage.initStyle(StageStyle.UTILITY);
 
-            building.setName(name);
-            building.setLocation(loc);
-            building.setSqFT(sqft);
-            building.setDate(cDate);
-            building.setStartShared(sShared);
-            building.setEndShared(eShared);
+                Button yes = (Button) scene.lookup("#yes");
+                Button no = (Button) scene.lookup("#no");
 
-            BuildingRecords buildingRecords = new BuildingRecords(dbConn);
-            boolean success = buildingRecords.insertBuilding(building);
+                yes.setOnAction(e -> {
+                    Building building = new Building();
 
-            if (success) {
-                // Log inserted data here
-                insertSuccessful();
-                clearInputs();
-            } else {
-                insertFail();
+                    building.setName(name);
+                    building.setLocation(loc);
+                    building.setSqFT(sqft);
+                    building.setDate(cDate);
+                    building.setStartShared(sShared);
+                    building.setEndShared(eShared);
+
+                    BuildingRecords buildingRecords = new BuildingRecords(dbConn);
+                    boolean success = buildingRecords.insertBuilding(building);
+
+                    if (success) {
+                        // Log inserted data here
+                        insertSuccessful();
+                        stage.close();
+                        clearInputs();
+                    } else {
+                        stage.close();
+                        insertFail();
+                    }
+                });
+
+                no.setOnAction(e -> {
+                    stage.close();
+                });
+
+                stage.show();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
