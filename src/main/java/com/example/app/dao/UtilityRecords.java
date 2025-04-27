@@ -4,6 +4,7 @@ import com.example.app.model.Utility;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 
 public class UtilityRecords implements DBQueries {
@@ -103,5 +104,22 @@ public class UtilityRecords implements DBQueries {
         }
 
         return utilities;
+    }
+
+    public boolean findUtility(int year, int month, int id){
+        Connection connection = dbConn.getConnection();
+        String query = String.format(
+                "SELECT * FROM utility WHERE YEAR(date) = %d AND MONTH(date) = %d AND buildingID = %d",
+                year, month, id);
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            ResultSet result = statement.executeQuery();
+            if (result != null && result.next()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            return false;
+        }
     }
 }

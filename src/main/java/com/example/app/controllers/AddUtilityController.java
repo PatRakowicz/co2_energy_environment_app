@@ -245,17 +245,21 @@ public class AddUtilityController implements Alerts {
             utility.setMiscCost(mCost);
 
             UtilityRecords utilityRecords = new UtilityRecords(dbConn);
-            boolean success = utilityRecords.insertUtility(utility);
+            if(utilityRecords.findUtility(date.getYear(), date.getMonthValue(), utility.getBuildingID())){
+                alreadyExists();
+            }else {
+                boolean success = utilityRecords.insertUtility(utility);
 
-            if (success) {
-                // Log inserted data here
-                insertSuccessful();
-                clearUtilityInputs();
-                if(buildingComboBox.getValue().getName().equals("Master Meter")){
-                    averageMasterMeter(eCost, eUsage);
+                if (success) {
+                    // Log inserted data here
+                    insertSuccessful();
+                    clearUtilityInputs();
+                    if (buildingComboBox.getValue().getName().equals("Master Meter")) {
+                        averageMasterMeter(eCost, eUsage);
+                    }
+                } else {
+                    insertFail();
                 }
-            } else {
-                insertFail();
             }
         }
 

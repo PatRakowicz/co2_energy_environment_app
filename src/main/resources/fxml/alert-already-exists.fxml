@@ -6,15 +6,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="110.0" prefWidth="460.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Label layoutX="14.0" layoutY="26.0" text="Data failed to delete!">
+        <Label layoutX="14.0" layoutY="14.0" text="Entry already exists for this month!">
             <font>
                 <Font size="18.0" />
             </font>
         </Label>
-        <Label layoutX="14.0" layoutY="53.0" text="Try again or check database connection">
+        <Label layoutX="14.0" layoutY="42.0" text="If this is incorrect, find the entry in the ">
             <font>
                 <Font size="18.0" />
             </font>
@@ -24,5 +23,10 @@
                 <Image url="@../images/cross.png" />
             </image>
         </ImageView>
+      <Label layoutX="14.0" layoutY="69.0" text="update page and update the entry">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
     </children>
 </AnchorPane>
