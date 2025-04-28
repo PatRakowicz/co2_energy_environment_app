@@ -92,6 +92,7 @@ public class ApplicationController {
     }
 
     public void openDBWindow() {
+        boolean isConnected = dbConn.isConnectionSuccessful();
         try {
             if (DBStage != null && DBStage.isShowing()) {
                 return;
@@ -113,6 +114,9 @@ public class ApplicationController {
             DBStage.setOnHidden(windowEvent -> {
                 DBButton.setDisable(false);
                 updateDBButtonStatus();
+                if(dbConn.isConnectionSuccessful() && !isConnected){
+                    initialize();
+                }
             });
 
             DBStage.show();
