@@ -24,11 +24,11 @@ public class GasRecords implements DBQueries {
         String values = String.format(
                 "%d, %.2f, '%s', '%s', %.2f, %.2f",
                 gas.getBuildingID(),
-                gas.getCurrent_charges(),
-                new Date(gas.getFrom_billing().getTime()),
-                new Date(gas.getTo_billing().getTime()),
-                gas.getMeter_read(),
-                gas.getBilled_ccf()
+                gas.getCurrentCharges(),
+                new Date(gas.getFromBilling().getTime()),
+                new Date(gas.getToBilling().getTime()),
+                gas.getMeterRead(),
+                gas.getBilledCCF()
         );
         return insert(table, columns, values, dbConn);
     }
@@ -49,12 +49,12 @@ public class GasRecords implements DBQueries {
                 Gas gas = new Gas();
 
                 gas.setBuildingID(resultSet.getInt("buildingID"));
-                gas.setCurrent_charges(resultSet.getFloat("current_charges"));
+                gas.setCurrentCharges(resultSet.getFloat("current_charges"));
                 gas.setRate(resultSet.getString("rate"));
-                gas.setTo_billing(resultSet.getDate("to_billing"));
-                gas.setFrom_billing(resultSet.getDate("from_billing"));
-                gas.setMeter_read(resultSet.getFloat("meter_read"));
-                gas.setBilled_ccf(resultSet.getFloat("billed_ccf"));
+                gas.setToBilling(resultSet.getDate("to_billing"));
+                gas.setFromBilling(resultSet.getDate("from_billing"));
+                gas.setMeterRead(resultSet.getFloat("meter_read"));
+                gas.setBilledCCF(resultSet.getFloat("billed_ccf"));
 
                 gasList.add(gas);
             }
