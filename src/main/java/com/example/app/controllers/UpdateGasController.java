@@ -2,9 +2,11 @@ package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
 import com.example.app.dao.DBConn;
+import com.example.app.dao.LogRecords;
 import com.example.app.dao.UpdateGasLogic;
 import com.example.app.model.Building;
 import com.example.app.model.Gas;
+import com.example.app.model.Log;
 import com.example.app.utils.Alerts;
 import com.example.app.utils.FilteredBuildingBox;
 import javafx.application.Platform;
@@ -250,6 +252,12 @@ public class UpdateGasController implements Alerts {
             boolean success = updateGasLogic.updateGas(building, gas);
 
             if (success){
+                LogRecords logRecords = new LogRecords(dbConn);
+                Log log = new Log();
+                log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
+                log.setEvent("Gas for `" + monthComboBox + ", " + yearComboBox + "` was updated.");
+                logRecords.insertLog(log);
+
                 clearGasInputs();
                 yearComboBox.setValue(null);
                 monthComboBox.setValue(null);
@@ -282,6 +290,13 @@ public class UpdateGasController implements Alerts {
                 yes.setOnAction(e -> {
                     boolean success = updateGasLogic.deleteGas(selectedGas);
                     if(success){
+
+                        LogRecords logRecords = new LogRecords(dbConn);
+                        Log log = new Log();
+                        log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
+                        log.setEvent("Gas for `" + monthComboBox + ", " + yearComboBox + "` was deleted.");
+                        logRecords.insertLog(log);
+
                         deleteSuccessful();
                         clearGasInputs();
                         yearComboBox.setValue(null);
