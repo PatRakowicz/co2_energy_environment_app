@@ -1,10 +1,8 @@
 package com.example.app.controllers;
 
-import com.example.app.dao.BuildingRecords;
-import com.example.app.dao.DBConn;
-import com.example.app.dao.UtilityCsvLogic;
-import com.example.app.dao.UtilityRecords;
+import com.example.app.dao.*;
 import com.example.app.model.Building;
+import com.example.app.model.Log;
 import com.example.app.model.Utility;
 import com.example.app.utils.Alerts;
 import com.example.app.utils.FilteredBuildingBox;
@@ -249,6 +247,12 @@ public class AddUtilityController implements Alerts {
 
             if (success) {
                 // Log inserted data here
+                LogRecords logRecords = new LogRecords(dbConn);
+                Log log = new Log();
+                log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
+                log.setEvent("Gas entry `" + utility.getUtilityID() + "` added.");
+                logRecords.insertLog(log);
+
                 insertSuccessful();
                 clearUtilityInputs();
                 if(buildingComboBox.getValue().getName().equals("Master Meter")){
@@ -307,7 +311,14 @@ public class AddUtilityController implements Alerts {
         if (file != null && dbConn != null) {
             UtilityCsvLogic uploader = new UtilityCsvLogic(dbConn);
             uploader.importUtilityCSV(file);
-            System.out.println("CSV Upload Complete.");
+
+            LogRecords logRecords = new LogRecords(dbConn);
+            Log log = new Log();
+            log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
+            log.setEvent("CSV was uploaded for Utility.");
+            logRecords.insertLog(log);
+
+//            System.out.println("CSV Upload Complete.");
         }
     }
 

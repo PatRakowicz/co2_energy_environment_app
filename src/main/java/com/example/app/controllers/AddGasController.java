@@ -1,11 +1,9 @@
 package com.example.app.controllers;
 
-import com.example.app.dao.BuildingRecords;
-import com.example.app.dao.DBConn;
-import com.example.app.dao.GasCsvLogic;
-import com.example.app.dao.GasRecords;
+import com.example.app.dao.*;
 import com.example.app.model.Building;
 import com.example.app.model.Gas;
+import com.example.app.model.Log;
 import com.example.app.utils.Alerts;
 import com.example.app.utils.FilteredBuildingBox;
 import javafx.fxml.FXML;
@@ -195,6 +193,12 @@ public class AddGasController implements Alerts {
 
             if (success) {
                 // Log inserted data here
+                LogRecords logRecords = new LogRecords(dbConn);
+                Log log = new Log();
+                log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
+                log.setEvent("Gas entry `" + gas.getGasID() + "` added.");
+                logRecords.insertLog(log);
+
                 insertSuccessful();
                 clearGasInputs();
             } else {
@@ -213,7 +217,14 @@ public class AddGasController implements Alerts {
         if (file != null && dbConn != null) {
             GasCsvLogic uploader = new GasCsvLogic(dbConn);
             uploader.importGasCSV(file);
-            System.out.println("CSV Upload Complete.");
+
+            LogRecords logRecords = new LogRecords(dbConn);
+            Log log = new Log();
+            log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
+            log.setEvent("CSV was uploaded for Gas.");
+            logRecords.insertLog(log);
+
+//            System.out.println("CSV Upload Complete.");
         }
     }
 
