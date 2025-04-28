@@ -82,35 +82,39 @@ public class UtilityCsvLogic implements DBQueries {
                     continue;
                 }
 
-                Utility utility = new Utility();
-                utility.setDate(sharedDate);
-                utility.setBuildingID(building.getBuildingID());
-                utility.setWaterUsage(parts.length > 1 ? parseOrNull(parts[1]) : null);
-                utility.setWaterCost(parts.length > 2 ? parseOrNull(parts[2]) : null);
-                utility.setElectricityUsage(parts.length > 3 ? parseOrNull(parts[3]) : null);
-                utility.setElectricityCost(parts.length > 4 ? parseOrNull(parts[4]) : null);
-                utility.setSewageCost(parts.length > 5 ? parseOrNull(parts[5]) : null);
-                utility.setUsageGal(parts.length > 6 ? parseOrNull(parts[6]) : null);
-                utility.setMiscCost(parts.length > 7 ? parseOrNull(parts[7]) : null);
+                try {
+                    Utility utility = new Utility();
+                    utility.setDate(sharedDate);
+                    utility.setBuildingID(building.getBuildingID());
+                    utility.setWaterUsage(parts.length > 1 ? parseOrNull(parts[1]) : null);
+                    utility.setWaterCost(parts.length > 2 ? parseOrNull(parts[2]) : null);
+                    utility.setElectricityUsage(parts.length > 3 ? parseOrNull(parts[3]) : null);
+                    utility.setElectricityCost(parts.length > 4 ? parseOrNull(parts[4]) : null);
+                    utility.setSewageCost(parts.length > 5 ? parseOrNull(parts[5]) : null);
+                    utility.setUsageGal(parts.length > 6 ? parseOrNull(parts[6]) : null);
+                    utility.setMiscCost(parts.length > 7 ? parseOrNull(parts[7]) : null);
 
-                if (building.getName().equalsIgnoreCase("Master Meter")) {
-                    boolean hasRequiredFields =
-                            (utility.getElectricityUsage() != null && utility.getElectricityUsage() != 0) ||
-                                    (utility.getElectricityCost() != null && utility.getElectricityCost() != 0) ||
-                                    (utility.getMiscCost() != null && utility.getMiscCost() != 0);
+                    // Master Meter special handling
+                    if (building.getName().equalsIgnoreCase("Master Meter")) {
+                        boolean hasRequiredFields =
+                                (utility.getElectricityUsage() != null && utility.getElectricityUsage() != 0) ||
+                                        (utility.getElectricityCost() != null && utility.getElectricityCost() != 0) ||
+                                        (utility.getMiscCost() != null && utility.getMiscCost() != 0);
 
-                    if (!hasRequiredFields) {
-                        skippedCount++;
-                        errorMessages.add("Master Meter entry must have at least Electricity Usage, Electricity Cost, or Misc Cost filled.");
-                        continue;
+                        if (!hasRequiredFields) {
+                            skippedCount++;
+                            errorMessages.add("Master Meter entry must have at least Electricity Usage, Electricity Cost, or Misc Cost filled.");
+                            continue;
+                        }
+                        masterMeterInserted = true;
+                        masterUtility = utility;
                     }
-
-                    masterMeterInserted = true;
-                    masterUtility = utility;
+                    insertUtility(conn, building, utility);
+                    insertedCount++;
+                } catch (NumberFormatException e) {
+                    skippedCount++;
+                    errorMessages.add("Invalid numeric value in row for building: " + buildingName);
                 }
-
-                insertUtility(conn, building, utility);
-                insertedCount++;
             }
         } catch (IOException | SQLException e) {
             e.printStackTrace();
