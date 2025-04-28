@@ -95,7 +95,7 @@ public class UtilityCsvLogic implements DBQueries {
                     utility.setMiscCost(parts.length > 7 ? parseOrNull(parts[7]) : null);
 
                     // Master Meter special handling
-                    if (building.getName().equalsIgnoreCase("Master Meter")) {
+                    if (utility.getBuildingID() == 40) {
                         boolean hasRequiredFields =
                                 (utility.getElectricityUsage() != null && utility.getElectricityUsage() != 0) ||
                                         (utility.getElectricityCost() != null && utility.getElectricityCost() != 0) ||
