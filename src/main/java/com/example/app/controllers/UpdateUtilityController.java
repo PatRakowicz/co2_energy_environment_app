@@ -165,7 +165,7 @@ public class UpdateUtilityController implements Alerts {
                 LogRecords logRecords = new LogRecords(dbConn);
                 Log log = new Log();
                 log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
-                log.setEvent("Utility for `" + monthComboBox + ", " + yearComboBox + "` was updated.");
+                log.setEvent("Utility for building `" + utility.getBuildingID() + ", " + utility.getDate() + "` was updated.");
                 logRecords.insertLog(log);
 
                 clearInputs();
@@ -203,7 +203,7 @@ public class UpdateUtilityController implements Alerts {
                         LogRecords logRecords = new LogRecords(dbConn);
                         Log log = new Log();
                         log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
-                        log.setEvent("Utility for `" + monthComboBox + ", " + yearComboBox + "` was deleted.");
+                        log.setEvent("Utility for building `" + selectedUtility.getBuildingID() + ", " + selectedUtility.getDate() + "` was deleted.");
                         logRecords.insertLog(log);
 
                         deleteSuccessful();

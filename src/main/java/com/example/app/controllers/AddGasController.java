@@ -196,7 +196,7 @@ public class AddGasController implements Alerts {
                 LogRecords logRecords = new LogRecords(dbConn);
                 Log log = new Log();
                 log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
-                log.setEvent("Gas entry `" + gas.getGasID() + "` added.");
+                log.setEvent("Gas entry for building `" + gas.getBuildingID() + "` added.");
                 logRecords.insertLog(log);
 
                 insertSuccessful();
