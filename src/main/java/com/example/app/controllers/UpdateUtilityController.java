@@ -381,9 +381,7 @@ public class UpdateUtilityController implements Alerts {
         // disable electricity fields
         electricityUsage.setDisable(true);
         electricityCost.setDisable(true);
-        // clear electricity fields so no electricity data gets added by mistake
-        electricityUsage.setText(null);
-        electricityCost.setText(null);
+
         // enable remaining fields in case they were disabled
         waterCost.setDisable(false);
         waterUsage.setDisable(false);
