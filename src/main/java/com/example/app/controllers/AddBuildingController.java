@@ -17,6 +17,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class AddBuildingController implements Alerts {
@@ -213,6 +214,19 @@ public class AddBuildingController implements Alerts {
                         if(sShared != null){
                             MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn, false);
                             masterMeterLogic.updateAllFrom(sShared);
+
+                            // log the master meter change
+                            log = new Log();
+                            log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
+                            log.setEvent(String.format(
+                                    "Building %s added, updated all master meter values from %s to %s, %d entries updated",
+                                    building.getName(),
+                                    startShared.getValue(),
+                                    LocalDate.now(),
+                                    masterMeterLogic.getUpdatedEntries()
+                                    )
+                            );
+                            logRecords.insertLog(log);
                         }else{
                             insertSuccessful();
                         }

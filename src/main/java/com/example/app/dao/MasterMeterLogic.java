@@ -2,6 +2,7 @@ package com.example.app.dao;
 
 
 import com.example.app.model.Building;
+import com.example.app.model.Log;
 import com.example.app.model.Utility;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -25,6 +26,13 @@ public class MasterMeterLogic implements DBQueries {
 
     public MasterMeterLogic(DBConn c, boolean p){dbConn = c; printStats = p;}
 
+    public int getNewEntries(){
+        return newEntries;
+    }
+
+    public int getUpdatedEntries(){
+        return updatedEntries;
+    }
 
     public void resetStats(){
         newEntries = 0;
@@ -126,6 +134,10 @@ public class MasterMeterLogic implements DBQueries {
 
         if(printStats) {
             showStats();
+            LogRecords logRecords = new LogRecords(dbConn);
+            Log log = new Log();
+            log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
+            logRecords.insertLog(log);
         }
     }
 
@@ -253,5 +265,12 @@ public class MasterMeterLogic implements DBQueries {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void updateMasterMeterDate(Date date){
+        String table = "building";
+        String setClause = String.format("date = '%s'", date);
+        String condition = "buildingID = 40";
+        update(table, setClause, condition, dbConn);
     }
 }

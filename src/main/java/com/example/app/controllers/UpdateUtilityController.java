@@ -174,17 +174,29 @@ public class UpdateUtilityController implements Alerts {
                 log.setEvent("Utility for `" + monthComboBox + ", " + yearComboBox + "` was updated.");
                 logRecords.insertLog(log);
 
+                if (building.getBuildingID() == 40) {
+                    MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn, true);
+                    masterMeterLogic.singleUpdate(utility);
+
+                    // log the master meter change
+                    log = new Log();
+                    log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
+                    log.setEvent(String.format(
+                                    "Master Meter utility updated, %d entries inserted, %d entries updated for %s",
+                                    masterMeterLogic.getNewEntries(),
+                                    masterMeterLogic.getUpdatedEntries(),
+                                    date
+                            )
+                    );
+                    logRecords.insertLog(log);
+                }else{
+                    updateSuccessful();
+                }
                 clearInputs();
                 yearComboBox.setValue(null);
                 monthComboBox.setValue(null);
                 selectedUtility = null;
                 clearStored();
-                if (utility.getBuildingID() == 40) {
-                    MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn, true);
-                    masterMeterLogic.singleUpdate(utility);
-                }else{
-                    updateSuccessful();
-                }
             }
             else {
                 updateFail();
