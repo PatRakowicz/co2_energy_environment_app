@@ -6,8 +6,6 @@ import javafx.scene.control.Alert;
 
 import java.io.*;
 import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -45,6 +43,12 @@ public class GasCsvLogic implements DBQueries {
                 lineNumber++;
                 String[] parts = line.split(",", -1);
                 for (int i = 0; i < parts.length; i++) parts[i] = parts[i].trim();
+
+                if (parts.length > 3 && (parts[2].equalsIgnoreCase("From Billing (DD/MM/YYYY)") || parts[3].equalsIgnoreCase("To Billing (DD/MM/YYYY)"))) {
+                    skippedCount++;
+                    errorMessages.add("Skipped header row detected in upload.");
+                    continue;
+                }
 
                 if (parts.length < 6) {
                     skippedCount++;
@@ -110,7 +114,7 @@ public class GasCsvLogic implements DBQueries {
             }
 
             writer.write(String.join(",", new String[]{
-                    "Building Name", "Current Charges", "From Billing", "To Billing", "Meter Read", "Billed CCF"
+                    "Building Name", "Current Charges", "From Billing (DD/MM/YYYY)", "To Billing (DD/MM/YYYY)", "Meter Read", "Billed CCF"
             }));
             writer.newLine();
 
@@ -145,12 +149,14 @@ public class GasCsvLogic implements DBQueries {
         }
     }
 
-    private Float parseOrNull(String value) {
-        try {
-            return value.trim().isEmpty() ? null : Float.parseFloat(value);
-        } catch (NumberFormatException e) {
-            return null;
+    private Float parseOrNull(String value) throws NumberFormatException {
+        if (value.trim().isEmpty()) return null;
+
+        String sanitized = value.replaceAll("[$,%]", "").trim();
+        if (!sanitized.matches("-?\\d*(\\.\\d+)?")) {
+            throw new NumberFormatException("Invalid numeric value: " + value);
         }
+        return Float.parseFloat(sanitized);
     }
 
     private Date parseDateOrNull(String value) {
