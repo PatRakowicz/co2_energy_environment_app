@@ -106,6 +106,11 @@ public class UtilityCsvLogic implements DBQueries {
                             errorMessages.add("Master Meter entry must have at least Electricity Usage, Electricity Cost, or Misc Cost filled.");
                             continue;
                         }
+                        utility.setWaterUsage(null);
+                        utility.setWaterCost(null);
+                        utility.setSewageCost(null);
+                        utility.setUsageGal(null);
+
                         masterMeterInserted = true;
                         masterUtility = utility;
                     }
