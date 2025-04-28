@@ -55,6 +55,16 @@ public class ApplicationController {
         }
     }
 
+    public void resetPages(){
+        updateDBButtonStatus();
+        addDataController = new AddDataController(dbConn);
+        reportController = new ReportController();
+        updateDataController = new UpdateDataController(dbConn);
+        viewDataController = new ViewDataController(dbConn);
+        switchToViewData(new ActionEvent());
+        viewPageButton.setDisable(true);
+    }
+
     public void setPageContent(String fxmlFile, Object controller){
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
@@ -115,7 +125,7 @@ public class ApplicationController {
                 DBButton.setDisable(false);
                 updateDBButtonStatus();
                 if(dbConn.isConnectionSuccessful() && !isConnected){
-                    initialize();
+                    resetPages();
                 }
             });
 
