@@ -240,11 +240,11 @@ public class UpdateGasController implements Alerts {
             Gas gas = new Gas();
             gas.setGasID(selectedGas.getGasID());
             gas.setBuildingID(selectedGas.getBuildingID());
-            gas.setCurrent_charges(cCharges);
-            gas.setMeter_read(mRead);
-            gas.setFrom_billing(fBilling);
-            gas.setTo_billing(tBilling);
-            gas.setBilled_ccf(bCCF);
+            gas.setCurrentCharges(cCharges);
+            gas.setMeterRead(mRead);
+            gas.setFromBilling(fBilling);
+            gas.setToBilling(tBilling);
+            gas.setBilledCCF(bCCF);
 
             Building building = buildingComboBox.getValue();
             boolean success = updateGasLogic.updateGas(building, gas);
@@ -316,11 +316,11 @@ public class UpdateGasController implements Alerts {
 
             if (gas != null) {
                 selectedGas = gas;
-                currentCharges.setText(Float.toString(gas.getCurrent_charges()));
-                meterRead.setText(Float.toString(gas.getMeter_read()));
-                fromBilling.setValue(gas.getFrom_billing().toLocalDate());
-                toBilling.setValue(gas.getTo_billing().toLocalDate());
-                billedCCF.setText(Float.toString(gas.getBilled_ccf()));
+                currentCharges.setText(Float.toString(gas.getCurrentCharges()));
+                meterRead.setText(Float.toString(gas.getMeterRead()));
+                fromBilling.setValue(gas.getFromBilling().toLocalDate());
+                toBilling.setValue(gas.getToBilling().toLocalDate());
+                billedCCF.setText(Float.toString(gas.getBilledCCF()));
                 setInputDisabled(false);
             } else {
                 clearGasInputs();

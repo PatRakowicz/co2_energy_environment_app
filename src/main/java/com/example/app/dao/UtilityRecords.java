@@ -6,6 +6,8 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UtilityRecords implements DBQueries {
     private DBConn dbConn;
@@ -71,7 +73,36 @@ public class UtilityRecords implements DBQueries {
         return insert(table, columns, values, dbConn);
     }
 
+    public Map<String, Float> getBuildingTotalUsage() {
+        Map<String, Float> usageDictionary = new HashMap<>();
+
+        String query = """
+            SELECT b.name AS Building,
+                SUM(coalesce(u.e_usage, 0) + coalesce(u.w_usage, 0)) AS Total
+            FROM utility u
+            JOIN building b ON u.buildingID = b.buildingID
+            GROUP BY b.name
+            """;
+
+        try (PreparedStatement statement = this.dbConn.getConnection().prepareStatement(query)) {
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                String name = resultSet.getString("Building");
+                Float usage = resultSet.getFloat("Total");
+
+                usageDictionary.put(name, usage);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.printf("Caught SQL Error: %s", e);
+        }
+
+        return usageDictionary;
+    }
+
     public ArrayList<Utility> getUtilities(int buildingID, LocalDate start, LocalDate end, DBConn dbConn) {
+        utilities.clear();
+
         String query = "SELECT * FROM utility "
                      + "WHERE buildingID = ? "
                      + "AND date >= ? AND date <= ?";

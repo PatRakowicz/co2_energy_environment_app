@@ -32,11 +32,11 @@ public class UpdateGasLogic implements DBQueries{
             if (resultSet != null && resultSet.next()) {
                 gas.setGasID(resultSet.getInt("gasID"));
                 gas.setBuildingID(resultSet.getInt("buildingID"));
-                gas.setCurrent_charges(resultSet.getFloat("current_charges"));
-                gas.setFrom_billing(resultSet.getDate("from_billing"));
-                gas.setTo_billing(resultSet.getDate("to_billing"));
-                gas.setMeter_read(resultSet.getFloat("meter_read"));
-                gas.setBilled_ccf(resultSet.getFloat("billed_ccf"));
+                gas.setCurrentCharges(resultSet.getFloat("current_charges"));
+                gas.setFromBilling(resultSet.getDate("from_billing"));
+                gas.setToBilling(resultSet.getDate("to_billing"));
+                gas.setMeterRead(resultSet.getFloat("meter_read"));
+                gas.setBilledCCF(resultSet.getFloat("billed_ccf"));
             } else {
                 return null;
             }
@@ -48,18 +48,18 @@ public class UpdateGasLogic implements DBQueries{
     }
 
     public boolean updateGas(Building building, Gas gas){
-        if (building == null || building.getBuildingID() == 0 || gas.getTo_billing() == null) {
+        if (building == null || building.getBuildingID() == 0 || gas.getToBilling() == null) {
             System.out.println("Invalid input for updateUtility.");
             return false;
         }
         String table = "gas";
         String setClause = String.format(
                 "current_charges = %.2f, from_billing = '%s', to_billing = '%s', meter_read = %.2f, billed_ccf = %.2f",
-                gas.getCurrent_charges(),
-                gas.getFrom_billing(),
-                gas.getTo_billing(),
-                gas.getMeter_read(),
-                gas.getBilled_ccf()
+                gas.getCurrentCharges(),
+                gas.getFromBilling(),
+                gas.getToBilling(),
+                gas.getMeterRead(),
+                gas.getBilledCCF()
                 );
         String condition = String.format("gasID = %d", gas.getGasID());
         return update(table, setClause, condition, dbConn);

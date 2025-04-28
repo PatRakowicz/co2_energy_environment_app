@@ -196,12 +196,12 @@ public class AddGasController implements Alerts {
         if(validity()){
             Gas gas = new Gas();
             gas.setBuildingID(building.getBuildingID());
-            gas.setCurrent_charges(cCharges);
+            gas.setCurrentCharges(cCharges);
             gas.setRate("NEED TO REMOVE THIS");
-            gas.setFrom_billing(fBilling);
-            gas.setTo_billing(tBilling);
-            gas.setMeter_read(mRead);
-            gas.setBilled_ccf(bCCF);
+            gas.setFromBilling(fBilling);
+            gas.setToBilling(tBilling);
+            gas.setMeterRead(mRead);
+            gas.setBilledCCF(bCCF);
 
             GasRecords gasRecords = new GasRecords(dbConn);
             boolean success = gasRecords.insertGas(gas);

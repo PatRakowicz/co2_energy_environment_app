@@ -1,7 +1,6 @@
 package com.example.app.controllers;
 
 import com.example.app.dao.DBConn;
-import com.example.app.model.Building;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +12,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class ApplicationController {
     @FXML
@@ -27,7 +25,7 @@ public class ApplicationController {
     private DBConn dbConn;
 
     private AddDataController addDataController;
-    private ReportController reportController;
+    private LogController logController;
     private UpdateDataController updateDataController;
     private ViewDataController viewDataController;
 
@@ -37,7 +35,7 @@ public class ApplicationController {
             dbConn = new DBConn();
             updateDBButtonStatus();
             addDataController = new AddDataController(dbConn);
-            reportController = new ReportController();
+            logController = new LogController();
             updateDataController = new UpdateDataController(dbConn);
             viewDataController = new ViewDataController(dbConn);
 
@@ -146,7 +144,7 @@ public class ApplicationController {
     public void switchToReport(ActionEvent event) {
         enableButtons();
         reportPageButton.setDisable(true);
-        setPageContent("/fxml/report-view.fxml", reportController);
+        setPageContent("/fxml/log-view.fxml", logController);
     }
 
     @FXML
