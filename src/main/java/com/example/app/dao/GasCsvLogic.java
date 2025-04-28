@@ -163,9 +163,11 @@ public class GasCsvLogic implements DBQueries {
         try {
             if (value.trim().isEmpty()) return null;
 
-            String[] parts = value.trim().split("/");
-            if (parts.length != 3) return null;
+            value = value.trim();
 
+            if (!value.matches("\\d{2}/\\d{2}/\\d{4}")) return null;
+
+            String[] parts = value.split("/");
             int day = Integer.parseInt(parts[0]);
             int month = Integer.parseInt(parts[1]);
             int year = Integer.parseInt(parts[2]);
@@ -174,6 +176,7 @@ public class GasCsvLogic implements DBQueries {
             cal.setLenient(false);
             cal.set(year, month - 1, day);
             return new java.sql.Date(cal.getTimeInMillis());
+
         } catch (Exception e) {
             return null;
         }
