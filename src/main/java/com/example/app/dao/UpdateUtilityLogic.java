@@ -123,6 +123,9 @@ public class UpdateUtilityLogic implements DBQueries{
     }
 
     public int getMinUtilityYear() {
+        if(dbConn.getConnection() == null){
+            return 0;
+        }
         String query = "SELECT MIN(YEAR(date)) AS min_year FROM utility";
         try (PreparedStatement stmt = dbConn.getConnection().prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {

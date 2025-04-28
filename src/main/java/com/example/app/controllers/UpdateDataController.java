@@ -31,6 +31,11 @@ public class UpdateDataController{
         // set initial connection
         dbConn = conn;
 
+        // if the connection isn't there exit
+        if(dbConn == null){
+            return;
+        }
+
         // set tab controllers
         updateUtilityController = new UpdateUtilityController(dbConn);
         updateGasController = new UpdateGasController(dbConn);
@@ -38,17 +43,19 @@ public class UpdateDataController{
 
         // get tab content
         try{
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/update-utility-tab.fxml"));
-            fxmlLoader.setController(updateUtilityController);
-            utilityPane = fxmlLoader.load();
+            if(dbConn != null) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/update-utility-tab.fxml"));
+                fxmlLoader.setController(updateUtilityController);
+                utilityPane = fxmlLoader.load();
 
-            fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/update-gas-tab.fxml"));
-            fxmlLoader.setController(updateGasController);
-            gasPane = fxmlLoader.load();
+                fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/update-gas-tab.fxml"));
+                fxmlLoader.setController(updateGasController);
+                gasPane = fxmlLoader.load();
 
-            fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/update-building-tab.fxml"));
-            fxmlLoader.setController(updateBuildingController);
-            buildingPane = fxmlLoader.load();
+                fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/update-building-tab.fxml"));
+                fxmlLoader.setController(updateBuildingController);
+                buildingPane = fxmlLoader.load();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

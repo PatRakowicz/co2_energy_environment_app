@@ -43,6 +43,10 @@ public class AddUtilityController implements Alerts {
     }
 
     public void initialize() {
+        if(dbConn == null){
+            return;
+        }
+
         buildingRecords = new BuildingRecords(dbConn);
         buildings = buildingRecords.getBuildings();
         buildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
