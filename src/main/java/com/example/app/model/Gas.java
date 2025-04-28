@@ -1,15 +1,25 @@
 package com.example.app.model;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.sql.Date;
 
 public class Gas {
     private int buildingID;
+    private int gasID;
     private Float currentCharges;
     private String rate;
     private Date fromBilling;
     private Date toBilling;
     private Float meterRead;
     private Float billedCCF;
+
+    public int getGasID() {
+        return gasID;
+    }
+
+    public void setGasID(int gasID) {
+        this.gasID = gasID;
+    }
 
     // Getters and Setters for billed_ccf
     public Float getBilledCCF() {
@@ -66,6 +76,9 @@ public class Gas {
     }
 
     // Setter for buildingID
+    public int getBuildingID() {
+        return buildingID;
+    }
 
     public void setBuildingID(int buildingID) {
         this.buildingID = buildingID;
