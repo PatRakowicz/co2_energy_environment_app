@@ -2,7 +2,9 @@ package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
 import com.example.app.dao.DBConn;
+import com.example.app.dao.LogRecords;
 import com.example.app.model.Building;
+import com.example.app.model.Log;
 import com.example.app.utils.Alerts;
 import com.example.app.utils.FilteredBuildingBox;
 import javafx.application.Platform;
@@ -209,6 +211,12 @@ public class UpdateBuildingController implements Alerts {
                 buildingComboBox.setValue(null);
                 buildingComboBox.hide();
                 Platform.runLater(() -> {updateSuccessful();});
+
+                LogRecords logRecords = new LogRecords(dbConn);
+                Log log = new Log();
+                log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
+                log.setEvent("Building `" + building.getName() + "` was updated");
+                logRecords.insertLog(log);
             }else{
                 updateFail();
             }

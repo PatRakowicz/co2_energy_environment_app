@@ -2,7 +2,9 @@ package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
 import com.example.app.dao.DBConn;
+import com.example.app.dao.LogRecords;
 import com.example.app.model.Building;
+import com.example.app.model.Log;
 import com.example.app.utils.Alerts;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -166,6 +168,12 @@ public class AddBuildingController implements Alerts {
 
             if (success) {
                 // Log inserted data here
+                LogRecords logRecords = new LogRecords(dbConn);
+                Log log = new Log();
+                log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
+                log.setEvent("Created new building `" + building.getName() + "`");
+                logRecords.insertLog(log);
+
                 insertSuccessful();
                 clearInputs();
             } else {

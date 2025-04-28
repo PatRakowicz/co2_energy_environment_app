@@ -35,7 +35,7 @@ public class ApplicationController {
             dbConn = new DBConn();
             updateDBButtonStatus();
             addDataController = new AddDataController(dbConn);
-            logController = new LogController();
+            logController = new LogController(dbConn);
             updateDataController = new UpdateDataController(dbConn);
             viewDataController = new ViewDataController(dbConn);
 
@@ -131,6 +131,7 @@ public class ApplicationController {
         enableButtons();
         reportPageButton.setDisable(true);
         setPageContent("/fxml/log-view.fxml", logController);
+        logController.initialize();
     }
 
     @FXML
