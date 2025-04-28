@@ -3,6 +3,13 @@ package com.example.app.dao;
 
 import com.example.app.model.Building;
 import com.example.app.model.Utility;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -12,8 +19,19 @@ public class MasterMeterLogic implements DBQueries {
     private final DBConn dbConn;
     private float usageRate, costRate;
     private Utility masterUtility;
+    private boolean moreThanOne;
+    int newEntries, updatedEntries, failedNewEntries, failedUpdatedEntries;
 
-    public MasterMeterLogic(DBConn c){dbConn = c;}
+
+    public MasterMeterLogic(DBConn c){dbConn = c; moreThanOne = false;}
+
+
+    public void resetStats(){
+        newEntries = 0;
+        updatedEntries = 0;
+        failedUpdatedEntries = 0;
+        failedNewEntries = 0;
+    }
 
 
     // If the utility already exists returns the utilityID, if no utility exists returns 0,
@@ -66,11 +84,10 @@ public class MasterMeterLogic implements DBQueries {
     }
 
     public void singleUpdate(Utility m){
+        if(!moreThanOne){
+            resetStats();
+        }
         masterUtility = m;
-        int newEntries = 0;
-        int updatedEntries = 0;
-        int failedNewEntries = 0;
-        int failedUpdatedEntries = 0;
         LocalDate masterDate = new Date(masterUtility.getDate().getTime()).toLocalDate();
         int year = masterDate.getYear();
         int month = masterDate.getMonthValue();
@@ -95,7 +112,7 @@ public class MasterMeterLogic implements DBQueries {
             }
             // there was an error
             else if (id == -1){
-                //TODO print error messages?
+                System.out.println("There was an Error with retrieving information");
             }
             // update existing utility
             else{
@@ -107,13 +124,9 @@ public class MasterMeterLogic implements DBQueries {
             }
         }
 
-        System.out.println(String.format("Successful Inserts = %d", newEntries));
-        System.out.println(String.format("Filed Inserts = %d", failedNewEntries));
-        System.out.println(String.format("Successful Updates = %d", updatedEntries));
-        System.out.println(String.format("Failed Updates = %d", failedUpdatedEntries));
-
-
-        //TODO show success stats
+        if(!moreThanOne) {
+            showStats();
+        }
     }
 
     public ArrayList<Building> getAllBuildingsForDate(){
@@ -155,5 +168,90 @@ public class MasterMeterLogic implements DBQueries {
         }
         usageRate = masterUtility.getElectricityUsage() / total;
         costRate = masterUtility.getElectricityCost() / total;
+    }
+
+    public void updateAllFrom(Date firstDate){
+        resetStats();
+        moreThanOne = true;
+        ArrayList<Utility> masterUtilities = getMasterUtilities(firstDate);
+        for(Utility u : masterUtilities){
+            singleUpdate(u);
+        }
+
+        showStats();
+
+        moreThanOne = false;
+    }
+
+    public ArrayList<Utility> getMasterUtilities(Date firstDate){
+        ArrayList<Utility> masterUtilities = new ArrayList<Utility>();
+        Connection connection = dbConn.getConnection();
+        String query = String.format(
+                "SELECT * FROM utility WHERE buildingID = 40 AND date > '%s' AND date <= current_date()",
+                firstDate
+        );
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Utility utility = new Utility();
+
+                utility.setBuildingID(40);
+                utility.setDate(resultSet.getDate("date"));
+                utility.setElectricityCost(resultSet.getFloat("e_cost"));
+                utility.setElectricityUsage(resultSet.getFloat("e_usage"));
+                utility.setWaterCost(resultSet.getFloat("w_cost"));
+                utility.setWaterUsage(resultSet.getFloat("w_usage"));
+                utility.setSewageCost(resultSet.getFloat("sw_cost"));
+                utility.setMiscCost(resultSet.getFloat("misc_cost"));
+
+                masterUtilities.add(utility);
+            }
+        } catch (SQLException e) {
+            System.out.printf("Caught SQL Error: %s", e);
+            return null;
+        }
+
+        return masterUtilities;
+    }
+
+    public void showStats(){
+        try {
+            //load resource file into new stage
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/stats.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UTILITY);
+
+            Label one = (Label) scene.lookup("#one");
+            Label two = (Label) scene.lookup("#two");
+            Label three = (Label) scene.lookup("#three");
+            Label four = (Label) scene.lookup("#four");
+            one.setText(String.format("Successfully Inserted: %d", newEntries));
+            two.setText(String.format("Failed To Insert: %d", failedNewEntries));
+            three.setText(String.format("Successfully Updated: %d", updatedEntries));
+            four.setText(String.format("Failed To Update: %d", failedUpdatedEntries));
+
+            //if user clicks with mouse, close the stage
+            root.setOnMouseClicked(event -> {
+                if (event.getButton() == MouseButton.PRIMARY || event.getButton() == MouseButton.SECONDARY) {
+                    stage.close();
+                }
+            });
+
+            //if focus is lost close the stage
+            stage.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+                if (!isNowFocused) {
+                    stage.close();
+                }
+            });
+
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

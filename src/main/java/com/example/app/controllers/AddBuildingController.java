@@ -2,6 +2,7 @@ package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
 import com.example.app.dao.DBConn;
+import com.example.app.dao.MasterMeterLogic;
 import com.example.app.model.Building;
 import com.example.app.utils.Alerts;
 import javafx.fxml.FXML;
@@ -197,8 +198,13 @@ public class AddBuildingController implements Alerts {
 
                     if (success) {
                         // Log inserted data here
-                        insertSuccessful();
                         stage.close();
+                        if(sShared != null){
+                            MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn);
+                            masterMeterLogic.updateAllFrom(sShared);
+                        }else{
+                            insertSuccessful();
+                        }
                         clearInputs();
                         clearStored();
                     } else {

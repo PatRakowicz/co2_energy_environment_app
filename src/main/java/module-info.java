@@ -2,6 +2,7 @@ module com.example.app {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
+    requires jdk.jshell;
 
 
     opens com.example.app to javafx.fxml;

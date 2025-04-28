@@ -2,6 +2,7 @@ package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
 import com.example.app.dao.DBConn;
+import com.example.app.dao.MasterMeterLogic;
 import com.example.app.model.Building;
 import com.example.app.utils.Alerts;
 import com.example.app.utils.FilteredBuildingBox;
@@ -213,12 +214,24 @@ public class UpdateBuildingController implements Alerts {
 
             boolean success = buildingRecords.updateBuilding(building);
             if(success){
+                boolean updatingMasterMeter = false;
+                Building selectedBuilding = buildingComboBox.getValue();
+                if(selectedBuilding.getSqFT() != sqft || selectedBuilding.getStartShared() != sShared){
+                    updatingMasterMeter = true;
+                    MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn);
+                    masterMeterLogic.updateAllFrom(new java.sql.Date(selectedBuilding.getStartShared().getTime()));
+                }
                 buildingRecords = new BuildingRecords(dbConn);
                 buildings = buildingRecords.getBuildings();
                 buildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
                 buildingComboBox.setValue(null);
                 buildingComboBox.hide();
-                Platform.runLater(() -> {updateSuccessful();});
+                if(!updatingMasterMeter) {
+                    Platform.runLater(() -> {
+                        updateSuccessful();
+                    });
+                }
+                clearStored();
             }else{
                 updateFail();
             }
