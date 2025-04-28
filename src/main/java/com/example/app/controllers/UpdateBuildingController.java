@@ -218,7 +218,7 @@ public class UpdateBuildingController implements Alerts {
                 Building selectedBuilding = buildingComboBox.getValue();
                 if(selectedBuilding.getSqFT() != sqft || selectedBuilding.getStartShared() != sShared){
                     updatingMasterMeter = true;
-                    MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn);
+                    MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn, false);
                     masterMeterLogic.updateAllFrom(new java.sql.Date(selectedBuilding.getStartShared().getTime()));
                 }
                 buildingRecords = new BuildingRecords(dbConn);

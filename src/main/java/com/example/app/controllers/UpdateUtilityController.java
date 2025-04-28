@@ -166,10 +166,11 @@ public class UpdateUtilityController implements Alerts {
                 monthComboBox.setValue(null);
                 selectedUtility = null;
                 clearStored();
-                updateSuccessful();
                 if (utility.getBuildingID() == 40) {
-                    MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn);
+                    MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn, true);
                     masterMeterLogic.singleUpdate(utility);
+                }else{
+                    updateSuccessful();
                 }
             }
             else {

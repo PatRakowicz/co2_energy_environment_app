@@ -200,7 +200,7 @@ public class AddBuildingController implements Alerts {
                         // Log inserted data here
                         stage.close();
                         if(sShared != null){
-                            MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn);
+                            MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn, false);
                             masterMeterLogic.updateAllFrom(sShared);
                         }else{
                             insertSuccessful();

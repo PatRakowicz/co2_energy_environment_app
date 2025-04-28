@@ -19,11 +19,11 @@ public class MasterMeterLogic implements DBQueries {
     private final DBConn dbConn;
     private float usageRate, costRate;
     private Utility masterUtility;
-    private boolean moreThanOne;
+    private boolean printStats;
     int newEntries, updatedEntries, failedNewEntries, failedUpdatedEntries;
 
 
-    public MasterMeterLogic(DBConn c){dbConn = c; moreThanOne = false;}
+    public MasterMeterLogic(DBConn c, boolean p){dbConn = c; printStats = p;}
 
 
     public void resetStats(){
@@ -84,7 +84,7 @@ public class MasterMeterLogic implements DBQueries {
     }
 
     public void singleUpdate(Utility m){
-        if(!moreThanOne){
+        if(printStats){
             resetStats();
         }
         masterUtility = m;
@@ -124,7 +124,7 @@ public class MasterMeterLogic implements DBQueries {
             }
         }
 
-        if(!moreThanOne) {
+        if(printStats) {
             showStats();
         }
     }
@@ -172,7 +172,7 @@ public class MasterMeterLogic implements DBQueries {
 
     public void updateAllFrom(Date firstDate){
         resetStats();
-        moreThanOne = true;
+        printStats = false;
         ArrayList<Utility> masterUtilities = getMasterUtilities(firstDate);
         for(Utility u : masterUtilities){
             singleUpdate(u);
@@ -180,7 +180,7 @@ public class MasterMeterLogic implements DBQueries {
 
         showStats();
 
-        moreThanOne = false;
+        printStats = true;
     }
 
     public ArrayList<Utility> getMasterUtilities(Date firstDate){

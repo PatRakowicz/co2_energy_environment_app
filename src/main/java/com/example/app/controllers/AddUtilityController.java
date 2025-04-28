@@ -261,12 +261,13 @@ public class AddUtilityController implements Alerts {
 
                 if (success) {
                     // Log inserted data here
-                    insertSuccessful();
                     clearUtilityInputs();
                     clearStored();
                     if (utility.getBuildingID() == 40) {
-                        MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn);
+                        MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn, true);
                         masterMeterLogic.singleUpdate(utility);
+                    }else{
+                        insertSuccessful();
                     }
                 } else {
                     insertFail();
