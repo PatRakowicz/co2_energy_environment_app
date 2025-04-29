@@ -39,9 +39,19 @@ jlink {
         imageName = 'CO2EmissionsApp'
         installerName = 'CO2EmissionsAppInstaller'
         appVersion = '1.0'
+        skipInstaller = false
         installerType = org.gradle.internal.os.OperatingSystem.current().isWindows() ? 'exe' :
                 org.gradle.internal.os.OperatingSystem.current().isMacOsX() ? 'dmg' : 'deb'
-        skipInstaller = false
+
+//        Custom Installer window config
+        icon = file('favicon.ico')
+        appVersion = '1.0'
+        vendor = 'CS Capstone | Western Colorado University'
+        winMenu = true
+        winShortcut = true
+        winDirChooser = true
+        winPerUserInstall = true
+        winUpgradeUuid = 'b1fc4996-ddbb-4fe9-a28b-d1c73a84a279' // Allows for the same app to be updated and not reinstalled
     }
 
     addOptions('--add-modules', 'ALL-MODULE-PATH')
