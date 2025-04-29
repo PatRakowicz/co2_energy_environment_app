@@ -97,13 +97,12 @@ public class UtilityCsvLogic implements DBQueries {
                     // Master Meter special handling
                     if (utility.getBuildingID() == 40) {
                         boolean hasRequiredFields =
-                                (utility.getElectricityUsage() != null && utility.getElectricityUsage() != 0) ||
-                                        (utility.getElectricityCost() != null && utility.getElectricityCost() != 0) ||
-                                        (utility.getMiscCost() != null && utility.getMiscCost() != 0);
+                                (utility.getElectricityUsage() != null && utility.getElectricityUsage() != 0) &&
+                                        (utility.getElectricityCost() != null && utility.getElectricityCost() != 0);
 
                         if (!hasRequiredFields) {
                             skippedCount++;
-                            errorMessages.add("Master Meter entry must have at least Electricity Usage, Electricity Cost, or Misc Cost filled.");
+                            errorMessages.add("Master Meter entry must have valid (non-null, non-zero) Electricity Usage AND Electricity Cost.");
                             continue;
                         }
                         utility.setWaterUsage(null);
