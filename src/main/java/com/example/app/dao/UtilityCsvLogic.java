@@ -10,13 +10,12 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class UtilityCsvLogic implements DBQueries {
-    private DBConn dbConn;
-    private boolean masterMeterInserted;
-
     private final String[] HEADERS = {
             "Building Name", "Water Usage", "Water Cost", "Electricity Usage", "Electricity Cost",
             "Sewage Cost", "Misc Cost"
     };
+    private DBConn dbConn;
+    private boolean masterMeterInserted;
 
     public UtilityCsvLogic(DBConn dbConn) {
         this.dbConn = dbConn;
@@ -83,26 +82,43 @@ public class UtilityCsvLogic implements DBQueries {
                     continue;
                 }
 
-                Utility utility = new Utility();
-                utility.setDate(sharedDate);
-                utility.setBuildingID(building.getBuildingID());
-                utility.setWaterUsage(parts.length > 1 ? parseOrNull(parts[1]) : null);
-                utility.setWaterCost(parts.length > 2 ? parseOrNull(parts[2]) : null);
-                utility.setElectricityUsage(parts.length > 3 ? parseOrNull(parts[3]) : null);
-                utility.setElectricityCost(parts.length > 4 ? parseOrNull(parts[4]) : null);
-                utility.setSewageCost(parts.length > 5 ? parseOrNull(parts[5]) : null);
-                utility.setUsageGal(parts.length > 6 ? parseOrNull(parts[6]) : null);
-                utility.setMiscCost(parts.length > 7 ? parseOrNull(parts[7]) : null);
+                try {
+                    Utility utility = new Utility();
+                    utility.setDate(sharedDate);
+                    utility.setBuildingID(building.getBuildingID());
+                    utility.setWaterUsage(parts.length > 1 ? parseOrNull(parts[1]) : null);
+                    utility.setWaterCost(parts.length > 2 ? parseOrNull(parts[2]) : null);
+                    utility.setElectricityUsage(parts.length > 3 ? parseOrNull(parts[3]) : null);
+                    utility.setElectricityCost(parts.length > 4 ? parseOrNull(parts[4]) : null);
+                    utility.setSewageCost(parts.length > 5 ? parseOrNull(parts[5]) : null);
+                    utility.setUsageGal(parts.length > 6 ? parseOrNull(parts[6]) : null);
+                    utility.setMiscCost(parts.length > 7 ? parseOrNull(parts[7]) : null);
 
-                if(utility.getBuildingID() == 40){
-                    masterMeterInserted = true;
-                    masterUtility = utility;
+                    // Master Meter special handling
+                    if (utility.getBuildingID() == 40) {
+                        boolean hasRequiredFields =
+                                (utility.getElectricityUsage() != null && utility.getElectricityUsage() != 0) &&
+                                        (utility.getElectricityCost() != null && utility.getElectricityCost() != 0);
+
+                        if (!hasRequiredFields) {
+                            skippedCount++;
+                            errorMessages.add("Master Meter entry must have valid (non-null, non-zero) Electricity Usage AND Electricity Cost.");
+                            continue;
+                        }
+                        utility.setWaterUsage(null);
+                        utility.setWaterCost(null);
+                        utility.setSewageCost(null);
+                        utility.setUsageGal(null);
+
+                        masterMeterInserted = true;
+                        masterUtility = utility;
+                    }
+                    insertUtility(conn, building, utility);
+                    insertedCount++;
+                } catch (NumberFormatException e) {
+                    skippedCount++;
+                    errorMessages.add("Invalid numeric value in row for building: " + buildingName);
                 }
-
-                insertUtility(conn, building, utility);
-                insertedCount++;
-
-
             }
         } catch (IOException | SQLException e) {
             e.printStackTrace();
@@ -113,7 +129,7 @@ public class UtilityCsvLogic implements DBQueries {
         // Show results in alert
         showResultsAlert(insertedCount, skippedCount, errorMessages);
 
-        if(masterMeterInserted){
+        if (masterMeterInserted) {
             MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn, false);
             masterMeterLogic.singleUpdate(masterUtility);
         }
@@ -166,21 +182,24 @@ public class UtilityCsvLogic implements DBQueries {
         }
     }
 
-    private Float parseOrNull(String value) {
-        try {
-            return value.trim().isEmpty() ? null : Float.parseFloat(value.trim());
-        } catch (NumberFormatException e) {
-            return null;
+    private Float parseOrNull(String value) throws NumberFormatException {
+        if (value.trim().isEmpty()) return null;
+        String sanitized = value.replaceAll("[$,%]", "").trim();
+        if (!sanitized.matches("-?\\d*(\\.\\d+)?")) {
+            throw new NumberFormatException("Invalid numeric value: " + value);
         }
+        return Float.parseFloat(sanitized);
     }
 
     private Date parseDateOrNull(String value) {
         try {
             if (value.trim().isEmpty()) return null;
 
-            String[] parts = value.trim().split("/");
-            if (parts.length != 3) return null;
+            value = value.trim();
 
+            if (!value.matches("\\d{2}/\\d{2}/\\d{4}")) return null;
+
+            String[] parts = value.split("/");
             int day = Integer.parseInt(parts[0]);
             int month = Integer.parseInt(parts[1]);
             int year = Integer.parseInt(parts[2]);
