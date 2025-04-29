@@ -2,6 +2,7 @@ package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
 import com.example.app.dao.DBConn;
+import com.example.app.dao.MasterMeterLogic;
 import com.example.app.dao.LogRecords;
 import com.example.app.dao.UpdateUtilityLogic;
 import com.example.app.model.Building;
@@ -60,6 +61,10 @@ public class UpdateUtilityController implements Alerts {
     }
 
     public void initialize(){
+        if(dbConn == null){
+            return;
+        }
+
         buildingRecords = new BuildingRecords(dbConn);
         buildings = buildingRecords.getBuildings();
         buildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
@@ -86,6 +91,7 @@ public class UpdateUtilityController implements Alerts {
     }
 
     public void onChange() {
+        clearErrors();
         if(buildingComboBox.getValue() != null && yearComboBox.getValue() != null && monthComboBox.getValue() != null) {
             Building selectedBuilding = buildingComboBox.getValue();
             int selectedYear = yearComboBox.getValue();
@@ -168,11 +174,29 @@ public class UpdateUtilityController implements Alerts {
                 log.setEvent("Utility for `" + monthComboBox + ", " + yearComboBox + "` was updated.");
                 logRecords.insertLog(log);
 
+                if (building.getBuildingID() == 40) {
+                    MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn, true);
+                    masterMeterLogic.singleUpdate(utility);
+
+                    // log the master meter change
+                    log = new Log();
+                    log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
+                    log.setEvent(String.format(
+                                    "Master Meter utility updated, %d entries inserted, %d entries updated for %s",
+                                    masterMeterLogic.getNewEntries(),
+                                    masterMeterLogic.getUpdatedEntries(),
+                                    date
+                            )
+                    );
+                    logRecords.insertLog(log);
+                }else{
+                    updateSuccessful();
+                }
                 clearInputs();
                 yearComboBox.setValue(null);
                 monthComboBox.setValue(null);
                 selectedUtility = null;
-                updateSuccessful();
+                clearStored();
             }
             else {
                 updateFail();
@@ -229,6 +253,8 @@ public class UpdateUtilityController implements Alerts {
     }
 
     private boolean utilityValidity() {
+        clearStored();
+
         boolean valid = true;
 
         if(electricityUsage.getText() == null || electricityUsage.getText().isEmpty()){
@@ -383,14 +409,21 @@ public class UpdateUtilityController implements Alerts {
         // disable electricity fields
         electricityUsage.setDisable(true);
         electricityCost.setDisable(true);
-        // clear electricity fields so no electricity data gets added by mistake
-        electricityUsage.setText(null);
-        electricityCost.setText(null);
+
         // enable remaining fields in case they were disabled
         waterCost.setDisable(false);
         waterUsage.setDisable(false);
         sewageCost.setDisable(false);
         miscCost.setDisable(false);
+    }
+
+    public void clearStored(){
+        eUsage = 0;
+        eCost = 0;
+        wUsage = 0;
+        wCost = 0;
+        sCost = 0;
+        mCost = 0;
     }
 
     private void setInputDisabled(boolean disabled) {

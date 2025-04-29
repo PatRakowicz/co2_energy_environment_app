@@ -42,6 +42,10 @@ public class AddGasController implements Alerts {
     }
 
     public void initialize() {
+        if(dbConn == null){
+            return;
+        }
+
         buildingRecords = new BuildingRecords(dbConn);
         buildings = buildingRecords.getBuildings();
         buildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
@@ -76,8 +80,17 @@ public class AddGasController implements Alerts {
         toBilling.setValue(null);
         billedCCF.setText(null);
     }
+    public void clearStored(){
+        cCharges = 0;
+        mRead = 0;
+        fBilling = null;
+        tBilling = null;
+        bCCF = 0;
+    }
 
     public boolean validity(){
+        clearStored();
+
         boolean valid = true;
 
         if(buildingComboBox.getValue() == null){
@@ -88,7 +101,7 @@ public class AddGasController implements Alerts {
             building = buildingComboBox.getValue();
         }
 
-        if(currentCharges.getText() == null){
+        if(currentCharges.getText() == null || currentCharges.getText().isEmpty()){
             currentChargesError.setText("ERROR: Current Charges can't be nothing");
             valid = false;
         }else{
@@ -104,7 +117,7 @@ public class AddGasController implements Alerts {
             }
         }
 
-        if(meterRead.getText() == null){
+        if(meterRead.getText() == null || meterRead.getText().isEmpty()){
             meterReadError.setText("ERROR: Meter Read can't be nothing");
             valid = false;
         }else{
@@ -120,7 +133,7 @@ public class AddGasController implements Alerts {
             }
         }
 
-        if(billedCCF.getText() == null){
+        if(billedCCF.getText() == null || billedCCF.getText().isEmpty()){
             billedCCFError.setText("ERROR: Billed CCF can't be nothing");
             valid = false;
         }else{
@@ -191,18 +204,22 @@ public class AddGasController implements Alerts {
             GasRecords gasRecords = new GasRecords(dbConn);
             boolean success = gasRecords.insertGas(gas);
 
-            if (success) {
-                // Log inserted data here
-                LogRecords logRecords = new LogRecords(dbConn);
-                Log log = new Log();
-                log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
-                log.setEvent("Gas entry `" + gas.getGasID() + "` added.");
-                logRecords.insertLog(log);
-
-                insertSuccessful();
-                clearGasInputs();
-            } else {
-                insertFail();
+            if(gasRecords.findGas(toBilling.getValue().getYear(), toBilling.getValue().getMonthValue(), gas.getBuildingID())){
+                alreadyExists();
+            }else {
+                if (success) {
+                    // Log inserted data here
+                    LogRecords logRecords = new LogRecords(dbConn);
+                    Log log = new Log();
+                    log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
+                    log.setEvent("Gas entry `" + gas.getGasID() + "` added.");
+                    logRecords.insertLog(log);
+                    insertSuccessful();
+                    clearGasInputs();
+                    clearStored();
+                } else {
+                    insertFail();
+                }
             }
         }
     }

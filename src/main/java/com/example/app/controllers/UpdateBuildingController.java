@@ -2,6 +2,7 @@ package com.example.app.controllers;
 
 import com.example.app.dao.BuildingRecords;
 import com.example.app.dao.DBConn;
+import com.example.app.dao.MasterMeterLogic;
 import com.example.app.dao.LogRecords;
 import com.example.app.model.Building;
 import com.example.app.model.Log;
@@ -45,6 +46,10 @@ public class UpdateBuildingController implements Alerts {
     }
 
     public void initialize() {
+        if(dbConn == null){
+            return;
+        }
+
         buildingRecords = new BuildingRecords(dbConn);
         buildings = buildingRecords.getBuildings();
         buildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
@@ -100,7 +105,17 @@ public class UpdateBuildingController implements Alerts {
         endShared.setDisable(d);
     }
 
+    public void clearStored(){
+        loc = null;
+        sqft = 0;
+        cDate = null;
+        sShared = null;
+        eShared = null;
+    }
+
     public boolean validity(){
+        clearStored();
+
         boolean valid = true;
 
         if(buildingComboBox.getValue() == null){
@@ -188,7 +203,7 @@ public class UpdateBuildingController implements Alerts {
             if(squareFeet.getText() == null){
                 building.setSqFT(-1);
             }
-            else if(squareFeet.getText() == null){
+            else if(squareFeet.getText() == null || squareFeet.getText().isEmpty()){
                 building.setSqFT(-1);
             }else{
                 building.setSqFT(Integer.parseInt(squareFeet.getText()));
@@ -205,18 +220,44 @@ public class UpdateBuildingController implements Alerts {
 
             boolean success = buildingRecords.updateBuilding(building);
             if(success){
+                boolean updatingMasterMeter = false;
+                Building selectedBuilding = buildingComboBox.getValue();
+                if(selectedBuilding.getSqFT() != sqft || selectedBuilding.getStartShared() != sShared){
+                    updatingMasterMeter = true;
+                    MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn, false);
+                    masterMeterLogic.updateAllFrom(new java.sql.Date(selectedBuilding.getStartShared().getTime()));
+
+                    // log the master meter change
+                    LogRecords logRecords = new LogRecords(dbConn);
+                    Log log = new Log();
+                    log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
+                    log.setEvent(String.format(
+                            "Building %s sqft changed, updated all master meter values from %s to %s, %d entries updated",
+                            building.getName(),
+                            startShared.getValue(),
+                            LocalDate.now(),
+                            masterMeterLogic.getUpdatedEntries()
+                            )
+                    );
+                    logRecords.insertLog(log);
+                }
                 buildingRecords = new BuildingRecords(dbConn);
                 buildings = buildingRecords.getBuildings();
                 buildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
                 buildingComboBox.setValue(null);
                 buildingComboBox.hide();
-                Platform.runLater(() -> {updateSuccessful();});
+                if(!updatingMasterMeter) {
+                    Platform.runLater(() -> {
+                        updateSuccessful();
+                    });
+                }
 
                 LogRecords logRecords = new LogRecords(dbConn);
                 Log log = new Log();
                 log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
                 log.setEvent("Building `" + building.getName() + "` was updated");
                 logRecords.insertLog(log);
+                clearStored();
             }else{
                 updateFail();
             }
@@ -224,6 +265,7 @@ public class UpdateBuildingController implements Alerts {
     }
 
     public void onChange(){
+        clearErrors();
         if(buildingComboBox.getValue() != null){
             setDisableInput(false);
             Building building = buildingComboBox.getValue();

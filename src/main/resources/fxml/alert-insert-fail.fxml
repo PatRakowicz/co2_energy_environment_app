@@ -14,7 +14,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Label layoutX="14.0" layoutY="53.0" text="Try agin or check database connection">
+      <Label layoutX="14.0" layoutY="53.0" text="Try again or check database connection">
          <font>
             <Font size="18.0" />
          </font>

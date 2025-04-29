@@ -44,6 +44,10 @@ public class AddUtilityController implements Alerts {
     }
 
     public void initialize() {
+        if(dbConn == null){
+            return;
+        }
+
         buildingRecords = new BuildingRecords(dbConn);
         buildings = buildingRecords.getBuildings();
         buildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
@@ -104,9 +108,21 @@ public class AddUtilityController implements Alerts {
         buildingError.setText(null);
     }
 
+    public void clearStored(){
+        eUsage = 0;
+        eCost = 0;
+        wUsage = 0;
+        wCost = 0;
+        sCost = 0;
+        mCost = 0;
+    }
+
     // This is where the error checking happens
     public boolean validity(){
+        clearStored();
+
         boolean valid = true;
+
         if(electricityUsage.getText() == null || electricityUsage.getText().isEmpty()){
             eUsage = -1;
         }else {
@@ -209,14 +225,6 @@ public class AddUtilityController implements Alerts {
             }
         }
 
-        if(utilityDate.getValue() == null){
-            dateError.setText("ERROR: invalid date");
-            valid = false;
-        }
-        else{
-            date = utilityDate.getValue();
-        }
-
         if(buildingComboBox.getValue() == null){
             buildingError.setText("ERROR: building must be selected");
             valid = false;
@@ -225,6 +233,21 @@ public class AddUtilityController implements Alerts {
             building = buildingComboBox.getValue();
         }
 
+        if(utilityDate.getValue() == null){
+            dateError.setText("ERROR: invalid date");
+            valid = false;
+        }
+        else{
+            date = utilityDate.getValue();
+            if(building.getDate().after(java.sql.Date.valueOf(date)) && building.getBuildingID() != 40){
+                dateError.setText("ERROR: Date can't be before building was made");
+                valid = false;
+            }
+            else if(building.getBuildingID() == 40){
+                MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn, false);
+                masterMeterLogic.updateMasterMeterDate(java.sql.Date.valueOf(date));
+            }
+        }
 
         return valid;
     }
@@ -243,23 +266,43 @@ public class AddUtilityController implements Alerts {
             utility.setMiscCost(mCost);
 
             UtilityRecords utilityRecords = new UtilityRecords(dbConn);
-            boolean success = utilityRecords.insertUtility(utility);
+            if(utilityRecords.findUtility(date.getYear(), date.getMonthValue(), utility.getBuildingID())){
+                alreadyExists();
+            }else {
+                boolean success = utilityRecords.insertUtility(utility);
 
-            if (success) {
-                // Log inserted data here
-                LogRecords logRecords = new LogRecords(dbConn);
-                Log log = new Log();
-                log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
-                log.setEvent("Gas entry `" + utility.getUtilityID() + "` added.");
-                logRecords.insertLog(log);
+                if (success) {
+                    // Log inserted data here
+                    LogRecords logRecords = new LogRecords(dbConn);
+                    Log log = new Log();
+                    log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
+                    log.setEvent("Utility entry `" + utility.getUtilityID() + "` added.");
+                    logRecords.insertLog(log);
 
-                insertSuccessful();
-                clearUtilityInputs();
-                if(buildingComboBox.getValue().getName().equals("Master Meter")){
-                    averageMasterMeter(eCost, eUsage);
+                    clearUtilityInputs();
+                    if (utility.getBuildingID() == 40) {
+                        MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn, true);
+                        masterMeterLogic.singleUpdate(utility);
+
+                        // log the master meter change
+                        logRecords = new LogRecords(dbConn);
+                        log = new Log();
+                        log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
+                        log.setEvent(String.format(
+                                "Master Meter utility inserted, %d entries inserted, %d entries updated for %s",
+                                masterMeterLogic.getNewEntries(),
+                                masterMeterLogic.getUpdatedEntries(),
+                                date
+                                )
+                        );
+                        logRecords.insertLog(log);
+                    }else{
+                        insertSuccessful();
+                    }
+                    clearStored();
+                } else {
+                    insertFail();
                 }
-            } else {
-                insertFail();
             }
         }
 
@@ -335,9 +378,5 @@ public class AddUtilityController implements Alerts {
             exporter.exportCsvTemplate(file);
             System.out.println("CSV Template Exported.");
         }
-    }
-
-    public void averageMasterMeter(float masterCost, float masterUsage){
-
     }
 }

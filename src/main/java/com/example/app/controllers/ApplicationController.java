@@ -53,6 +53,16 @@ public class ApplicationController {
         }
     }
 
+    public void resetPages(){
+        updateDBButtonStatus();
+        addDataController = new AddDataController(dbConn);
+        logController = new LogController();
+        updateDataController = new UpdateDataController(dbConn);
+        viewDataController = new ViewDataController(dbConn);
+        switchToViewData(new ActionEvent());
+        viewPageButton.setDisable(true);
+    }
+
     public void setPageContent(String fxmlFile, Object controller){
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlFile));
@@ -90,6 +100,7 @@ public class ApplicationController {
     }
 
     public void openDBWindow() {
+        boolean isConnected = dbConn.isConnectionSuccessful();
         try {
             if (DBStage != null && DBStage.isShowing()) {
                 return;
@@ -111,6 +122,9 @@ public class ApplicationController {
             DBStage.setOnHidden(windowEvent -> {
                 DBButton.setDisable(false);
                 updateDBButtonStatus();
+                if(dbConn.isConnectionSuccessful() && !isConnected){
+                    resetPages();
+                }
             });
 
             DBStage.show();

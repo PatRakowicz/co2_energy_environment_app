@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 public class UtilityCsvLogic implements DBQueries {
     private DBConn dbConn;
+    private boolean masterMeterInserted;
 
     private final String[] HEADERS = {
             "Building Name", "Water Usage", "Water Cost", "Electricity Usage", "Electricity Cost",
@@ -23,6 +24,7 @@ public class UtilityCsvLogic implements DBQueries {
 
 
     public void importUtilityCSV(File file) {
+        Utility masterUtility = new Utility();
         int insertedCount = 0;
         int skippedCount = 0;
         ArrayList<String> errorMessages = new ArrayList<>();
@@ -92,8 +94,15 @@ public class UtilityCsvLogic implements DBQueries {
                 utility.setUsageGal(parts.length > 6 ? parseOrNull(parts[6]) : null);
                 utility.setMiscCost(parts.length > 7 ? parseOrNull(parts[7]) : null);
 
+                if(utility.getBuildingID() == 40){
+                    masterMeterInserted = true;
+                    masterUtility = utility;
+                }
+
                 insertUtility(conn, building, utility);
                 insertedCount++;
+
+
             }
         } catch (IOException | SQLException e) {
             e.printStackTrace();
@@ -103,6 +112,11 @@ public class UtilityCsvLogic implements DBQueries {
 
         // Show results in alert
         showResultsAlert(insertedCount, skippedCount, errorMessages);
+
+        if(masterMeterInserted){
+            MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn, false);
+            masterMeterLogic.singleUpdate(masterUtility);
+        }
     }
 
     public void exportCsvTemplate(File file) {

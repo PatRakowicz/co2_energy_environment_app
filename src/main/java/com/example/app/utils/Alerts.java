@@ -64,4 +64,8 @@ public interface Alerts {
     default void deleteFail(){
         alert("/fxml/alert-delete-fail.fxml");
     }
+
+    default void alreadyExists(){
+        alert("/fxml/alert-already-exists.fxml");
+    }
 }

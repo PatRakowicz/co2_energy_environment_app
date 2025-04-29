@@ -45,7 +45,7 @@ public class Utility {
         return waterUsage;
     }
 
-    public Object getBuildingID() {
+    public int getBuildingID() {
         return buildingID;
     }
 
