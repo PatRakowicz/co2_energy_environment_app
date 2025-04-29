@@ -33,7 +33,7 @@ public class LogRecords implements DBQueries {
     public ArrayList<String> getLogs() {
         logs.clear();
 
-        String query = "SELECT * FROM logs ORDER BY timestamp DESC";
+        String query = "SELECT * FROM logs ORDER BY logID DESC";
         try (PreparedStatement statement = this.dbConn.getConnection().prepareStatement(query)) {
             resultSet = statement.executeQuery();
             while (resultSet.next()) {

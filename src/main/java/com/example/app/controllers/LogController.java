@@ -9,6 +9,7 @@ import javafx.scene.control.ListView;
 import javafx.stage.FileChooser;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 
 public class LogController {
@@ -30,16 +31,20 @@ public class LogController {
     }
 
     @FXML public void downloadLogs(ActionEvent event) {
-        // This needs to change to a .txt with all logs | PLACEHOLDER FOR NOW!
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save CSV Template");
-        fileChooser.setInitialFileName("gas_template.csv");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV File", "*.csv"));
+        fileChooser.setTitle("Save Log File");
+        fileChooser.setInitialFileName("logs.txt");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("TXT File", "*.txt"));
         File file = fileChooser.showSaveDialog(null);
 
         if (file != null && dbConn != null) {
-            GasCsvLogic exporter = new GasCsvLogic(dbConn);
-            exporter.exportCsvTemplate(file);
+            try (FileWriter writer = new FileWriter(file)) {
+                for (String log : logList.getItems()) {
+                    writer.write(log + "\n");
+                }
+            } catch (java.io.IOException e) {
+                e.printStackTrace();
+            }
 
             LogRecords logRecords = new LogRecords(dbConn);
             Log log = new Log();

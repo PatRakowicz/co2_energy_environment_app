@@ -255,7 +255,7 @@ public class UpdateGasController implements Alerts {
                 LogRecords logRecords = new LogRecords(dbConn);
                 Log log = new Log();
                 log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
-                log.setEvent("Gas for `" + monthComboBox + ", " + yearComboBox + "` was updated.");
+                log.setEvent("Gas for `" + gas.getFromBilling() + ", " + gas.getToBilling() + "` was updated.");
                 logRecords.insertLog(log);
 
                 clearGasInputs();
@@ -294,7 +294,7 @@ public class UpdateGasController implements Alerts {
                         LogRecords logRecords = new LogRecords(dbConn);
                         Log log = new Log();
                         log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
-                        log.setEvent("Gas for `" + monthComboBox + ", " + yearComboBox + "` was deleted.");
+                        log.setEvent("Gas for `" + selectedGas.getFromBilling() + ", " + selectedGas.getToBilling() + "` was deleted.");
                         logRecords.insertLog(log);
 
                         deleteSuccessful();
