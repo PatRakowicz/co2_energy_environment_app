@@ -44,14 +44,16 @@ jlink {
                 org.gradle.internal.os.OperatingSystem.current().isMacOsX() ? 'dmg' : 'deb'
 
 //        Custom Installer window config
-        icon = file('favicon.ico')
+        icon = file('/favicon.ico')
         appVersion = '1.0'
-        vendor = 'CS Capstone | Western Colorado University'
-        winMenu = true
-        winShortcut = true
-        winDirChooser = true
-        winPerUserInstall = true
-        winUpgradeUuid = 'b1fc4996-ddbb-4fe9-a28b-d1c73a84a279' // Allows for the same app to be updated and not reinstalled
+        vendor = 'CS Capstone - Western Colorado University'
+        installerOptions = [
+                '--win-menu',
+                '--win-shortcut',
+                '--win-dir-chooser',
+                '--win-per-user-install',
+                '--win-upgrade-uuid', 'b1fc4996-ddbb-4fe9-a28b-d1c73a84a279'
+        ]
     }
 
     addOptions('--add-modules', 'ALL-MODULE-PATH')
