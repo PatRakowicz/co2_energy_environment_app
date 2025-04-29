@@ -62,7 +62,6 @@ public interface DBQueries {
         if (!condition.isEmpty()) {
             query += String.format(" WHERE %s", condition);
         }
-
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             int rowsAffected = statement.executeUpdate();
             System.out.println("Rows updated: " + rowsAffected);
@@ -90,7 +89,7 @@ public interface DBQueries {
      *  else { System.out.println("No user was updated."); }
      * */
 
-    default boolean delete(String table, String setClause, String condition, DBConn dbConn) {
+    default boolean delete(String table, String condition, DBConn dbConn) {
         Connection connection = dbConn.getConnection();
         if (connection == null) {
             System.out.println("No active db Connection.");

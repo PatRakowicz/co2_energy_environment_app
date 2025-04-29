@@ -1,6 +1,5 @@
 package com.example.app.model;
 
-import java.time.LocalDate;
 import java.util.Date;
 
 public class Building {
@@ -25,6 +24,12 @@ public class Building {
     public Date getStartShared(){return startShared;}
 
     public Date getEndShared(){return endShared;}
+
+    public String getLocation() {return location;}
+
+    public int getSqFT() {return sqFT;}
+
+    public Date getDate() {return date;}
 
     // Setters
     public void setBuildingID(int buildingID) {
@@ -51,7 +56,5 @@ public class Building {
         this.date = date;
     }
 
-    public void setEndShared(Date endShared) {
-        this.endShared = endShared;
-    }
+    public void setEndShared(Date endShared) {this.endShared = endShared;}
 }
