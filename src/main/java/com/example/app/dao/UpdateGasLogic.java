@@ -66,6 +66,9 @@ public class UpdateGasLogic implements DBQueries{
     }
 
     public int getMinGasYear(){
+        if(dbConn.getConnection() == null){
+            return 0;
+        }
         String query = "SELECT MIN(YEAR(to_billing)) AS min_year FROM gas";
         try (PreparedStatement stmt = dbConn.getConnection().prepareStatement(query);
              ResultSet rs = stmt.executeQuery()) {

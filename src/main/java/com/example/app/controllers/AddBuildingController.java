@@ -3,13 +3,21 @@ package com.example.app.controllers;
 import com.example.app.dao.BuildingRecords;
 import com.example.app.dao.DBConn;
 import com.example.app.dao.LogRecords;
+import com.example.app.dao.MasterMeterLogic;
 import com.example.app.model.Building;
 import com.example.app.model.Log;
 import com.example.app.utils.Alerts;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class AddBuildingController implements Alerts {
@@ -33,6 +41,10 @@ public class AddBuildingController implements Alerts {
     }
 
     public void initialize() {
+        if(dbConn == null){
+            return;
+        }
+
         buildingRecords = new BuildingRecords(dbConn);
         buildings = buildingRecords.getBuildings();
 
@@ -76,7 +88,17 @@ public class AddBuildingController implements Alerts {
         endShared.setValue(null);
     }
 
+    public void clearStored(){
+        loc = null;
+        sqft = 0;
+        cDate = null;
+        sShared = null;
+        eShared = null;
+    }
+
     public boolean validity(){
+        clearStored();
+
         boolean valid = true;
 
         if(buildingName.getText() == null || buildingName.getText().isEmpty()){
@@ -154,30 +176,75 @@ public class AddBuildingController implements Alerts {
     public void add(){
         clearErrors();
         if(validity()){
-            Building building = new Building();
+            try {
+                //load resource file into new stage
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/building-add-confirmation.fxml"));
+                Parent root = loader.load();
+                Scene scene = new Scene(root);
+                Stage stage = new Stage();
+                stage.initModality(Modality.APPLICATION_MODAL);
+                stage.setScene(scene);
+                stage.setResizable(false);
+                stage.initStyle(StageStyle.UTILITY);
 
-            building.setName(name);
-            building.setLocation(loc);
-            building.setSqFT(sqft);
-            building.setDate(cDate);
-            building.setStartShared(sShared);
-            building.setEndShared(eShared);
+                Button yes = (Button) scene.lookup("#yes");
+                Button no = (Button) scene.lookup("#no");
 
-            BuildingRecords buildingRecords = new BuildingRecords(dbConn);
-            boolean success = buildingRecords.insertBuilding(building);
+                yes.setOnAction(e -> {
+                    Building building = new Building();
 
-            if (success) {
-                // Log inserted data here
-                LogRecords logRecords = new LogRecords(dbConn);
-                Log log = new Log();
-                log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
-                log.setEvent("Created new building `" + building.getName() + "`");
-                logRecords.insertLog(log);
+                    building.setName(name);
+                    building.setLocation(loc);
+                    building.setSqFT(sqft);
+                    building.setDate(cDate);
+                    building.setStartShared(sShared);
+                    building.setEndShared(eShared);
 
-                insertSuccessful();
-                clearInputs();
-            } else {
-                insertFail();
+                    BuildingRecords buildingRecords = new BuildingRecords(dbConn);
+                    boolean success = buildingRecords.insertBuilding(building);
+
+                    if (success) {
+                        // Log inserted data here
+                        LogRecords logRecords = new LogRecords(dbConn);
+                        Log log = new Log();
+                        log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
+                        log.setEvent("Created new building `" + building.getName() + "`");
+                        logRecords.insertLog(log);
+                        stage.close();
+                        if(sShared != null){
+                            MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn, false);
+                            masterMeterLogic.updateAllFrom(sShared);
+
+                            // log the master meter change
+                            log = new Log();
+                            log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
+                            log.setEvent(String.format(
+                                    "Building %s added, updated all master meter values from %s to %s, %d entries updated",
+                                    building.getName(),
+                                    startShared.getValue(),
+                                    LocalDate.now(),
+                                    masterMeterLogic.getUpdatedEntries()
+                                    )
+                            );
+                            logRecords.insertLog(log);
+                        }else{
+                            insertSuccessful();
+                        }
+                        clearInputs();
+                        clearStored();
+                    } else {
+                        stage.close();
+                        insertFail();
+                    }
+                });
+
+                no.setOnAction(e -> {
+                    stage.close();
+                });
+
+                stage.show();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
