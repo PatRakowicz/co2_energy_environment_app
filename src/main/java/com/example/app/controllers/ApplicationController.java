@@ -1,26 +1,30 @@
 package com.example.app.controllers;
 
 import com.example.app.dao.DBConn;
-import javafx.event.ActionEvent;
+import com.example.app.utils.HelpPageManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import java.io.IOException;
 
-public class ApplicationController {
+public class ApplicationController implements HelpPageManager {
     @FXML
     private VBox rootPane;
 
     private Stage DBStage;
 
     @FXML
-    private Button DBButton, addPageButton, updatePageButton, viewPageButton, reportPageButton;
+    private Button DBButton, addPageButton, updatePageButton, viewPageButton, logsPageButton;
+    @FXML
+    private ImageView helpButton;
+    public static ImageView help;
 
     private DBConn dbConn;
 
@@ -28,6 +32,7 @@ public class ApplicationController {
     private LogController logController;
     private UpdateDataController updateDataController;
     private ViewDataController viewDataController;
+    public static Stage helpStage;
 
     @FXML
     public void initialize() {
@@ -48,9 +53,28 @@ public class ApplicationController {
             content.prefWidthProperty().bind(rootPane.widthProperty());
             content.prefHeightProperty().bind(rootPane.heightProperty().subtract(40));
             viewPageButton.setDisable(true);
+
+            setHelpStage();
+            setHelp(helpButton);
         }catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    public void setHelpStage(){
+        Stage stage = new Stage();
+        stage.setResizable(false);
+        stage.initStyle(StageStyle.UTILITY);
+
+        stage.setOnCloseRequest(event -> {
+            event.consume();
+            stage.hide();
+            helpButton.setDisable(false);
+        });
+
+        setHelpStage(stage);
+
+        setHelpPage("/fxml/help-view.fxml");
     }
 
     public void resetPages(){
@@ -59,7 +83,7 @@ public class ApplicationController {
         logController = new LogController();
         updateDataController = new UpdateDataController(dbConn);
         viewDataController = new ViewDataController(dbConn);
-        switchToViewData(new ActionEvent());
+        switchToViewData();
         viewPageButton.setDisable(true);
     }
 
@@ -82,7 +106,7 @@ public class ApplicationController {
 
     public void enableButtons(){
         addPageButton.setDisable(false);
-        reportPageButton.setDisable(false);
+        logsPageButton.setDisable(false);
         viewPageButton.setDisable(false);
         updatePageButton.setDisable(false);
     }
@@ -134,31 +158,62 @@ public class ApplicationController {
     }
 
     @FXML
-    public void switchToAddData(ActionEvent event) {
+    public void switchToAddData() {
         enableButtons();
         addPageButton.setDisable(true);
+        closeHelpPage();
         setPageContent("/fxml/add-data-view.fxml", addDataController);
     }
 
     @FXML
-    public void switchToReport(ActionEvent event) {
+    public void switchToLogs() {
         enableButtons();
-        reportPageButton.setDisable(true);
+        logsPageButton.setDisable(true);
+        closeHelpPage();
+        setHelpPage("/fxml/help-logs.fxml");
         setPageContent("/fxml/log-view.fxml", logController);
         logController.initialize();
     }
 
     @FXML
-    public void switchToUpdateData(ActionEvent event) {
+    public void switchToUpdateData() {
         enableButtons();
         updatePageButton.setDisable(true);
+        closeHelpPage();
         setPageContent("/fxml/update-data-view.fxml", updateDataController);
     }
 
     @FXML
-    public void switchToViewData(ActionEvent event) {
+    public void switchToViewData() {
         enableButtons();
         viewPageButton.setDisable(true);
+        closeHelpPage();
+        setHelpPage("/fxml/help-view.fxml");
         setPageContent("/fxml/view-data-view.fxml", viewDataController);
+    }
+
+    @FXML
+    public void openHelp(){
+        if(helpButton.isDisable() || helpStage.isShowing()){
+            return;
+        }
+        helpButton.setDisable(true);
+        openHelpPage();
+    }
+
+    public static void setHelpStage(Stage stage){
+        helpStage = stage;
+    }
+
+    public static Stage getHelpStage(){
+        return helpStage;
+    }
+
+    public static void setHelp(ImageView imageView){
+        help = imageView;
+    }
+
+    public static ImageView getHelp(){
+        return help;
     }
 }

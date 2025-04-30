@@ -5,6 +5,7 @@ import com.example.app.dao.DBConn;
 import com.example.app.dao.UpdateUtilityLogic;
 import com.example.app.model.Building;
 import com.example.app.utils.FilteredBuildingBox;
+import com.example.app.utils.HelpPageManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -13,11 +14,13 @@ import javafx.scene.layout.GridPane;
 import java.util.ArrayList;
 
 
-public class UpdateDataController{
+public class UpdateDataController implements HelpPageManager {
     private DBConn dbConn;
 
     @FXML
     private Tab utilityTab, gasTab, buildingTab;
+    @FXML
+    private TabPane updateDataPane;
 
     private UpdateUtilityController updateUtilityController;
     private UpdateGasController updateGasController;
@@ -67,9 +70,30 @@ public class UpdateDataController{
             return;
         }
 
+        // set help page content
+        updateDataPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
+            if (newTab != null) {
+                updateHelpPage(newTab);
+            }
+        });
+
         //set tab content
         utilityTab.setContent(utilityPane);
         gasTab.setContent(gasPane);
         buildingTab.setContent(buildingPane);
+        updateHelpPage(updateDataPane.getSelectionModel().getSelectedItem());
+    }
+
+    public void updateHelpPage(Tab newTab){
+        closeHelpPage();
+        if(newTab == utilityTab){
+            setHelpPage("/fxml/help-add-utility.fxml");
+        }
+        else if(newTab == gasTab){
+            setHelpPage("/fxml/help-add-gas.fxml");
+        }
+        else if(newTab == buildingTab){
+            setHelpPage("/fxml/help-add-building.fxml");
+        }
     }
 }
