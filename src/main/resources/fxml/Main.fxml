@@ -15,7 +15,7 @@
             <Button fx:id="updatePageButton" mnemonicParsing="false" onAction="#switchToUpdateData" text="Update" />
             <Button fx:id="viewPageButton" mnemonicParsing="false" onAction="#switchToViewData" text="View" />
             <Button fx:id="logsPageButton" mnemonicParsing="false" onAction="#switchToLogs" text="Logs" />
-            <ImageView fx:id="helpButton" fitHeight="40.0" fitWidth="40.0" onMouseClicked="#openHelp" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="helpButton" fitHeight="25.0" fitWidth="25.0" onMouseClicked="#openHelp" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/help.png" />
                </image>
