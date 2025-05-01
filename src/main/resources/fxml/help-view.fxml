@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.*?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <Text layoutX="242.0" layoutY="152.0" strokeType="OUTSIDE" strokeWidth="0.0" text="THIS IS THE HELP VIEW PAGE" />
-   </children>
+<AnchorPane xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            prefHeight="400.0" prefWidth="600.0">
+    <children>
+        <Text layoutX="20.0" layoutY="40.0" text="VIEW DATA HELP" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+        <Text layoutX="20.0" layoutY="70.0" text="This screen visualizes utility and gas data across time." />
+        <Text layoutX="20.0" layoutY="100.0" text="STEPS:" style="-fx-font-weight: bold;" />
+        <Text layoutX="40.0" layoutY="125.0" text="1. Select a building." />
+        <Text layoutX="40.0" layoutY="145.0" text="2. Choose start and end dates." />
+        <Text layoutX="40.0" layoutY="165.0" text="3. Check which data types to display (usage, cost, etc)." />
+        <Text layoutX="40.0" layoutY="185.0" text="4. Click 'Refresh' to update chart and table." />
+    </children>
 </AnchorPane>

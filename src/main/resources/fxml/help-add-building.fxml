@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             prefHeight="400.0" prefWidth="600.0">
-
+    <children>
+        <Text layoutX="20.0" layoutY="40.0" text="ADD BUILDING HELP" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+        <Text layoutX="20.0" layoutY="70.0" text="This page allows you to add a new building to the system." />
+        <Text layoutX="20.0" layoutY="100.0" text="STEPS:" style="-fx-font-weight: bold;" />
+        <Text layoutX="40.0" layoutY="125.0" text="1. Enter building name, location, and square footage." />
+        <Text layoutX="40.0" layoutY="145.0" text="2. Optionally enter shared meter start/end dates." />
+        <Text layoutX="40.0" layoutY="165.0" text="3. Click 'Add' to save the building." />
+        <Text layoutX="20.0" layoutY="200.0" text="EXAMPLE:" style="-fx-font-style: italic;" />
+        <Text layoutX="40.0" layoutY="225.0" text="Name: 1432 W Gunnison" />
+        <Text layoutX="40.0" layoutY="245.0" text="Location: Chicago, IL" />
+        <Text layoutX="40.0" layoutY="265.0" text="SqFT: 2200" />
+        <Text layoutX="40.0" layoutY="285.0" text="Start Shared: 01/01/2024" />
+    </children>
 </AnchorPane>

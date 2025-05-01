@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             prefHeight="400.0" prefWidth="600.0">
-
+    <children>
+        <Text layoutX="20.0" layoutY="40.0" text="ADD UTILITY HELP" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+        <Text layoutX="20.0" layoutY="70.0" text="This page allows you to manually or bulk add utility data per building." />
+        <Text layoutX="20.0" layoutY="100.0" text="STEPS:" style="-fx-font-weight: bold;" />
+        <Text layoutX="40.0" layoutY="125.0" text="1. Select a building from the dropdown." />
+        <Text layoutX="40.0" layoutY="145.0" text="2. Choose the utility date." />
+        <Text layoutX="40.0" layoutY="165.0" text="3. Fill in available utility fields (water, electricity, etc)." />
+        <Text layoutX="40.0" layoutY="185.0" text="4. Click 'Add' to save the record." />
+        <Text layoutX="20.0" layoutY="220.0" text="CSV UPLOAD:" style="-fx-font-weight: bold;" />
+        <Text layoutX="40.0" layoutY="245.0" text="Use 'Upload CSV' to bulk import rows with building and values." />
+        <Text layoutX="40.0" layoutY="265.0" text="Use 'Download Template' for a formatted file." />
+        <Text layoutX="20.0" layoutY="300.0" text="EXAMPLE CSV ROW:" style="-fx-font-style: italic;" />
+        <Text layoutX="40.0" layoutY="325.0" text="1234 Main St, 1000, 120.00, 1500, 180.00, 45.00,,25.00, 01/01/2024" />
+        <Text layoutX="40.0" layoutY="350.0" text="With date, it will only grab the date shown as DD/MM/YYYY for all entries." />
+    </children>
 </AnchorPane>
