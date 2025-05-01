@@ -3,8 +3,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/23.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
             prefHeight="400.0" prefWidth="600.0">
     <children>
         <Text layoutX="20.0" layoutY="40.0" text="VIEW DATA HELP" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
