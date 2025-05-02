@@ -51,16 +51,24 @@ public class AddGasController implements Alerts {
         buildingBox = new FilteredBuildingBox(buildings, buildingComboBox);
 
         fromBilling.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-            if (!isNowFocused) {
-                fromBilling.setValue(fromBilling.getConverter()
-                        .fromString(fromBilling.getEditor().getText()));
+            try {
+                if (!isNowFocused) {
+                    fromBilling.setValue(fromBilling.getConverter()
+                            .fromString(fromBilling.getEditor().getText()));
+                }
+            } catch (Exception e) {
+                fromBilling.setValue(null);
             }
         });
 
         toBilling.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-            if (!isNowFocused) {
-                toBilling.setValue(toBilling.getConverter()
-                        .fromString(toBilling.getEditor().getText()));
+            try {
+                if (!isNowFocused) {
+                    toBilling.setValue(toBilling.getConverter()
+                            .fromString(toBilling.getEditor().getText()));
+                }
+            } catch (Exception e) {
+                toBilling.setValue(null);
             }
         });
     }
