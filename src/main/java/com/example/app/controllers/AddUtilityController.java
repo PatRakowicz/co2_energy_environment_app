@@ -309,6 +309,7 @@ public class AddUtilityController implements Alerts {
     }
 
     public void onChange(){
+        clearUtilityErrors();
         if(buildingComboBox.getValue() != null && utilityDate.getValue() != null) {
             if(buildingComboBox.getValue().getName().equals("Master Meter")){
                 electricityUsage.setDisable(false);

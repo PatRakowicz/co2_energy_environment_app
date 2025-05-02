@@ -77,7 +77,7 @@ public class UpdateGasController implements Alerts {
         }
 
         ChangeListener valueChangeListener = (obs, oldValue, newValue) -> {
-            Platform.runLater(() -> onChange());
+            onChange();
         };
 
         buildingComboBox.valueProperty().addListener(valueChangeListener);
