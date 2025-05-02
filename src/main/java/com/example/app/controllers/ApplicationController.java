@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import java.io.IOException;
 
-public class ApplicationController implements HelpPageManager {
+public class ApplicationController{
     @FXML
     private VBox rootPane;
 
@@ -25,6 +25,7 @@ public class ApplicationController implements HelpPageManager {
     @FXML
     private ImageView helpButton;
     public static ImageView help;
+    public static HelpPageManager helpPageManager;
 
     private DBConn dbConn;
 
@@ -32,7 +33,6 @@ public class ApplicationController implements HelpPageManager {
     private LogController logController;
     private UpdateDataController updateDataController;
     private ViewDataController viewDataController;
-    public static Stage helpStage;
 
     @FXML
     public void initialize() {
@@ -54,27 +54,12 @@ public class ApplicationController implements HelpPageManager {
             content.prefHeightProperty().bind(rootPane.heightProperty().subtract(40));
             viewPageButton.setDisable(true);
 
-            setHelpStage();
             setHelp(helpButton);
+            helpPageManager = new HelpPageManager();
+            helpPageManager.setHelpPage("/fxml/help-view.fxml");
         }catch (IOException e){
             e.printStackTrace();
         }
-    }
-
-    public void setHelpStage(){
-        Stage stage = new Stage();
-        stage.setResizable(false);
-        stage.initStyle(StageStyle.UTILITY);
-
-        stage.setOnCloseRequest(event -> {
-            event.consume();
-            stage.hide();
-            helpButton.setDisable(false);
-        });
-
-        setHelpStage(stage);
-
-        setHelpPage("/fxml/help-view.fxml");
     }
 
     public void resetPages(){
@@ -161,7 +146,10 @@ public class ApplicationController implements HelpPageManager {
     public void switchToAddData() {
         enableButtons();
         addPageButton.setDisable(true);
-        closeHelpPage();
+        if(helpPageManager.getHelpStage() != null) {
+            helpPageManager.closeHelpPage();
+        }
+        helpButton.setDisable(false);
         setPageContent("/fxml/add-data-view.fxml", addDataController);
     }
 
@@ -169,8 +157,11 @@ public class ApplicationController implements HelpPageManager {
     public void switchToLogs() {
         enableButtons();
         logsPageButton.setDisable(true);
-        closeHelpPage();
-        setHelpPage("/fxml/help-logs.fxml");
+        helpPageManager.setHelpPage("/fxml/help-logs.fxml");
+        if(helpPageManager.getHelpStage() != null) {
+            helpPageManager.closeHelpPage();
+        }
+        helpButton.setDisable(false);
         setPageContent("/fxml/log-view.fxml", logController);
         logController.initialize();
     }
@@ -179,7 +170,10 @@ public class ApplicationController implements HelpPageManager {
     public void switchToUpdateData() {
         enableButtons();
         updatePageButton.setDisable(true);
-        closeHelpPage();
+        if(helpPageManager.getHelpStage() != null) {
+            helpPageManager.closeHelpPage();
+        }
+        helpButton.setDisable(false);
         setPageContent("/fxml/update-data-view.fxml", updateDataController);
     }
 
@@ -187,26 +181,21 @@ public class ApplicationController implements HelpPageManager {
     public void switchToViewData() {
         enableButtons();
         viewPageButton.setDisable(true);
-        closeHelpPage();
-        setHelpPage("/fxml/help-view.fxml");
+        helpPageManager.setHelpPage("/fxml/help-view.fxml");
+        if(helpPageManager.getHelpStage() != null) {
+            helpPageManager.closeHelpPage();
+        }
+        helpButton.setDisable(false);
         setPageContent("/fxml/view-data-view.fxml", viewDataController);
     }
 
     @FXML
     public void openHelp(){
-        if(helpButton.isDisable() || helpStage.isShowing()){
+        if(helpButton.isDisable()){
             return;
         }
         helpButton.setDisable(true);
-        openHelpPage();
-    }
-
-    public static void setHelpStage(Stage stage){
-        helpStage = stage;
-    }
-
-    public static Stage getHelpStage(){
-        return helpStage;
+        helpPageManager.openHelpPage();
     }
 
     public static void setHelp(ImageView imageView){

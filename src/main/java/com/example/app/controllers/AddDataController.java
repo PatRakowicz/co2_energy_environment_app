@@ -17,7 +17,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class AddDataController implements HelpPageManager {
+import static com.example.app.controllers.ApplicationController.getHelp;
+import static com.example.app.controllers.ApplicationController.helpPageManager;
+
+public class AddDataController{
     private DBConn dbConn;
     @FXML
     private Tab utilityTab, gasTab, buildingTab;
@@ -86,15 +89,18 @@ public class AddDataController implements HelpPageManager {
     }
 
     public void updateHelpPage(Tab newTab){
-        closeHelpPage();
+        if(helpPageManager.getHelpStage() != null) {
+            helpPageManager.closeHelpPage();
+        }
         if(newTab == utilityTab){
-            setHelpPage("/fxml/help-add-utility.fxml");
+            helpPageManager.setHelpPage("/fxml/help-add-utility.fxml");
         }
         else if(newTab == gasTab){
-            setHelpPage("/fxml/help-add-gas.fxml");
+            helpPageManager.setHelpPage("/fxml/help-add-gas.fxml");
         }
         else if(newTab == buildingTab){
-            setHelpPage("/fxml/help-add-building.fxml");
+            helpPageManager.setHelpPage("/fxml/help-add-building.fxml");
         }
+        getHelp().setDisable(false);
     }
 }

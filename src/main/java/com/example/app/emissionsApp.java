@@ -1,13 +1,13 @@
 package com.example.app;
-
-import com.example.app.utils.HelpPageManager;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 
-public class emissionsApp extends javafx.application.Application implements HelpPageManager {
+import static com.example.app.controllers.ApplicationController.helpPageManager;
+
+public class emissionsApp extends javafx.application.Application{
     @Override
     public void start(Stage stage) throws IOException {
         try {
@@ -17,9 +17,10 @@ public class emissionsApp extends javafx.application.Application implements Help
             stage.setScene(scene);
 
             stage.setOnCloseRequest(event -> {
-                closeHelpPage();
+                if(helpPageManager.getHelpStage() != null) {
+                    helpPageManager.closeHelpPage();
+                }
             });
-
 
             stage.show();
         } catch (Exception e){

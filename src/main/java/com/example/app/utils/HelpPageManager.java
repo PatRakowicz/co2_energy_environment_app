@@ -9,25 +9,47 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
-import static com.example.app.controllers.ApplicationController.helpStage;
+import static com.example.app.controllers.ApplicationController.help;
 
-public interface HelpPageManager {
-    default void openHelpPage(){
-        helpStage.show();
+
+public class HelpPageManager {
+    private Stage helpStage;
+    private String page;
+
+    public HelpPageManager(){
+        page = "";
     }
 
-    default void closeHelpPage(){
-        helpStage.hide();
-    }
-
-    default void setHelpPage(String page){
+    public void openHelpPage(){
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(page));
-            Parent root = fxmlLoader.load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(page));
+            Parent root = loader.load();
             Scene scene = new Scene(root);
+            helpStage = new Stage();
+
+            helpStage.setOnCloseRequest(event -> {
+                help.setDisable(false);
+            });
+
             helpStage.setScene(scene);
-        }catch (IOException e){
+            helpStage.setResizable(false);
+            helpStage.initStyle(StageStyle.UTILITY);
+
+            helpStage.show();
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void closeHelpPage(){
+        helpStage.close();
+    }
+
+    public void setHelpPage(String p){
+        page = p;
+    }
+
+    public Stage getHelpStage() {
+        return helpStage;
     }
 }

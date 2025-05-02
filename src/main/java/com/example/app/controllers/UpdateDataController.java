@@ -13,8 +13,11 @@ import javafx.scene.layout.GridPane;
 
 import java.util.ArrayList;
 
+import static com.example.app.controllers.ApplicationController.getHelp;
+import static com.example.app.controllers.ApplicationController.helpPageManager;
 
-public class UpdateDataController implements HelpPageManager {
+
+public class UpdateDataController{
     private DBConn dbConn;
 
     @FXML
@@ -85,15 +88,18 @@ public class UpdateDataController implements HelpPageManager {
     }
 
     public void updateHelpPage(Tab newTab){
-        closeHelpPage();
+        if(helpPageManager.getHelpStage() != null) {
+            helpPageManager.closeHelpPage();
+        }
         if(newTab == utilityTab){
-            setHelpPage("/fxml/help-update-utility.fxml");
+            helpPageManager.setHelpPage("/fxml/help-update-utility.fxml");
         }
         else if(newTab == gasTab){
-            setHelpPage("/fxml/help-update-gas.fxml");
+            helpPageManager.setHelpPage("/fxml/help-update-gas.fxml");
         }
         else if(newTab == buildingTab){
-            setHelpPage("/fxml/help-update-building.fxml");
+            helpPageManager.setHelpPage("/fxml/help-update-building.fxml");
         }
+        getHelp().setDisable(false);
     }
 }
