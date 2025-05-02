@@ -134,10 +134,6 @@ public class MasterMeterLogic implements DBQueries {
 
         if(printStats) {
             showStats();
-            LogRecords logRecords = new LogRecords(dbConn);
-            Log log = new Log();
-            log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
-            logRecords.insertLog(log);
         }
     }
 
