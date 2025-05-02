@@ -87,13 +87,13 @@ public class UpdateDataController implements HelpPageManager {
     public void updateHelpPage(Tab newTab){
         closeHelpPage();
         if(newTab == utilityTab){
-            setHelpPage("/fxml/help-add-utility.fxml");
+            setHelpPage("/fxml/help-update-utility.fxml");
         }
         else if(newTab == gasTab){
-            setHelpPage("/fxml/help-add-gas.fxml");
+            setHelpPage("/fxml/help-update-gas.fxml");
         }
         else if(newTab == buildingTab){
-            setHelpPage("/fxml/help-add-building.fxml");
+            setHelpPage("/fxml/help-update-building.fxml");
         }
     }
 }
