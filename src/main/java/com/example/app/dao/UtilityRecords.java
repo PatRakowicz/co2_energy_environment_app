@@ -73,12 +73,14 @@ public class UtilityRecords implements DBQueries {
         return insert(table, columns, values, dbConn);
     }
 
-    public Map<String, Float> getBuildingTotalUsage() {
-        Map<String, Float> usageDictionary = new HashMap<>();
+    public Map<String, Float[]> getBuildingTotalUsage() {
+        Map<String, Float[]> usageDictionary = new HashMap<>();
 
         String query = """
-            SELECT b.name AS Building,
-                SUM(coalesce(u.e_usage, 0) + coalesce(u.w_usage, 0)) AS Total
+            SELECT 
+                b.name AS Building,
+                SUM(coalesce(u.e_usage, 0)) AS TotalKwh,
+                SUM(coalesce(u.w_usage, 0)) AS TotalGal
             FROM utility u
             JOIN building b ON u.buildingID = b.buildingID
             GROUP BY b.name
@@ -88,9 +90,12 @@ public class UtilityRecords implements DBQueries {
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 String name = resultSet.getString("Building");
-                Float usage = resultSet.getFloat("Total");
+                Float kwh = resultSet.getFloat("TotalKwh");
+                Float scaledKwh = kwh / 1000f;
+                Float gal = resultSet.getFloat("TotalGal");
+                float scaledGal = gal / 1000f;
 
-                usageDictionary.put(name, usage);
+                usageDictionary.put(name, new Float[]{scaledKwh, scaledGal});
             }
         } catch (SQLException e) {
             e.printStackTrace();

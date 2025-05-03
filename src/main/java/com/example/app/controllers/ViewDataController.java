@@ -299,16 +299,45 @@ public class ViewDataController{
         // Bar Chart
         barChart.getData().clear();
 
-        Map<String, Float> usageDictionary = utilityRecords.getBuildingTotalUsage();
+        Map<String, Float[]> usageDictionary = utilityRecords.getBuildingTotalUsage();
 
-        XYChart.Series<String, Number> usageByBuilding = new XYChart.Series<>();
-        usageByBuilding.setName("Total Usage");
+        XYChart.Series<String, Number> electricSeries = new XYChart.Series<>();
+        electricSeries.setName("Total KWH (x1000)");
 
-        for (Map.Entry<String, Float> entry : usageDictionary.entrySet()) {
-            XYChart.Data<String, Number> data = new XYChart.Data<>(entry.getKey(), entry.getValue());
-            usageByBuilding.getData().add(data);
-        }
+        XYChart.Series<String, Number> waterSeries = new XYChart.Series<>();
+        waterSeries.setName("Total GAL (x1000)");
 
-        barChart.getData().add(usageByBuilding);
+        usageDictionary.entrySet().stream()
+                .sorted((a, b) -> {
+                    Float[] aVals = a.getValue();
+                    Float[] bVals = b.getValue();
+
+                    Float electricity = aVals[0];
+                    Float water = aVals[1];
+                    Float electricityUsageA = (electricity != null) ? electricity : 0;    // Electricity Usage
+                    Float waterUsageA = (water != null) ? water : 0;                 // Water Usage
+                    Float aTotal = electricityUsageA + waterUsageA;
+
+                    Float electricityB = bVals[0];
+                    Float waterB = bVals[1];
+                    Float electricityUsageB = (electricityB != null) ? electricityB : 0;
+                    Float waterUsageB = (waterB != null) ? waterB : 0;
+                    Float bTotal = electricityUsageB + waterUsageB;
+
+                    return Float.compare(bTotal, aTotal); // descending bars
+                })
+                .limit(20)
+                .forEach(entry -> {
+                    String building = entry.getKey();
+                    Float kwh = entry.getValue()[0] != null ? entry.getValue()[0] : 0;
+                    Float gallons = entry.getValue()[1] != null ? entry.getValue()[1] : 0;
+
+                    electricSeries.getData().add(new XYChart.Data<>(building, kwh));
+                    waterSeries.getData().add(new XYChart.Data<>(building, gallons));
+                });
+
+        barChart.getData().addAll(electricSeries, waterSeries);
+        barChart.setLegendVisible(true);
+        barChart.getXAxis().setTickLabelRotation(-45);
     }
 }
