@@ -83,7 +83,7 @@ public class UpdateUtilityController implements Alerts {
         }
 
         ChangeListener valueChangeListener = (obs, oldValue, newValue) -> {
-            Platform.runLater(() -> onChange());
+            onChange();
         };
         buildingComboBox.valueProperty().addListener(valueChangeListener);
         yearComboBox.valueProperty().addListener(valueChangeListener);

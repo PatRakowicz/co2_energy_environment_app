@@ -4,6 +4,7 @@ import com.example.app.dao.*;
 import com.example.app.model.Building;
 import com.example.app.utils.FilteredBuildingBox;
 import com.example.app.model.Utility;
+import com.example.app.utils.HelpPageManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -16,10 +17,15 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class AddDataController {
+import static com.example.app.controllers.ApplicationController.getHelp;
+import static com.example.app.controllers.ApplicationController.helpPageManager;
+
+public class AddDataController{
     private DBConn dbConn;
     @FXML
     private Tab utilityTab, gasTab, buildingTab;
+    @FXML
+    private TabPane addDataPane;
 
     AddUtilityController addUtilityController;
     AddGasController addGasController;
@@ -68,9 +74,33 @@ public class AddDataController {
             return;
         }
 
+        // set help page content
+        addDataPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
+            if (newTab != null) {
+                updateHelpPage(newTab);
+            }
+        });
+
         //set tab content
         utilityTab.setContent(utilityPane);
         gasTab.setContent(gasPane);
         buildingTab.setContent(buildingPane);
+        updateHelpPage(addDataPane.getSelectionModel().getSelectedItem());
+    }
+
+    public void updateHelpPage(Tab newTab){
+        if(helpPageManager.getHelpStage() != null) {
+            helpPageManager.closeHelpPage();
+        }
+        if(newTab == utilityTab){
+            helpPageManager.setHelpPage("/fxml/help-add-utility.fxml");
+        }
+        else if(newTab == gasTab){
+            helpPageManager.setHelpPage("/fxml/help-add-gas.fxml");
+        }
+        else if(newTab == buildingTab){
+            helpPageManager.setHelpPage("/fxml/help-add-building.fxml");
+        }
+        getHelp().setDisable(false);
     }
 }

@@ -57,9 +57,13 @@ public class AddUtilityController implements Alerts {
         });
 
         utilityDate.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-            if (!isNowFocused) {
-                utilityDate.setValue(utilityDate.getConverter()
-                        .fromString(utilityDate.getEditor().getText()));
+            try {
+                if (!isNowFocused) {
+                    utilityDate.setValue(utilityDate.getConverter()
+                            .fromString(utilityDate.getEditor().getText()));
+                }
+            } catch (Exception e) {
+                utilityDate.setValue(null);
             }
         });
     }
@@ -309,6 +313,7 @@ public class AddUtilityController implements Alerts {
     }
 
     public void onChange(){
+        clearUtilityErrors();
         if(buildingComboBox.getValue() != null && utilityDate.getValue() != null) {
             if(buildingComboBox.getValue().getName().equals("Master Meter")){
                 electricityUsage.setDisable(false);

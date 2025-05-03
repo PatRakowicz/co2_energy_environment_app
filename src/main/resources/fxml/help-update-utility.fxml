@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            prefHeight="400.0" prefWidth="600.0">
+    <children>
+        <Text layoutX="20.0" layoutY="40.0" text="UPDATE UTILITY HELP" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+        <Text layoutX="20.0" layoutY="70.0" text="This view is for editing or deleting saved utility records." />
+        <Text layoutX="20.0" layoutY="100.0" text="STEPS:" style="-fx-font-weight: bold;" />
+        <Text layoutX="40.0" layoutY="125.0" text="1. Select a building, month, and year." />
+        <Text layoutX="40.0" layoutY="145.0" text="2. Click 'Load Data' to pull existing values." />
+        <Text layoutX="40.0" layoutY="165.0" text="3. Update fields and click 'Update'." />
+        <Text layoutX="40.0" layoutY="185.0" text="4. Or click 'Delete' to remove the entry." />
+    </children>
+</AnchorPane>

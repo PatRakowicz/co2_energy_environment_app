@@ -94,11 +94,27 @@ public class ViewDataController{
         utilityRecords = new UtilityRecords(dbConn);
         gasRecords = new GasRecords(dbConn);
 
-        // Disable manual typing in datePicker
-        startDatePicker.getEditor().setDisable(true);
-        startDatePicker.getEditor().setOpacity(1);
-        endDatePicker.getEditor().setDisable(true);
-        endDatePicker.getEditor().setOpacity(1);
+        // Enable manual typing in datePicker
+        startDatePicker.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            try {
+                if (!isNowFocused) {
+                    startDatePicker.setValue(startDatePicker.getConverter()
+                            .fromString(startDatePicker.getEditor().getText()));
+                }
+            } catch (Exception e) {
+                startDatePicker.setValue(null);
+            }
+        });
+        endDatePicker.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+            try {
+                if (!isNowFocused) {
+                    endDatePicker.setValue(endDatePicker.getConverter()
+                            .fromString(endDatePicker.getEditor().getText()));
+                }
+            } catch (Exception e) {
+                endDatePicker.setValue(null);
+            }
+        });
 
 
         // https://docs.oracle.com/javase/8/javafx/api/javafx/beans/property/SimpleFloatProperty.html#SimpleFloatProperty-java.lang.Object-java.lang.String-

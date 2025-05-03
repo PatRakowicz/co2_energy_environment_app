@@ -59,23 +59,35 @@ public class UpdateBuildingController implements Alerts {
         });
 
         constructionDate.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-            if (!isNowFocused) {
-                constructionDate.setValue(constructionDate.getConverter()
-                        .fromString(constructionDate.getEditor().getText()));
+            try {
+                if (!isNowFocused) {
+                    constructionDate.setValue(constructionDate.getConverter()
+                            .fromString(constructionDate.getEditor().getText()));
+                }
+            } catch (Exception e) {
+                constructionDate.setValue(null);
             }
         });
 
         startShared.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-            if (!isNowFocused) {
-                startShared.setValue(startShared.getConverter()
-                        .fromString(startShared.getEditor().getText()));
+            try {
+                if (!isNowFocused) {
+                    startShared.setValue(startShared.getConverter()
+                            .fromString(startShared.getEditor().getText()));
+                }
+            } catch (Exception e) {
+                startShared.setValue(null);
             }
         });
 
         endShared.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-            if (!isNowFocused) {
-                endShared.setValue(endShared.getConverter()
-                        .fromString(endShared.getEditor().getText()));
+            try {
+                if (!isNowFocused) {
+                    endShared.setValue(endShared.getConverter()
+                            .fromString(endShared.getEditor().getText()));
+                }
+            } catch (Exception e) {
+                endShared.setValue(null);
             }
         });
     }
