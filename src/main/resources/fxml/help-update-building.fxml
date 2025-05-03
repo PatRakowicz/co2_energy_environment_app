@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            prefHeight="400.0" prefWidth="600.0">
+    <children>
+        <Text layoutX="20.0" layoutY="40.0" text="UPDATE BUILDING HELP" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+        <Text layoutX="20.0" layoutY="70.0" text="Use this page to modify existing building records." />
+        <Text layoutX="20.0" layoutY="100.0" text="STEPS:" style="-fx-font-weight: bold;" />
+        <Text layoutX="40.0" layoutY="125.0" text="1. Select a building from the list." />
+        <Text layoutX="40.0" layoutY="145.0" text="2. Modify name, location, sqft, or shared meter dates." />
+        <Text layoutX="40.0" layoutY="165.0" text="3. Click 'Update' to save changes." />
+    </children>
+</AnchorPane>

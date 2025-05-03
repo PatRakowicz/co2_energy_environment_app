@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox fx:id="rootPane" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app.controllers.ApplicationController">
+   <children>
+      <ToolBar maxHeight="40.0" minHeight="40.0" prefHeight="40.0">
+        <items>
+          <Button fx:id="DBButton" mnemonicParsing="false" onAction="#openDBWindow" text="Database" />
+            <Button fx:id="addPageButton" mnemonicParsing="false" onAction="#switchToAddData" text="Add" />
+            <Button fx:id="updatePageButton" mnemonicParsing="false" onAction="#switchToUpdateData" text="Update" />
+            <Button fx:id="viewPageButton" mnemonicParsing="false" onAction="#switchToViewData" text="View" />
+            <Button fx:id="logsPageButton" mnemonicParsing="false" onAction="#switchToLogs" text="Logs" />
+            <ImageView fx:id="helpButton" fitHeight="25.0" fitWidth="25.0" onMouseClicked="#openHelp" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/help.png" />
+               </image>
+            </ImageView>
+        </items>
+      </ToolBar>
+   </children>
+</VBox>

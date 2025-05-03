@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            prefHeight="400.0" prefWidth="600.0">
+    <children>
+        <Text layoutX="20.0" layoutY="40.0" text="UPDATE GAS HELP" style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+        <Text layoutX="20.0" layoutY="70.0" text="Edit or delete gas entries for any building." />
+        <Text layoutX="20.0" layoutY="100.0" text="STEPS:" style="-fx-font-weight: bold;" />
+        <Text layoutX="40.0" layoutY="125.0" text="1. Select building and billing period." />
+        <Text layoutX="40.0" layoutY="145.0" text="2. Change meter readings, charges, or CCF." />
+        <Text layoutX="40.0" layoutY="165.0" text="3. Click 'Update' to apply, or 'Delete' to remove." />
+    </children>
+</AnchorPane>
