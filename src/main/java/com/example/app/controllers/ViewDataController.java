@@ -5,10 +5,9 @@ import com.example.app.dao.DBConn;
 import com.example.app.dao.GasRecords;
 import com.example.app.dao.UtilityRecords;
 import com.example.app.model.Building;
-import com.example.app.utils.FilteredBuildingBox;
 import com.example.app.model.Gas;
 import com.example.app.model.Utility;
-import javafx.beans.property.SimpleDoubleProperty;
+import com.example.app.utils.FilteredBuildingBox;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -23,7 +22,6 @@ import javafx.scene.control.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 public class ViewDataController{
