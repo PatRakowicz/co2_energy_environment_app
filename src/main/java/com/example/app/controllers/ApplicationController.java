@@ -65,7 +65,7 @@ public class ApplicationController{
     public void resetPages(){
         updateDBButtonStatus();
         addDataController = new AddDataController(dbConn);
-        logController = new LogController();
+        logController = new LogController(dbConn);
         updateDataController = new UpdateDataController(dbConn);
         viewDataController = new ViewDataController(dbConn);
         switchToViewData();
