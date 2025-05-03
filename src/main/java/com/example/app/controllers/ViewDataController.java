@@ -231,23 +231,35 @@ public class ViewDataController{
 
         for (Utility utility : utilities) {
             String dateToString = utility.getDate().toString();
-            if (electricityUsage != null) {
-                electricityUsage.getData().add(new XYChart.Data<>(dateToString, utility.getElectricityUsage()));
+
+            Float eu = utility.getElectricityUsage();   // Electricity Usage
+            if (electricityUsage != null && eu != null) {
+                electricityUsage.getData().add(new XYChart.Data<>(dateToString, eu));
             }
-            if (waterUsage != null) {
-                waterUsage.getData().add(new XYChart.Data<>(dateToString, utility.getWaterUsage()));
+
+            Float wu = utility.getWaterUsage();     // Water Usage
+            if (waterUsage != null && wu != null) {
+                waterUsage.getData().add(new XYChart.Data<>(dateToString, wu));
             }
-            if (electricityCost != null) {
-                electricityCost.getData().add(new XYChart.Data<>(dateToString, utility.getElectricityCost()));
+
+            Float ec = utility.getElectricityCost();    // Electricity Cost
+            if (electricityCost != null && ec != null) {
+                electricityCost.getData().add(new XYChart.Data<>(dateToString, ec));
             }
-            if (waterCost != null) {
-                waterCost.getData().add(new XYChart.Data<>(dateToString, utility.getWaterCost()));
+
+            Float wc = utility.getWaterCost();      // Water Cost
+            if (waterCost != null && wc != null) {
+                waterCost.getData().add(new XYChart.Data<>(dateToString, wc));
             }
-            if (sewageCost != null) {
-                sewageCost.getData().add(new XYChart.Data<>(dateToString, utility.getSewageCost()));
+
+            Float sc = utility.getSewageCost();     // Sewage Cost
+            if (sewageCost != null && sc != null) {
+                sewageCost.getData().add(new XYChart.Data<>(dateToString, sc));
             }
-            if (miscCost != null) {
-                miscCost.getData().add(new XYChart.Data<>(dateToString, utility.getMiscCost()));
+
+            Float mc = utility.getMiscCost();       // Misc Cost
+            if (miscCost != null && mc != null) {
+                miscCost.getData().add(new XYChart.Data<>(dateToString, mc));
             }
         }
 
