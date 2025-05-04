@@ -51,6 +51,24 @@ public class UtilityCsvLogic implements DBQueries {
                 return;
             }
 
+            java.util.Calendar calendar = java.util.Calendar.getInstance();
+            calendar.setTime(sharedDate);
+            int month = calendar.get(java.util.Calendar.MONTH) + 1;
+            int year = calendar.get(java.util.Calendar.YEAR);
+
+            String checkQuery = "SELECT COUNT(*) FROM utility WHERE MONTH(date) = ? AND YEAR(date) = ?";
+            try (PreparedStatement checkStmt = conn.prepareStatement(checkQuery)) {
+                checkStmt.setInt(1, month);
+                checkStmt.setInt(2, year);
+                ResultSet rs = checkStmt.executeQuery();
+                if (rs.next() && rs.getInt(1) > 0) {
+                    String dateText = String.format("%02d/%04d", month, year);
+                    errorMessages.add("Entries for " + dateText + " already exist. Import cancelled.");
+                    showResultsAlert(0, 0, errorMessages);
+                    return;
+                }
+            }
+
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",", -1);
@@ -193,11 +211,11 @@ public class UtilityCsvLogic implements DBQueries {
 
     private Date parseDateOrNull(String value) {
         try {
-            if (value.trim().isEmpty()) return null;
+            if (value == null || value.trim().isEmpty()) return null;
 
             value = value.trim();
 
-            if (!value.matches("\\d{2}/\\d{2}/\\d{4}")) return null;
+            if (!value.matches("\\d{1,2}/\\d{1,2}/\\d{4}")) return null;
 
             String[] parts = value.split("/");
             int day = Integer.parseInt(parts[0]);
