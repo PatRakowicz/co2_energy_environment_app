@@ -32,20 +32,20 @@ jlink {
     imageZip = file("${buildDir}/distributions/${project.name}.zip")
 
     launcher {
-        name = 'CO2EmissionsApp'
+        name = 'CO2 Emissions App'
     }
 
     jpackage {
-        imageName = 'CO2EmissionsApp'
-        installerName = 'CO2EmissionsAppInstaller'
-        appVersion = '1.0'
+        imageName = 'CO2 Emissions App'
+        installerName = 'CO2EmissionsApp-Installer'
+        appVersion = '1.5'
         skipInstaller = false
         installerType = org.gradle.internal.os.OperatingSystem.current().isWindows() ? 'exe' :
                 org.gradle.internal.os.OperatingSystem.current().isMacOsX() ? 'dmg' : 'deb'
 
 //        Custom Installer window config
         icon = file('/favicon.ico')
-        appVersion = '1.0'
+        appVersion = '1.5'
         vendor = 'CS Capstone - Western Colorado University'
         installerOptions = [
                 '--win-menu',
