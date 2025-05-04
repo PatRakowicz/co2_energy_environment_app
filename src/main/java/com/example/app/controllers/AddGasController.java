@@ -203,7 +203,7 @@ public class AddGasController implements Alerts {
             Gas gas = new Gas();
             gas.setBuildingID(building.getBuildingID());
             gas.setCurrentCharges(cCharges);
-            gas.setRate("NEED TO REMOVE THIS");
+//            gas.setRate("NEED TO REMOVE THIS");
             gas.setFromBilling(fBilling);
             gas.setToBilling(tBilling);
             gas.setMeterRead(mRead);
@@ -220,7 +220,8 @@ public class AddGasController implements Alerts {
                     LogRecords logRecords = new LogRecords(dbConn);
                     Log log = new Log();
                     log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
-                    log.setEvent("Gas entry for building `" + gas.getBuildingID() + "` added.");
+                    log.setEvent(String.format("Inserted new gas record for building ID %d (from %s to %s, charges = %.2f).",
+                            gas.getBuildingID(), gas.getFromBilling(), gas.getToBilling(), gas.getCurrentCharges()));
                     logRecords.insertLog(log);
                     insertSuccessful();
                     clearGasInputs();

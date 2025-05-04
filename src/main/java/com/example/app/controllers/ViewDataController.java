@@ -50,7 +50,7 @@ public class ViewDataController{
     @FXML private SplitPane mainSplitPane;
     @FXML private LineChart<String, Number> lineChart;
     @FXML private BarChart<String, Number> barChart;
-    @FXML private PieChart pieChart;
+    @FXML private BarChart<String, Number> barChart2;
     @FXML private TabPane tabPane;
     @FXML private Tab utilityTab;
     @FXML private Tab gasTab;
@@ -65,7 +65,7 @@ public class ViewDataController{
     @FXML private TableColumn<Utility, Float> sewageCostColumn;
     @FXML private TableColumn<Utility, Float> miscCostColumn;
 
-    @FXML private TableColumn<Gas, String> rateColumn;
+//    @FXML private TableColumn<Gas, String> rateColumn;
     @FXML private TableColumn<Gas, Float> currentChargeColumn;
     @FXML private TableColumn<Gas, String> fromBillingColumn;
     @FXML private TableColumn<Gas, String> toBillingColumn;
@@ -127,7 +127,7 @@ public class ViewDataController{
 
         fromBillingColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getFromBilling().toString()));
         toBillingColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getToBilling().toString()));
-        rateColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getRate()));
+//        rateColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getRate()));
         currentChargeColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getCurrentCharges()).asObject());
         meterReadColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getMeterRead()).asObject());
         billedCCFColumn.setCellValueFactory(data -> new SimpleFloatProperty(data.getValue().getBilledCCF()).asObject());
@@ -170,6 +170,9 @@ public class ViewDataController{
         ArrayList<Gas> gasList = gasRecords.getGas(building.getBuildingID(), startDate, endDate, dbConn);
 
         populateTables(utilities, gasList);
+
+        populateCharts(utilities, showElectricityUsage, showWaterUsage, showElectricityCost,
+                showWaterCost, showSewageCost, showMiscCost);
     }
 
     private void populateTables(ArrayList<Utility> utilities, ArrayList<Gas> gasList) {
@@ -300,10 +303,10 @@ public class ViewDataController{
         Map<String, Float[]> usageDictionary = utilityRecords.getBuildingTotalUsage();
 
         XYChart.Series<String, Number> electricSeries = new XYChart.Series<>();
-        electricSeries.setName("Total KWH (x1000)");
+        electricSeries.setName("Total KWH");
 
         XYChart.Series<String, Number> waterSeries = new XYChart.Series<>();
-        waterSeries.setName("Total GAL (x1000)");
+        waterSeries.setName("Total GAL");
 
         usageDictionary.entrySet().stream()
                 .sorted((a, b) -> {
@@ -312,8 +315,8 @@ public class ViewDataController{
 
                     Float electricity = aVals[0];
                     Float water = aVals[1];
-                    Float electricityUsageA = (electricity != null) ? electricity : 0;    // Electricity Usage
-                    Float waterUsageA = (water != null) ? water : 0;                 // Water Usage
+                    Float electricityUsageA = (electricity != null) ? electricity : 0;
+                    Float waterUsageA = (water != null) ? water : 0;
                     Float aTotal = electricityUsageA + waterUsageA;
 
                     Float electricityB = bVals[0];
@@ -337,5 +340,48 @@ public class ViewDataController{
         barChart.getData().addAll(electricSeries, waterSeries);
         barChart.setLegendVisible(true);
         barChart.getXAxis().setTickLabelRotation(-45);
+
+        // Bar Chart 2
+        barChart2.getData().clear();
+
+        Map<String, Float[]> costDictionary = utilityRecords.getBuildingTotalCost();
+
+        XYChart.Series<String, Number> eCost = new XYChart.Series<>();
+        eCost.setName("Total Electricity");
+
+        XYChart.Series<String, Number> wCost = new XYChart.Series<>();
+        wCost.setName("Total Water");
+
+        costDictionary.entrySet().stream()
+                .sorted((a, b) -> {
+                    Float[] aVals = a.getValue();
+                    Float[] bVals = b.getValue();
+
+                    Float electricity = aVals[0];
+                    Float water = aVals[1];
+                    Float electricityCostA = (electricity != null) ? electricity : 0;
+                    Float waterCostA = (water != null) ? water : 0;
+                    Float aTotal = electricityCostA + waterCostA;
+
+                    Float electricityB = bVals[0];
+                    Float waterB = bVals[1];
+                    Float electricityCostB = (electricityB != null) ? electricityB : 0;
+                    Float waterCostB = (waterB != null) ? waterB : 0;
+                    Float bTotal = electricityCostB + waterCostB;
+
+                    return Float.compare(bTotal, aTotal); // descending bars
+                })
+                .limit(20)
+                .forEach(entry -> {
+                    String building = entry.getKey();
+                    Float e = entry.getValue()[0] != null ? entry.getValue()[0] : 0;    // Electricity
+                    Float w = entry.getValue()[1] != null ? entry.getValue()[1] : 0;    // Water
+
+                    eCost.getData().add(new XYChart.Data<>(building, e));
+                    wCost.getData().add(new XYChart.Data<>(building, w));
+                });
+
+        barChart2.getData().addAll(eCost, wCost);
+        barChart2.setLegendVisible(true);
     }
 }

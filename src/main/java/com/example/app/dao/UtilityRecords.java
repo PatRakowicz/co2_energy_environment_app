@@ -105,6 +105,36 @@ public class UtilityRecords implements DBQueries {
         return usageDictionary;
     }
 
+    public Map<String, Float[]> getBuildingTotalCost() {
+        Map<String, Float[]> costDictionary = new HashMap<>();
+
+        String query = """
+            SELECT 
+                b.name AS Building,
+                SUM(coalesce(u.e_cost, 0)) AS TotalElectricity,
+                SUM(coalesce(u.w_cost, 0)) AS TotalWater
+            FROM utility u
+            JOIN building b ON u.buildingID = b.buildingID
+            GROUP BY b.name
+            """;
+
+        try (PreparedStatement statement = this.dbConn.getConnection().prepareStatement(query)) {
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                String name = resultSet.getString("Building");
+                Float electrictyCost = resultSet.getFloat("TotalElectricity");
+                Float waterCost = resultSet.getFloat("TotalWater");
+
+                costDictionary.put(name, new Float[]{electrictyCost, waterCost});
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.printf("Caught SQL Error: %s", e);
+        }
+
+        return costDictionary;
+    }
+
     public ArrayList<Utility> getUtilities(int buildingID, LocalDate start, LocalDate end, DBConn dbConn) {
         utilities.clear();
 

@@ -171,7 +171,8 @@ public class UpdateUtilityController implements Alerts {
                 LogRecords logRecords = new LogRecords(dbConn);
                 Log log = new Log();
                 log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
-                log.setEvent("Utility for building `" + utility.getBuildingID() + ", " + utility.getDate() + "` was updated.");
+                log.setEvent(String.format("Updated utility record for building ID %d (Date: %s).",
+                        utility.getBuildingID(), utility.getDate()));
                 logRecords.insertLog(log);
 
                 if (building.getBuildingID() == 40) {
