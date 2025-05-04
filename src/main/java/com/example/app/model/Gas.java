@@ -7,7 +7,7 @@ public class Gas {
     private int buildingID;
     private int gasID;
     private Float currentCharges;
-    private String rate;
+//    private String rate;
     private Date fromBilling;
     private Date toBilling;
     private Float meterRead;
@@ -58,13 +58,13 @@ public class Gas {
     }
 
     // Getters and Setters for rate
-    public String getRate() {
-        return rate;
-    }
-
-    public void setRate(String rate) {
-        this.rate = rate;
-    }
+//    public String getRate() {
+//        return rate;
+//    }
+//
+//    public void setRate(String rate) {
+//        this.rate = rate;
+//    }
 
     // Getters and Setters for current_charges
     public Float getCurrentCharges() {

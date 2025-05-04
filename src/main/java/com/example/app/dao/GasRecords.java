@@ -51,7 +51,7 @@ public class GasRecords implements DBQueries {
 
                 gas.setBuildingID(resultSet.getInt("buildingID"));
                 gas.setCurrentCharges(resultSet.getFloat("current_charges"));
-                gas.setRate(resultSet.getString("rate"));
+//                gas.setRate(resultSet.getString("rate"));
                 gas.setToBilling(resultSet.getDate("to_billing"));
                 gas.setFromBilling(resultSet.getDate("from_billing"));
                 gas.setMeterRead(resultSet.getFloat("meter_read"));
