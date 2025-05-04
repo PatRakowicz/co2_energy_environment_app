@@ -34,7 +34,7 @@ public class GasRecords implements DBQueries {
         return insert(table, columns, values, dbConn);
     }
 
-    public ArrayList<Gas> getGas(int buildingID, LocalDate toBilling, LocalDate fromBilling, DBConn dbConn) {
+    public ArrayList<Gas> getGas(int buildingID, LocalDate fromBilling, LocalDate toBilling, DBConn dbConn) {
         gasList.clear();
 
         String query = "SELECT * FROM gas "
@@ -42,8 +42,8 @@ public class GasRecords implements DBQueries {
                 + "AND to_billing >= ? AND from_billing <= ?";
         try (PreparedStatement statement = this.dbConn.getConnection().prepareStatement(query)) {
             statement.setInt(1, buildingID);
-            statement.setDate(2, Date.valueOf(toBilling));
-            statement.setDate(3, Date.valueOf(fromBilling));
+            statement.setDate(2, Date.valueOf(fromBilling));
+            statement.setDate(3, Date.valueOf(toBilling));
 
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -51,7 +51,7 @@ public class GasRecords implements DBQueries {
 
                 gas.setBuildingID(resultSet.getInt("buildingID"));
                 gas.setCurrentCharges(resultSet.getFloat("current_charges"));
-                gas.setRate(resultSet.getString("rate"));
+//                gas.setRate(resultSet.getString("rate"));
                 gas.setToBilling(resultSet.getDate("to_billing"));
                 gas.setFromBilling(resultSet.getDate("from_billing"));
                 gas.setMeterRead(resultSet.getFloat("meter_read"));

@@ -280,7 +280,8 @@ public class AddUtilityController implements Alerts {
                     LogRecords logRecords = new LogRecords(dbConn);
                     Log log = new Log();
                     log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
-                    log.setEvent("Utility entry for building `" + utility.getBuildingID() + "` added.");
+                    log.setEvent(String.format("Inserted new utility record for building ID %d (Date: %s).",
+                            utility.getBuildingID(), utility.getDate()));
                     logRecords.insertLog(log);
 
                     clearUtilityInputs();

@@ -20,7 +20,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1">
    <left>
       <VBox prefHeight="370.0" prefWidth="168.0" style="-fx-border-color: #000000;" BorderPane.alignment="CENTER">
          <children>
@@ -135,16 +135,23 @@
                                <Tab text="Building Utility Usage">
                                    <BarChart fx:id="barChart" legendSide="RIGHT" title="Total Usage By Building">
                                        <xAxis>
-                                           <CategoryAxis label="Category" />
+                                           <CategoryAxis label="Buildings" />
                                        </xAxis>
                                        <yAxis>
-                                           <NumberAxis label="Value" />
+                                           <NumberAxis label="Usage (x1000)" />
                                        </yAxis>
                                    </BarChart>
                                </Tab>
                         <Tab text="Building Utility Cost">
                            <content>
-                              <PieChart fx:id="pieChart" legendSide="RIGHT" title="Total Usage Cost By Building" />
+                              <BarChart fx:id="barChart2" legendSide="RIGHT" title="Total Usage Cost By Building">
+                                   <xAxis>
+                                       <CategoryAxis label="Buildings" />
+                                   </xAxis>
+                                   <yAxis>
+                                       <NumberAxis label="Cost $" />
+                                   </yAxis>
+                              </BarChart>
                            </content>
                         </Tab>
                            </tabs>
@@ -171,7 +178,7 @@
                                    <TableView fx:id="gasTableView">
                                        <columns>
                                            <TableColumn fx:id="currentChargeColumn" text="Current Charges" />
-                                           <TableColumn fx:id="rateColumn" text="Rate" />
+<!--                                           <TableColumn fx:id="rateColumn" text="Rate" />-->
                                            <TableColumn fx:id="fromBillingColumn" text="From Billing" />
                                            <TableColumn fx:id="toBillingColumn" text="To Billing" />
                                            <TableColumn fx:id="meterReadColumn" text="Meter Read" />

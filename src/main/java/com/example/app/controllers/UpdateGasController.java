@@ -263,7 +263,8 @@ public class UpdateGasController implements Alerts {
                 LogRecords logRecords = new LogRecords(dbConn);
                 Log log = new Log();
                 log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
-                log.setEvent("Gas for `" + gas.getFromBilling() + ", " + gas.getToBilling() + "` was updated.");
+                log.setEvent(String.format("Updated gas record for building ID %d (from %s to %s, charges = %.2f).",
+                        gas.getBuildingID(), gas.getFromBilling(), gas.getToBilling(), gas.getCurrentCharges()));
                 logRecords.insertLog(log);
 
                 clearGasInputs();

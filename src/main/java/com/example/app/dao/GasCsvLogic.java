@@ -90,6 +90,27 @@ public class GasCsvLogic implements DBQueries {
                     Float meterRead = parseOrNull(parts[4]);
                     Float billedCCF = parseOrNull(parts[5]);
 
+                    // Duplicate check by building and from_billing month/year
+                    if (fromBilling != null) {
+                        java.util.Calendar cal = java.util.Calendar.getInstance();
+                        cal.setTime(fromBilling);
+                        int month = cal.get(java.util.Calendar.MONTH) + 1;
+                        int year = cal.get(java.util.Calendar.YEAR);
+
+                        String dupeQuery = "SELECT COUNT(*) FROM gas WHERE buildingID = ? AND MONTH(from_billing) = ? AND YEAR(from_billing) = ?";
+                        try (PreparedStatement checkStmt = conn.prepareStatement(dupeQuery)) {
+                            checkStmt.setInt(1, building.getBuildingID());
+                            checkStmt.setInt(2, month);
+                            checkStmt.setInt(3, year);
+                            ResultSet rs = checkStmt.executeQuery();
+                            if (rs.next() && rs.getInt(1) > 0) {
+                                skippedCount++;
+                                errorMessages.add("Line " + lineNumber + ": Duplicate gas entry for " + buildingName + " in " + String.format("%02d/%04d", month, year));
+                                continue;
+                            }
+                        }
+                    }
+
                     insertGas(conn, building.getBuildingID(), currentCharges, fromBilling, toBilling, meterRead, billedCCF);
                     insertedCount++;
                 } catch (NumberFormatException | SQLException e) {
@@ -161,11 +182,11 @@ public class GasCsvLogic implements DBQueries {
 
     private Date parseDateOrNull(String value) {
         try {
-            if (value.trim().isEmpty()) return null;
+            if (value == null || value.trim().isEmpty()) return null;
 
             value = value.trim();
 
-            if (!value.matches("\\d{2}/\\d{2}/\\d{4}")) return null;
+            if (!value.matches("\\d{1,2}/\\d{1,2}/\\d{4}")) return null;
 
             String[] parts = value.split("/");
             int day = Integer.parseInt(parts[0]);

@@ -49,7 +49,7 @@ public class LogController {
             LogRecords logRecords = new LogRecords(dbConn);
             Log log = new Log();
             log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
-            log.setEvent("All logs downloaded to file.");
+            log.setEvent("User exported logs to file: " + file.getAbsolutePath());
             logRecords.insertLog(log);
         }
     }
@@ -60,7 +60,8 @@ public class LogController {
         LogRecords logRecords = new LogRecords(dbConn);
         Log log = new Log();
         log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
-        log.setEvent("All logs were cleared.");
+        log.setEvent("User cleared system logs.");
+
         logRecords.insertLog(log);
 
         ArrayList<String> logs = logRecords.getLogs();

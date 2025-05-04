@@ -6,23 +6,20 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="322.0" minWidth="620.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <left>
-      <ListView fx:id="logList" prefHeight="322.0" prefWidth="483.0" BorderPane.alignment="CENTER" />
-   </left>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <ListView fx:id="logList" />
+   </center>
+
    <right>
-      <VBox prefHeight="322.0" prefWidth="137.0" BorderPane.alignment="CENTER">
+      <VBox spacing="15.0" alignment="TOP_CENTER">
+         <VBox.margin>
+            <Insets top="20.0" right="10.0" left="10.0" bottom="10.0"/>
+         </VBox.margin>
          <children>
-            <Button mnemonicParsing="false" onAction="#downloadLogs" text="Download Logs">
-               <VBox.margin>
-                  <Insets bottom="10.0" left="15.0" top="15.0" />
-               </VBox.margin>
-            </Button>
-            <Button mnemonicParsing="false" onAction="#clearLogs" text="Clear Logs">
-               <VBox.margin>
-                  <Insets left="15.0" />
-               </VBox.margin>
-            </Button>
+            <Button text="Download Logs" onAction="#downloadLogs" />
+            <Button text="Clear Logs" onAction="#clearLogs" />
          </children>
       </VBox>
    </right>
