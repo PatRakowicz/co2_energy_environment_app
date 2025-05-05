@@ -21,17 +21,12 @@ public class ApplicationController{
     private Stage DBStage;
 
     @FXML
-    private Button DBButton, addPageButton, updatePageButton, viewPageButton, logsPageButton;
+    private Button DBButton;
     @FXML
     private ImageView helpButton;
     public static ImageView help;
     public static HelpPageManager helpPageManager;
-
     private DBConn dbConn;
-
-    private AddDataController addDataController;
-    private LogController logController;
-    private UpdateDataController updateDataController;
     private ViewDataController viewDataController;
 
     @FXML
@@ -39,9 +34,6 @@ public class ApplicationController{
         try {
             dbConn = new DBConn();
             updateDBButtonStatus();
-            addDataController = new AddDataController(dbConn);
-            logController = new LogController(dbConn);
-            updateDataController = new UpdateDataController(dbConn);
             viewDataController = new ViewDataController(dbConn);
 
 
@@ -52,7 +44,6 @@ public class ApplicationController{
             VBox.setVgrow(content, Priority.ALWAYS);
             content.prefWidthProperty().bind(rootPane.widthProperty());
             content.prefHeightProperty().bind(rootPane.heightProperty().subtract(40));
-            viewPageButton.setDisable(true);
 
             setHelp(helpButton);
             helpPageManager = new HelpPageManager();
@@ -64,12 +55,8 @@ public class ApplicationController{
 
     public void resetPages(){
         updateDBButtonStatus();
-        addDataController = new AddDataController(dbConn);
-        logController = new LogController(dbConn);
-        updateDataController = new UpdateDataController(dbConn);
         viewDataController = new ViewDataController(dbConn);
-        switchToViewData();
-        viewPageButton.setDisable(true);
+        setPageContent("/fxml/view-data-view.fxml", viewDataController);
     }
 
     public void setPageContent(String fxmlFile, Object controller){
@@ -87,13 +74,6 @@ public class ApplicationController{
             e.printStackTrace();
         }
 
-    }
-
-    public void enableButtons(){
-        addPageButton.setDisable(false);
-        logsPageButton.setDisable(false);
-        viewPageButton.setDisable(false);
-        updatePageButton.setDisable(false);
     }
 
     private void updateDBButtonStatus() {
@@ -143,53 +123,6 @@ public class ApplicationController{
     }
 
     @FXML
-    public void switchToAddData() {
-        enableButtons();
-        addPageButton.setDisable(true);
-        if(helpPageManager.getHelpStage() != null) {
-            helpPageManager.closeHelpPage();
-        }
-        helpButton.setDisable(false);
-        setPageContent("/fxml/add-data-view.fxml", addDataController);
-    }
-
-    @FXML
-    public void switchToLogs() {
-        enableButtons();
-        logsPageButton.setDisable(true);
-        helpPageManager.setHelpPage("/fxml/help-logs.fxml");
-        if(helpPageManager.getHelpStage() != null) {
-            helpPageManager.closeHelpPage();
-        }
-        helpButton.setDisable(false);
-        setPageContent("/fxml/log-view.fxml", logController);
-        logController.initialize();
-    }
-
-    @FXML
-    public void switchToUpdateData() {
-        enableButtons();
-        updatePageButton.setDisable(true);
-        if(helpPageManager.getHelpStage() != null) {
-            helpPageManager.closeHelpPage();
-        }
-        helpButton.setDisable(false);
-        setPageContent("/fxml/update-data-view.fxml", updateDataController);
-    }
-
-    @FXML
-    public void switchToViewData() {
-        enableButtons();
-        viewPageButton.setDisable(true);
-        helpPageManager.setHelpPage("/fxml/help-view.fxml");
-        if(helpPageManager.getHelpStage() != null) {
-            helpPageManager.closeHelpPage();
-        }
-        helpButton.setDisable(false);
-        setPageContent("/fxml/view-data-view.fxml", viewDataController);
-    }
-
-    @FXML
     public void openHelp(){
         if(helpButton.isDisable()){
             return;
@@ -200,9 +133,5 @@ public class ApplicationController{
 
     public static void setHelp(ImageView imageView){
         help = imageView;
-    }
-
-    public static ImageView getHelp(){
-        return help;
     }
 }
