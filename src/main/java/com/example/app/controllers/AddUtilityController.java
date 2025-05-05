@@ -243,9 +243,11 @@ public class AddUtilityController implements Alerts {
         }
         else{
             date = utilityDate.getValue();
-            if(building.getDate().after(java.sql.Date.valueOf(date)) && building.getBuildingID() != 40){
-                dateError.setText("ERROR: Date can't be before building was made");
-                valid = false;
+            if(building.getDate() != null) {
+                if (building.getDate().after(java.sql.Date.valueOf(date)) && building.getBuildingID() != 40) {
+                    dateError.setText("ERROR: Date can't be before building was made");
+                    valid = false;
+                }
             }
             else if(building.getBuildingID() == 40){
                 MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn, false);
