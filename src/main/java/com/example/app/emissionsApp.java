@@ -17,7 +17,7 @@ public class emissionsApp extends javafx.application.Application{
             stage.setTitle("WCU Emissions");
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
             Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root, 650, 400);
+            Scene scene = new Scene(root, 850, 480);
             stage.setScene(scene);
 
             stage.setOnCloseRequest(event -> {
