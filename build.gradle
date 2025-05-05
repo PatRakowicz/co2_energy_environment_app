@@ -32,12 +32,12 @@ jlink {
     imageZip = file("${buildDir}/distributions/${project.name}.zip")
 
     launcher {
-        name = 'CO2 Emissions App'
+        name = 'WCU Emissions'
     }
 
     jpackage {
-        imageName = 'CO2 Emissions App'
-        installerName = 'CO2EmissionsApp-Installer'
+        imageName = 'WCU Emissions'
+        installerName = 'WCUEmissions-Installer'
         appVersion = '1.5'
         skipInstaller = false
         installerType = org.gradle.internal.os.OperatingSystem.current().isWindows() ? 'exe' :
