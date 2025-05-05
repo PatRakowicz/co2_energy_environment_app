@@ -234,24 +234,26 @@ public class UpdateBuildingController implements Alerts {
             if(success){
                 boolean updatingMasterMeter = false;
                 Building selectedBuilding = buildingComboBox.getValue();
-                if(selectedBuilding.getSqFT() != sqft || selectedBuilding.getStartShared() != sShared){
-                    updatingMasterMeter = true;
-                    MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn, false);
-                    masterMeterLogic.updateAllFrom(new java.sql.Date(selectedBuilding.getStartShared().getTime()));
+                if(selectedBuilding.getSqFT() != sqft || (selectedBuilding.getStartShared() != null && selectedBuilding.getStartShared() != sShared)){
+                    if(selectedBuilding.getBuildingID() != 40) {
+                        updatingMasterMeter = true;
+                        MasterMeterLogic masterMeterLogic = new MasterMeterLogic(dbConn, false);
+                        masterMeterLogic.updateAllFrom(new java.sql.Date(selectedBuilding.getStartShared().getTime()));
 
-                    // log the master meter change
-                    LogRecords logRecords = new LogRecords(dbConn);
-                    Log log = new Log();
-                    log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
-                    log.setEvent(String.format(
-                            "Building %s sqft changed, updated all master meter values from %s to %s, %d entries updated",
-                            building.getName(),
-                            startShared.getValue(),
-                            LocalDate.now(),
-                            masterMeterLogic.getUpdatedEntries()
-                            )
-                    );
-                    logRecords.insertLog(log);
+                        // log the master meter change
+                        LogRecords logRecords = new LogRecords(dbConn);
+                        Log log = new Log();
+                        log.setTimestamp(new java.sql.Date(System.currentTimeMillis()));
+                        log.setEvent(String.format(
+                                        "Building %s sqft changed, updated all master meter values from %s to %s, %d entries updated",
+                                        building.getName(),
+                                        startShared.getValue(),
+                                        LocalDate.now(),
+                                        masterMeterLogic.getUpdatedEntries()
+                                )
+                        );
+                        logRecords.insertLog(log);
+                    }
                 }
                 buildingRecords = new BuildingRecords(dbConn);
                 buildings = buildingRecords.getBuildings();
